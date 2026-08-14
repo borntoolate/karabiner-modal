@@ -84,7 +84,12 @@ td, th {{
   text-align: left; vertical-align: top; padding: 0.75mm 1.4mm;
   border-bottom: .4pt solid #dfe4e8;
 }}
-th {{ font-size: .86em; color: #6b7680; font-weight: 600; text-transform: uppercase; }}
+/* Header labels are short by convention; wrapping them just orphans a
+   character (Japanese long vowel marks are especially ugly on their own). */
+th {{
+  font-size: .86em; color: #6b7680; font-weight: 600;
+  text-transform: uppercase; white-space: nowrap;
+}}
 tr:last-child td {{ border-bottom: none; }}
 td:first-child, th:first-child {{ white-space: nowrap; width: 1%; }}
 kbd {{

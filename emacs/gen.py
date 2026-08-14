@@ -109,6 +109,37 @@ manipulators.append(manip(
     "C-SPC: switch input source (control+space)"))
 
 # ---------------------------------------------------------------------------
+# 3b. Modifier pass-through on the four motion keys.
+#
+# Caps Lock emits no modifier of its own -- it only flips a variable -- so
+# `Caps + Option + Shift + n` matches nothing unless we say so explicitly, and
+# the application just receives a literal Option-Shift-n.  These rules forward
+# whatever you hold to the arrow key, keeping arrow-based app shortcuts (VS
+# Code duplicates a line with Option-Shift-Up or -Down) on the home row.
+#
+# Bare Shift is never forwarded: with META_MOD == "shift" it is Meta, and with
+# META_MOD == "option" it is selection.  Option is skipped entirely when it is
+# acting as Meta, otherwise M-f and this rule would fight over the same chord.
+# ---------------------------------------------------------------------------
+ARROW_KEYS = [("f", "right_arrow"), ("b", "left_arrow"),
+              ("n", "down_arrow"), ("p", "up_arrow")]
+PASSTHROUGH = [
+    (["command"],          ["left_command"],               "cmd"),
+    (["command", "shift"], ["left_command", "left_shift"], "cmd-shift"),
+]
+if META_MOD != "option":
+    PASSTHROUGH = [
+        (["option"],          ["left_option"],               "opt"),
+        (["option", "shift"], ["left_option", "left_shift"], "opt-shift"),
+    ] + PASSTHROUGH
+for _k, _arrow in ARROW_KEYS:
+    for _mand, _out, _label in PASSTHROUGH:
+        manipulators.append(manip(
+            _k, [key(_arrow, _out)], [EM],
+            {"mandatory": _mand, "optional": ["caps_lock"]},
+            f"{_label}+{_k}: forward {_label} to {_arrow}"))
+
+# ---------------------------------------------------------------------------
 # 4. C-x prefix: second stroke.  Must be matched before the plain bindings.
 # ---------------------------------------------------------------------------
 X_COMMANDS = [

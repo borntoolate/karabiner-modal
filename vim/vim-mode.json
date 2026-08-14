@@ -1083,6 +1083,502 @@
         },
         {
           "type": "basic",
+          "description": "opt+h: forward opt to left_arrow",
+          "from": {
+            "key_code": "h",
+            "modifiers": {
+              "mandatory": [
+                "option"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_option"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "cmd+h: forward cmd to left_arrow",
+          "from": {
+            "key_code": "h",
+            "modifiers": {
+              "mandatory": [
+                "command"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "opt-shift+h: forward opt-shift to left_arrow",
+          "from": {
+            "key_code": "h",
+            "modifiers": {
+              "mandatory": [
+                "option",
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_option",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "cmd-shift+h: forward cmd-shift to left_arrow",
+          "from": {
+            "key_code": "h",
+            "modifiers": {
+              "mandatory": [
+                "command",
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "opt+j: forward opt to down_arrow",
+          "from": {
+            "key_code": "j",
+            "modifiers": {
+              "mandatory": [
+                "option"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow",
+              "modifiers": [
+                "left_option"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "cmd+j: forward cmd to down_arrow",
+          "from": {
+            "key_code": "j",
+            "modifiers": {
+              "mandatory": [
+                "command"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "opt-shift+j: forward opt-shift to down_arrow",
+          "from": {
+            "key_code": "j",
+            "modifiers": {
+              "mandatory": [
+                "option",
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow",
+              "modifiers": [
+                "left_option",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "cmd-shift+j: forward cmd-shift to down_arrow",
+          "from": {
+            "key_code": "j",
+            "modifiers": {
+              "mandatory": [
+                "command",
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "opt+k: forward opt to up_arrow",
+          "from": {
+            "key_code": "k",
+            "modifiers": {
+              "mandatory": [
+                "option"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow",
+              "modifiers": [
+                "left_option"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "cmd+k: forward cmd to up_arrow",
+          "from": {
+            "key_code": "k",
+            "modifiers": {
+              "mandatory": [
+                "command"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "opt-shift+k: forward opt-shift to up_arrow",
+          "from": {
+            "key_code": "k",
+            "modifiers": {
+              "mandatory": [
+                "option",
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow",
+              "modifiers": [
+                "left_option",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "cmd-shift+k: forward cmd-shift to up_arrow",
+          "from": {
+            "key_code": "k",
+            "modifiers": {
+              "mandatory": [
+                "command",
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "opt+l: forward opt to right_arrow",
+          "from": {
+            "key_code": "l",
+            "modifiers": {
+              "mandatory": [
+                "option"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_option"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "cmd+l: forward cmd to right_arrow",
+          "from": {
+            "key_code": "l",
+            "modifiers": {
+              "mandatory": [
+                "command"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "opt-shift+l: forward opt-shift to right_arrow",
+          "from": {
+            "key_code": "l",
+            "modifiers": {
+              "mandatory": [
+                "option",
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_option",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "cmd-shift+l: forward cmd-shift to right_arrow",
+          "from": {
+            "key_code": "l",
+            "modifiers": {
+              "mandatory": [
+                "command",
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
           "description": "v: leave visual mode",
           "from": {
             "key_code": "v",

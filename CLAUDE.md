@@ -78,6 +78,22 @@ Shift や Control を「受け付けるが出力しない」場合は `mandatory
 make leakcheck
 ```
 
+### 「効かない」の原因は競合とは限らない
+
+Caps Lock は**修飾キーを一切出力しません。** 変数を立てるだけです。
+そのため `Caps + ⌥⇧ + j` のような組み合わせは、明示的なルールがなければ
+**どれにもマッチせず**、アプリには素の `⌥⇧j` が届きます。
+「競合して別の動作になる」ではなく「何も起きない」が典型的な失敗の形です。
+
+判定は目視ではなく `explain.py` にやらせてください。
+Karabiner と同じ順序でマッチングを再現します。
+
+```bash
+python3 shared/explain.py vim/vim-mode.json j option shift
+python3 shared/explain.py vim/vim-mode.json j --var vim_visual=1
+python3 shared/explain.py emacs/emacs-mode.json f
+```
+
 ### 生成順を崩さない
 
 `gen.py` はセクション番号どおりの順にマニピュレータを積んでいます。
@@ -120,6 +136,8 @@ karabiner-modal/
 │   └── CONTROL-KEY.md   Caps Lock を Control にしていた人向けの移行メモ（両モード共通）
 ├── shared/
 │   ├── validate.py              生成物の機械的検査（両モード共通）
+│   ├── leakcheck.py             修飾キーが出力に漏れていないかの検出
+│   ├── explain.py               「このキーは何になる?」を判定するデバッグ用
 │   ├── make_cheatsheet_pdf.py   CHEATSHEET.md → PDF
 │   └── probe_selection.js       ブラウザの選択挙動を実測する検証スクリプト
 ├── vim/

@@ -137,6 +137,36 @@ manipulators.append(manip(
     "r", [key("z", ["left_command", "left_shift"])], [VM], CTRL, "C-r: redo"))
 
 # ---------------------------------------------------------------------------
+# 2b. Modifier pass-through on hjkl.
+#
+# Caps Lock emits no modifier of its own -- it only flips a variable -- so
+# `Caps + Option + Shift + j` matches nothing unless we say so explicitly, and
+# the application just receives a literal Option-Shift-j.  These rules make the
+# obvious thing happen: whatever you hold is forwarded to the arrow key, so app
+# shortcuts built on arrows (VS Code duplicates a line with Option-Shift-Up or
+# -Down) stay reachable from the home row.
+#
+# Bare Shift is deliberately NOT forwarded: Shift carries Vim's uppercase
+# meaning in this config (`Shift+j` is J, join lines), not selection.
+# Control is left out too -- it is already spoken for by C-f / C-b / C-d / C-u,
+# and Control-Up is Mission Control rather than a text motion.
+# ---------------------------------------------------------------------------
+ARROW_KEYS = [("h", "left_arrow"), ("j", "down_arrow"),
+              ("k", "up_arrow"), ("l", "right_arrow")]
+PASSTHROUGH = [
+    (["option"],           ["left_option"],                "opt"),
+    (["command"],          ["left_command"],               "cmd"),
+    (["option", "shift"],  ["left_option", "left_shift"],  "opt-shift"),
+    (["command", "shift"], ["left_command", "left_shift"], "cmd-shift"),
+]
+for _k, _arrow in ARROW_KEYS:
+    for _mand, _out, _label in PASSTHROUGH:
+        manipulators.append(manip(
+            _k, [key(_arrow, _out)], [VM],
+            {"mandatory": _mand, "optional": ["caps_lock"]},
+            f"{_label}+{_k}: forward {_label} to {_arrow}"))
+
+# ---------------------------------------------------------------------------
 # 3. Visual mode
 # ---------------------------------------------------------------------------
 manipulators.append(manip(

@@ -182,6 +182,502 @@
         },
         {
           "type": "basic",
+          "description": "opt+f: forward opt to right_arrow",
+          "from": {
+            "key_code": "f",
+            "modifiers": {
+              "mandatory": [
+                "option"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_option"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "opt-shift+f: forward opt-shift to right_arrow",
+          "from": {
+            "key_code": "f",
+            "modifiers": {
+              "mandatory": [
+                "option",
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_option",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "cmd+f: forward cmd to right_arrow",
+          "from": {
+            "key_code": "f",
+            "modifiers": {
+              "mandatory": [
+                "command"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "cmd-shift+f: forward cmd-shift to right_arrow",
+          "from": {
+            "key_code": "f",
+            "modifiers": {
+              "mandatory": [
+                "command",
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "opt+b: forward opt to left_arrow",
+          "from": {
+            "key_code": "b",
+            "modifiers": {
+              "mandatory": [
+                "option"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_option"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "opt-shift+b: forward opt-shift to left_arrow",
+          "from": {
+            "key_code": "b",
+            "modifiers": {
+              "mandatory": [
+                "option",
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_option",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "cmd+b: forward cmd to left_arrow",
+          "from": {
+            "key_code": "b",
+            "modifiers": {
+              "mandatory": [
+                "command"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "cmd-shift+b: forward cmd-shift to left_arrow",
+          "from": {
+            "key_code": "b",
+            "modifiers": {
+              "mandatory": [
+                "command",
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "opt+n: forward opt to down_arrow",
+          "from": {
+            "key_code": "n",
+            "modifiers": {
+              "mandatory": [
+                "option"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow",
+              "modifiers": [
+                "left_option"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "opt-shift+n: forward opt-shift to down_arrow",
+          "from": {
+            "key_code": "n",
+            "modifiers": {
+              "mandatory": [
+                "option",
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow",
+              "modifiers": [
+                "left_option",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "cmd+n: forward cmd to down_arrow",
+          "from": {
+            "key_code": "n",
+            "modifiers": {
+              "mandatory": [
+                "command"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "cmd-shift+n: forward cmd-shift to down_arrow",
+          "from": {
+            "key_code": "n",
+            "modifiers": {
+              "mandatory": [
+                "command",
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "opt+p: forward opt to up_arrow",
+          "from": {
+            "key_code": "p",
+            "modifiers": {
+              "mandatory": [
+                "option"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow",
+              "modifiers": [
+                "left_option"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "opt-shift+p: forward opt-shift to up_arrow",
+          "from": {
+            "key_code": "p",
+            "modifiers": {
+              "mandatory": [
+                "option",
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow",
+              "modifiers": [
+                "left_option",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "cmd+p: forward cmd to up_arrow",
+          "from": {
+            "key_code": "p",
+            "modifiers": {
+              "mandatory": [
+                "command"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "cmd-shift+p: forward cmd-shift to up_arrow",
+          "from": {
+            "key_code": "p",
+            "modifiers": {
+              "mandatory": [
+                "command",
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
           "description": "C-x C-s: save",
           "from": {
             "key_code": "s",

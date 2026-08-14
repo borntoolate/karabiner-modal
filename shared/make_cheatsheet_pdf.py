@@ -86,7 +86,7 @@ td, th {{
 }}
 th {{ font-size: .86em; color: #6b7680; font-weight: 600; text-transform: uppercase; }}
 tr:last-child td {{ border-bottom: none; }}
-td:first-child {{ white-space: nowrap; width: 1%; }}
+td:first-child, th:first-child {{ white-space: nowrap; width: 1%; }}
 kbd {{
   font-family: "SF Mono", "DejaVu Sans Mono", monospace; font-size: .93em;
   background: #eef2f5; border: .4pt solid #cdd6dd; border-bottom-width: 1pt;

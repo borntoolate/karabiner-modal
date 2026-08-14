@@ -19,8 +19,18 @@ macOS 全体で Vim 風 / Emacs 風のキー操作を実現する **Karabiner-El
 make            # 両方を再生成 + 検査 + PDF
 make vim        # vim だけ
 make emacs      # emacs だけ
-make check      # 検査だけ
+make check      # 検査だけ（依存ゼロ。venv も qpdf も要りません）
 ```
+
+**PDF を作るときだけ外部依存があります。** 初回は次の2つが必要です。
+
+```bash
+brew install qpdf   # PDF のバイト再現性のための正規化に使う
+make venv           # .venv に playwright（Chromium で組版）を用意する
+```
+
+`gen.py` `validate.py` `leakcheck.py` `explain.py` は素の `python3` だけで動きます。
+`make check` を通すのに venv は不要です。
 
 ### 2. 変更後は必ず `make check` を通す
 

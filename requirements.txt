@@ -1,0 +1,7 @@
+# PDF 生成にだけ必要です。gen.py / validate.py / explain.py は素の python3 で動きます。
+#
+# playwright のバージョンは Chromium のビルド番号と紐づいています。上げると
+# `playwright install chromium` が別ビルドを取りに行き、100MB 以上の
+# ダウンロードが走ります。上げる理由がなければ固定のままにしてください。
+playwright==1.59.0
+pypdf

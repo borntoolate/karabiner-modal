@@ -148,8 +148,13 @@ manipulators.append(manip(
 #
 # Bare Shift is deliberately NOT forwarded: Shift carries Vim's uppercase
 # meaning in this config (`Shift+j` is J, join lines), not selection.
-# Control is left out too -- it is already spoken for by C-f / C-b / C-d / C-u,
-# and Control-Up is Mission Control rather than a text motion.
+#
+# Control is left out because of what it means on the key we emit.  These rules
+# output an arrow, and macOS splits Control in two: `Control + letter` is a text
+# command (C-a, C-e, C-k -- the Emacs-derived bindings), but `Control + arrow`
+# is Mission Control and Spaces, which is not a text operation at all.  There is
+# no text meaning on the arrow side to forward Control to.  Section 9 makes the
+# leftover Control chords inert instead of letting them fall through.
 # ---------------------------------------------------------------------------
 ARROW_KEYS = [("h", "left_arrow"), ("j", "down_arrow"),
               ("k", "up_arrow"), ("l", "right_arrow")]
@@ -330,6 +335,48 @@ manipulators.append(prefix_setter("d", "vim_d", NONE, "d: start dd"))
 manipulators.append(prefix_setter("y", "vim_y", NONE, "y: start yy"))
 manipulators.append(prefix_setter(
     "semicolon", "vim_colon", SHIFT, ": start ex command (:w / :q / :x)"))
+
+# ---------------------------------------------------------------------------
+# 8. Close the mode: swallow every Control / Option chord we did not define.
+#
+# Holding Caps Lock means "I am speaking Vim".  Whatever this file does not
+# define used to fall through to the application, and falling through is not
+# "nothing happens" -- macOS has its own bindings underneath:
+#
+#   Control + letter  is the Emacs-derived text system.  C-k kills to the end
+#                     of the line, C-a goes to the line start, C-v pages down,
+#                     C-y pastes, C-o opens a line.  Several collide head-on
+#                     with Vim's meaning for the same key: C-v is visual block
+#                     in Vim, C-o walks the jump list, C-a increments a number.
+#   Option + letter   is character input.  Option-s types ß, Option-p types pi,
+#                     and Option-e / -i / -u / -n arm a dead key that silently
+#                     eats the NEXT keystroke and turns it into an accent.
+#
+# Both are other keybinding systems surfacing inside this one.  `from.any`
+# matches every key at once, so two manipulators close the whole class.
+#
+# Command is deliberately left alone.  It is the application's command system,
+# it has no Vim notation to collide with, and Caps+Cmd+S should still save.
+# Leaving Command out of both `mandatory` and `optional` is what excludes it:
+# a chord that carries Command has a leftover modifier these rules do not
+# accept, so it does not match and reaches the application untouched.
+#
+# These must stay LAST.  `from.any` shadows every key, so anything placed after
+# them would never fire.  validate.py knows this and will say so.
+# ---------------------------------------------------------------------------
+SWALLOW = [
+    (["control"], ["caps_lock", "shift", "option"], "Control"),
+    (["option"],  ["caps_lock", "shift"],           "Option"),
+]
+for _mand, _opt, _label in SWALLOW:
+    manipulators.append({
+        "type": "basic",
+        "description": f"swallow every {_label} chord this config does not define",
+        "from": {"any": "key_code",
+                 "modifiers": {"mandatory": _mand, "optional": _opt}},
+        "to": [],
+        "conditions": [VM],
+    })
 
 doc = {
     "title": "Vim Mode (Caps Lock Leader) - US layout",

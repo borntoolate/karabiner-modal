@@ -258,6 +258,40 @@ manipulators.append(manip(
     params={"basic.to_delayed_action_delay_milliseconds": PREFIX_DELAY}))
 
 meta_label = "Shift" if META_MOD == "shift" else "Option"
+# ---------------------------------------------------------------------------
+# 9. Close the mode: swallow every Option chord we did not define.
+#
+# Holding Caps Lock means "I am speaking Emacs".  Whatever this file does not
+# define falls through to the application, and on a US layout `Option + letter`
+# is character input: Option-s types ß, Option-p types pi, and Option-e / -i /
+# -u / -n arm a dead key that silently eats the NEXT keystroke and turns it
+# into an accent.  That is character input surfacing in the middle of a motion.
+#
+# Control is deliberately NOT swallowed here, and this is where the two configs
+# diverge.  macOS's own Control bindings ARE the Emacs bindings -- C-a is the
+# line start, C-y yanks, C-t transposes, C-o opens a line -- so a Control chord
+# falling through lands on the same meaning this file gives it.  There is no
+# second keybinding system surfacing, so there is nothing to close off.  The
+# Vim config swallows Control precisely because there the two systems disagree.
+#
+# Command is left alone in both configs: it is the application's command system
+# and has no Emacs notation to collide with.  Leaving Command out of both
+# `mandatory` and `optional` is what excludes it -- a chord carrying Command
+# has a leftover modifier this rule does not accept, so it does not match.
+#
+# This must stay LAST: `from.any` shadows every key.
+# ---------------------------------------------------------------------------
+if META_MOD != "option":
+    manipulators.append({
+        "type": "basic",
+        "description": "swallow every Option chord this config does not define",
+        "from": {"any": "key_code",
+                 "modifiers": {"mandatory": ["option"],
+                               "optional": ["caps_lock", "shift"]}},
+        "to": [],
+        "conditions": [EM],
+    })
+
 doc = {
     "title": f"Emacs Mode (Caps Lock leader, Meta = {meta_label}) - US layout",
     "maintainers": [MAINTAINER],

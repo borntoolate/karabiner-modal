@@ -2330,6 +2330,30 @@
           "parameters": {
             "basic.to_delayed_action_delay_milliseconds": 800
           }
+        },
+        {
+          "type": "basic",
+          "description": "swallow every Option chord this config does not define",
+          "from": {
+            "any": "key_code",
+            "modifiers": {
+              "mandatory": [
+                "option"
+              ],
+              "optional": [
+                "caps_lock",
+                "shift"
+              ]
+            }
+          },
+          "to": [],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
         }
       ]
     }

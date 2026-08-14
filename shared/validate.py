@@ -24,6 +24,9 @@ command control option shift fn caps_lock any
 VALID_COND_TYPES = {"variable_if", "variable_unless", "frontmost_application_if",
                     "frontmost_application_unless", "device_if", "device_unless"}
 
+# `from.any` matches every event of the named kind instead of one key_code.
+VALID_ANY = {"key_code", "consumer_key_code", "pointing_button"}
+
 errors, warnings = [], []
 TARGET = sys.argv[1] if len(sys.argv) > 1 else "vim-mode.json"
 doc = json.load(open(TARGET, encoding="utf-8"))
@@ -43,9 +46,15 @@ for i, m in enumerate(manips):
     tag = f"[{i}] {m.get('description', '?')}"
     if m.get("type") != "basic":
         errors.append(f"{tag}: type != basic")
-    fk = m["from"].get("key_code")
-    if fk not in VALID_KEYS:
-        errors.append(f"{tag}: bad from.key_code {fk!r}")
+    if "any" in m["from"]:
+        if m["from"]["any"] not in VALID_ANY:
+            errors.append(f"{tag}: bad from.any {m['from']['any']!r}")
+        if "key_code" in m["from"]:
+            errors.append(f"{tag}: from has both any and key_code")
+    else:
+        fk = m["from"].get("key_code")
+        if fk not in VALID_KEYS:
+            errors.append(f"{tag}: bad from.key_code {fk!r}")
     mand, opt = modspec(m)
     for x in mand | opt:
         if x not in VALID_MODIFIERS:
@@ -84,6 +93,21 @@ def conds(m):
     return frozenset((c["type"], c["name"], c["value"]) for c in m.get("conditions", []))
 
 
+def fromkey(m):
+    """('any', kind) for a from.any manipulator, else ('key', key_code)."""
+    if "any" in m["from"]:
+        return ("any", m["from"]["any"])
+    return ("key", m["from"].get("key_code"))
+
+
+def key_subsumes(a, b):
+    """a's from-key matches every event b's from-key matches."""
+    if a == b:
+        return True
+    # `any: key_code` stands in front of every individual key
+    return a == ("any", "key_code") and b[0] == "key"
+
+
 def mod_subsumes(a, b):
     """a's from-modifier spec matches every event b's spec matches."""
     am, ao = a
@@ -98,7 +122,7 @@ def mod_subsumes(a, b):
 for j, mj in enumerate(manips):
     for i in range(j):
         mi = manips[i]
-        if mi["from"].get("key_code") != mj["from"].get("key_code"):
+        if not key_subsumes(fromkey(mi), fromkey(mj)):
             continue
         if not mod_subsumes(modspec(mi), modspec(mj)):
             continue

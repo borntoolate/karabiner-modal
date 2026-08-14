@@ -3746,6 +3746,55 @@
           "parameters": {
             "basic.to_delayed_action_delay_milliseconds": 800
           }
+        },
+        {
+          "type": "basic",
+          "description": "swallow every Control chord this config does not define",
+          "from": {
+            "any": "key_code",
+            "modifiers": {
+              "mandatory": [
+                "control"
+              ],
+              "optional": [
+                "caps_lock",
+                "shift",
+                "option"
+              ]
+            }
+          },
+          "to": [],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "swallow every Option chord this config does not define",
+          "from": {
+            "any": "key_code",
+            "modifiers": {
+              "mandatory": [
+                "option"
+              ],
+              "optional": [
+                "caps_lock",
+                "shift"
+              ]
+            }
+          },
+          "to": [],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
         }
       ]
     }

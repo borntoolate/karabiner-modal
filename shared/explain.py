@@ -31,7 +31,11 @@ def norm(mods):
 
 
 def matches(m, key, pressed, state):
-    if m["from"].get("key_code") != key:
+    # `from.any: key_code` stands in for every key at once
+    if "any" in m["from"]:
+        if m["from"]["any"] != "key_code":
+            return False
+    elif m["from"].get("key_code") != key:
         return False
 
     spec = m["from"].get("modifiers", {})
@@ -69,7 +73,7 @@ def describe_to(m, pressed):
         elif "set_variable" in ev:
             sv = ev["set_variable"]
             out.append(f"[{sv['name']}={sv['value']}]")
-    return " → ".join(out) if out else "(nothing)"
+    return " → ".join(out) if out else "何も起きない（キーは飲み込まれます）"
 
 
 def main():

@@ -124,6 +124,29 @@ def page_count(path):
     return len(PdfReader(str(path)).pages)
 
 
+def normalize(path, title):
+    """Strip the timestamps Chromium embeds so rebuilds are byte-identical.
+
+    Without this every `make` produces a different file and git shows the PDFs
+    as modified even when the cheat sheet did not change.
+    """
+    import subprocess
+    from pypdf import PdfReader, PdfWriter
+
+    reader = PdfReader(str(path))
+    writer = PdfWriter()
+    for page in reader.pages:
+        writer.add_page(page)
+    writer.add_metadata({"/Title": title, "/Producer": "make_cheatsheet_pdf.py",
+                         "/CreationDate": "D:20000101000000Z",
+                         "/ModDate": "D:20000101000000Z"})
+    with open(path, "wb") as fh:
+        writer.write(fh)
+    # qpdf derives /ID from the file contents instead of a random value
+    subprocess.run(["qpdf", "--deterministic-id", "--replace-input", str(path)],
+                   check=True)
+
+
 async def render_autofit(title, subtitle, sections, out_path, max_pages=1):
     """Render at the largest font size that still fits within max_pages."""
     from playwright.async_api import async_playwright
@@ -164,6 +187,7 @@ def main():
 
     out.parent.mkdir(parents=True, exist_ok=True)
     fs = asyncio.run(render_autofit(title, subtitle, sections, out))
+    normalize(out, title)
 
     rows = sum(len(r) for _, r in sections)
     print(f"{src} -> {out}  ({len(sections)} sections, {rows} rows, "

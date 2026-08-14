@@ -118,6 +118,16 @@ Karabiner の設定ファイルそのものの仕組み（変数リーダー、`
 
 ---
 
+## ライセンス
+
+[MIT License](LICENSE) です。設定ファイルもスクリプトもドキュメントも、
+自由にコピー・改変して使ってください。著作権表示を残すことだけが条件です。
+
+Karabiner-Elements 本体と公式のカスタム設定集は Unlicense（パブリックドメイン）ですが、
+このリポジトリはそれらの派生物ではないため、別のライセンスを選んでいます。
+
+---
+
 ## 参考
 
 - [Karabiner-Elements](https://karabiner-elements.pqrs.org/)

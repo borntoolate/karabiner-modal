@@ -16,6 +16,9 @@ import json
 # "option" : M-f is Caps + Option + f. Shift stays free, so Shift also selects.
 META_MOD = "shift"
 
+# Shown in Karabiner's rule list. Use your GitHub handle if you publish this.
+MAINTAINER = "Naosuke Wakahara"
+
 PREFIX_DELAY = 800   # ms allowed between C-x and its second stroke
 
 # What a lone tap of the leader key should send. None = nothing at all.
@@ -226,7 +229,7 @@ manipulators.append(manip(
 meta_label = "Shift" if META_MOD == "shift" else "Option"
 doc = {
     "title": f"Emacs Mode (Caps Lock leader, Meta = {meta_label}) - US layout",
-    "maintainers": ["generated-for-naosuke"],
+    "maintainers": [MAINTAINER],
     "rules": [{
         "description": f"Emacs mode (Caps Lock leader) - hold Caps Lock for C-, "
                        f"add {meta_label} for M-  [US layout]",

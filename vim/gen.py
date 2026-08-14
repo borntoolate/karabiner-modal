@@ -11,6 +11,9 @@ Assumes a US (ANSI) keyboard layout.
 """
 import json
 
+# Shown in Karabiner's rule list. Use your GitHub handle if you publish this.
+MAINTAINER = "Naosuke Wakahara"
+
 PREFIX_DELAY = 800  # ms allowed between the two strokes of dd / yy / gg / :w
 
 # What a lone tap of the leader key should send.
@@ -300,7 +303,7 @@ manipulators.append(prefix_setter(
 
 doc = {
     "title": "Vim Mode (Caps Lock Leader) - US layout",
-    "maintainers": ["generated-for-naosuke"],
+    "maintainers": [MAINTAINER],
     "rules": [{
         "description": "Vim mode (Caps Lock leader) - hold Caps Lock for Vim-style "
                        "navigation & editing; selection via visual mode [US layout]",

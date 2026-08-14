@@ -89,6 +89,19 @@ make leakcheck
 
 ループやテーブルに項目を足すときは、どのセクションに入るかを意識してください。
 
+### クラウド実行の Cowork からこのリポジトリを git 操作しない
+
+このリポジトリが外付けボリューム上にあるため、**クラウドで動く Cowork セッション**から
+（デバイスブリッジ経由のマウントで）git を操作すると、`.git/index.lock` などの
+ロックファイルが削除できずに残り、以降の git 操作が全部止まります。
+
+Mac 上でネイティブに動く Claude Code なら問題ありません。ロックが残っていたら
+消してください。
+
+```bash
+rm -f .git/*.lock .git/refs/heads/*.lock .git/objects/*.lock
+```
+
 ### 2ストロークの変数は必ず両方の経路で 0 に戻す
 
 `to_delayed_action` の `to_if_invoked`（時間切れ）と `to_if_canceled`（他キー押下）の

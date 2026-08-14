@@ -17,7 +17,7 @@ import json
 META_MOD = "shift"
 
 # Shown in Karabiner's rule list. Use your GitHub handle if you publish this.
-MAINTAINER = "Naosuke Wakahara"
+MAINTAINER = "borntoolate"
 
 PREFIX_DELAY = 800   # ms allowed between C-x and its second stroke
 

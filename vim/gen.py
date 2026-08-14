@@ -12,7 +12,7 @@ Assumes a US (ANSI) keyboard layout.
 import json
 
 # Shown in Karabiner's rule list. Use your GitHub handle if you publish this.
-MAINTAINER = "Naosuke Wakahara"
+MAINTAINER = "borntoolate"
 
 PREFIX_DELAY = 800  # ms allowed between the two strokes of dd / yy / gg / :w
 

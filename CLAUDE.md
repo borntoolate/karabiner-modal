@@ -1,0 +1,158 @@
+# CLAUDE.md
+
+Claude Code 向けの作業ガイドです。作業を始める前に必ず読んでください。
+
+## このリポジトリは何か
+
+macOS 全体で Vim 風 / Emacs 風のキー操作を実現する **Karabiner-Elements の設定**です。
+`vim/` と `emacs/` は**対等な2つの実装**で、どちらか一方を有効にして使い比べます。
+どちらかが本命ということはありません。片方を変えたら、もう片方にも同じ配慮が必要か検討してください。
+
+## 最重要ルール
+
+### 1. `*-mode.json` を直接編集しない
+
+`vim/vim-mode.json` と `emacs/emacs-mode.json` は**生成物**です。
+必ず `gen.py` を編集して再生成してください。JSON を手で直すと次の生成で消えます。
+
+```bash
+make            # 両方を再生成 + 検査 + PDF
+make vim        # vim だけ
+make emacs      # emacs だけ
+make check      # 検査だけ
+```
+
+### 2. 変更後は必ず `make check` を通す
+
+`shared/validate.py` が2種類の事故を検出します。
+
+- **key_code / modifier の綴り間違い** — Karabiner は未知の key_code を黙って無視するので、
+  タイポは「なぜかそのキーだけ効かない」という分かりにくい形で現れます
+- **到達不能なルール** — Karabiner は manipulators を上から順に見て最初にマッチしたものを
+  採用します。広いルールを前に置くと、後ろの狭いルールが永久に発火しません
+
+エラーが出た状態で「たぶん動く」と報告しないでください。
+
+### 3. 実機で動作確認できないことを正直に書く
+
+このリポジトリを触る環境から macOS のキー入力は試せません。
+**「動作を確認しました」と書かないでください。** 代わりに、
+
+- `make check` が通ったこと
+- どのキーストロークに翻訳されるか（`to` の中身）
+- どのアプリで挙動が割れる可能性があるか
+
+を書いて、実機確認はユーザーに委ねてください。
+
+## 動かしてはいけない設計判断
+
+過去に検討して意図的にそう決めたものです。変更を提案するのは構いませんが、
+**理由を確認せずに「改善」しないでください。** 経緯は各ドキュメントにあります。
+
+| 決定 | 理由の所在 |
+|---|---|
+| リーダーは Caps Lock。修飾キー（Hyper 等）にしない | `vim/ARCHITECTURE.md` §2 |
+| Caps Lock 単押しは**何もしない**（`TAP_ACTION = None`） | `vim/ARCHITECTURE.md` §2 |
+| `Caps + Space` は入力ソース切り替え（⌃Space）。潰さない | `docs/CONTROL-KEY.md` |
+| **Vim 版で Shift は選択ではない。** Vim の記法どおりの大文字・記号 | `vim/ARCHITECTURE.md` §3 |
+| Vim 版の選択はビジュアルモード（`v` / `V`）のみ | `vim/ARCHITECTURE.md` §5 |
+| Emacs 版の Meta は Caps + Shift（`META_MOD = "shift"`） | `emacs/DESIGN.md` §2 |
+| `dd` はクリップボードを使う（`p` で貼り戻せる） | `vim/LIMITATIONS.md` |
+| `%` `H` `L` `f` `t` `.` などは実装しない | `vim/LIMITATIONS.md` |
+| Figma などの除外アプリは設定しない | `COMPARISON.md` §5 |
+
+## よくある落とし穴
+
+### `optional: ["any"]` は修飾キーを出力に漏らす
+
+`from.modifiers.optional` に指定した修飾キーは、押されていれば**そのまま `to` に運ばれます。**
+`p` → ⌘V のルールを `optional: ["any"]` で書くと、`⇧p` が **⌘⇧V**
+（ペーストしてスタイルを合わせる）になります。過去に実際に混入したバグです。
+
+Shift や Control を「受け付けるが出力しない」場合は `mandatory` を使ってください。
+`mandatory` に指定した修飾キーは出力から取り除かれます。
+
+追加・変更したら、この確認を走らせてください。
+
+```bash
+make leakcheck
+```
+
+### 生成順を崩さない
+
+`gen.py` はセクション番号どおりの順にマニピュレータを積んでいます。
+狭い条件のものが先、広いものが後です。特に、
+
+- ビジュアルモード / マークの版は通常版より**前**
+- 2ストロークの2打目（消費側）は1打目（武装側）より**前**
+- `ctrl` 系の移動はビジュアルモードの操作キーより**前**
+
+ループやテーブルに項目を足すときは、どのセクションに入るかを意識してください。
+
+### 2ストロークの変数は必ず両方の経路で 0 に戻す
+
+`to_delayed_action` の `to_if_invoked`（時間切れ）と `to_if_canceled`（他キー押下）の
+**両方**で変数をクリアします。片方を忘れると状態が立ちっぱなしになり、
+「なぜか勝手に行が消える」設定ができあがります。
+
+## ファイルの役割
+
+```
+karabiner-modal/
+├── CLAUDE.md            この文書
+├── README.md            入口。インストール手順と両モードの概要
+├── COMPARISON.md        vim / emacs の比較と A/B テストの手順
+├── Makefile             生成・検査・PDF・インストール
+├── docs/
+│   └── CONTROL-KEY.md   Caps Lock を Control にしていた人向けの移行メモ（両モード共通）
+├── shared/
+│   ├── validate.py              生成物の機械的検査（両モード共通）
+│   ├── make_cheatsheet_pdf.py   CHEATSHEET.md → PDF
+│   └── probe_selection.js       ブラウザの選択挙動を実測する検証スクリプト
+├── vim/
+│   ├── gen.py           ← 編集するのはここ
+│   ├── vim-mode.json    生成物
+│   ├── CHEATSHEET.md    ← PDF の元。表だけが PDF に載る
+│   ├── CHEATSHEET.pdf   生成物
+│   ├── ARCHITECTURE.md  仕組みの解説。設計判断の記録
+│   └── LIMITATIONS.md   実装しなかったものと macOS 側の制約
+└── emacs/
+    ├── gen.py           ← 編集するのはここ
+    ├── emacs-mode.json  生成物
+    ├── CHEATSHEET.md    ← PDF の元
+    ├── CHEATSHEET.pdf   生成物
+    └── DESIGN.md        Emacs 版固有の設計判断
+```
+
+## ドキュメントの扱い
+
+**キー割り当てを変えたら `CHEATSHEET.md` も必ず更新してください。** PDF は
+`CHEATSHEET.md` の**マークダウン表だけ**を拾って生成されるので、
+散文を足しても PDF には出ません。表を直せば PDF に反映されます。
+
+設計判断を変えたときは、理由を `ARCHITECTURE.md` / `DESIGN.md` / `LIMITATIONS.md` の
+どれかに残してください。「なぜそうしなかったか」が失われると、
+同じ議論を繰り返すことになります。
+
+ドキュメントは**日本語**です。既存の文体（断定的で、トレードオフを隠さない）に合わせてください。
+できないことは「できない」と書きます。
+
+## 事実確認について
+
+Karabiner の仕様は推測せず、公式ドキュメントを確認してください。
+
+- [Manipulator definition](https://karabiner-elements.pqrs.org/docs/json/complex-modifications-manipulator-definition/)
+- [from.modifiers](https://karabiner-elements.pqrs.org/docs/json/complex-modifications-manipulator-definition/from/modifiers/)
+- [to_delayed_action](https://karabiner-elements.pqrs.org/docs/json/complex-modifications-manipulator-definition/to-delayed-action/)
+- [Input event modification chaining](https://karabiner-elements.pqrs.org/docs/manual/misc/event-modification-chaining/)
+
+ブラウザやアプリの挙動を推測で書かないでください。
+`shared/probe_selection.js` のように、Playwright で実測できるものは実測してください。
+
+## ユーザーについて
+
+- 日本語で応答してください
+- US（ANSI）配列を使っています
+- Caps Lock は macOS 側の Control リマップをやめ、この設定のリーダー専用にしています
+- Control は本物の Control キーで押しています
+- Vim 版と Emacs 版を実際に使い比べている最中です。どちらかに肩入れしないでください

@@ -1,0 +1,1841 @@
+{
+  "title": "Emacs Mode (Caps Lock leader, Meta = Shift) - US layout",
+  "maintainers": [
+    "generated-for-naosuke"
+  ],
+  "rules": [
+    {
+      "description": "Emacs mode (Caps Lock leader) - hold Caps Lock for C-, add Shift for M-  [US layout]",
+      "manipulators": [
+        {
+          "type": "basic",
+          "description": "Caps Lock: hold = Emacs leader (C-) / tap = nothing",
+          "from": {
+            "key_code": "caps_lock",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "set_variable": {
+                "name": "emacs_mode",
+                "value": 1
+              }
+            }
+          ],
+          "to_after_key_up": [
+            {
+              "set_variable": {
+                "name": "emacs_mode",
+                "value": 0
+              }
+            },
+            {
+              "set_variable": {
+                "name": "emacs_mark",
+                "value": 0
+              }
+            },
+            {
+              "set_variable": {
+                "name": "emacs_x",
+                "value": 0
+              }
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-g: keyboard-quit",
+          "from": {
+            "key_code": "g",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "escape"
+            },
+            {
+              "set_variable": {
+                "name": "emacs_mark",
+                "value": 0
+              }
+            },
+            {
+              "set_variable": {
+                "name": "emacs_x",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "M-SPC: drop the mark",
+          "from": {
+            "key_code": "spacebar",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "set_variable": {
+                "name": "emacs_mark",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "emacs_mark",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "M-SPC: set mark (selection follows every motion)",
+          "from": {
+            "key_code": "spacebar",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "set_variable": {
+                "name": "emacs_mark",
+                "value": 1
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_unless",
+              "name": "emacs_mark",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-SPC: switch input source (control+space)",
+          "from": {
+            "key_code": "spacebar",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "spacebar",
+              "modifiers": [
+                "left_control"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-x C-s: save",
+          "from": {
+            "key_code": "s",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "s",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "set_variable": {
+                "name": "emacs_x",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "emacs_x",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-x C-f: open file",
+          "from": {
+            "key_code": "f",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "o",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "set_variable": {
+                "name": "emacs_x",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "emacs_x",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-x C-w: save as",
+          "from": {
+            "key_code": "w",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "s",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ]
+            },
+            {
+              "set_variable": {
+                "name": "emacs_x",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "emacs_x",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-x C-c: quit application",
+          "from": {
+            "key_code": "c",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "q",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "set_variable": {
+                "name": "emacs_x",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "emacs_x",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-x k: close window/tab",
+          "from": {
+            "key_code": "k",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "w",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "set_variable": {
+                "name": "emacs_x",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "emacs_x",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-x h: select all",
+          "from": {
+            "key_code": "h",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "a",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "set_variable": {
+                "name": "emacs_x",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "emacs_x",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-x u: undo",
+          "from": {
+            "key_code": "u",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "z",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "set_variable": {
+                "name": "emacs_x",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "emacs_x",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-x o: other window",
+          "from": {
+            "key_code": "o",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "grave_accent_and_tilde",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "set_variable": {
+                "name": "emacs_x",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "emacs_x",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "mark M-f: forward word",
+          "from": {
+            "key_code": "f",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_option",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "emacs_mark",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "mark M-b: backward word",
+          "from": {
+            "key_code": "b",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_option",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "emacs_mark",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "mark M-v: scroll down (page up)",
+          "from": {
+            "key_code": "v",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "page_up",
+              "modifiers": [
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "emacs_mark",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "mark M-a: backward sentence",
+          "from": {
+            "key_code": "a",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow",
+              "modifiers": [
+                "left_option",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "emacs_mark",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "mark M-e: forward sentence",
+          "from": {
+            "key_code": "e",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow",
+              "modifiers": [
+                "left_option",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "emacs_mark",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "mark M-<: beginning of buffer",
+          "from": {
+            "key_code": "comma",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "emacs_mark",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "mark M->: end of buffer",
+          "from": {
+            "key_code": "period",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "emacs_mark",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "mark C-f: forward char",
+          "from": {
+            "key_code": "f",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "emacs_mark",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "mark C-b: backward char",
+          "from": {
+            "key_code": "b",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "emacs_mark",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "mark C-n: next line",
+          "from": {
+            "key_code": "n",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow",
+              "modifiers": [
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "emacs_mark",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "mark C-p: previous line",
+          "from": {
+            "key_code": "p",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow",
+              "modifiers": [
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "emacs_mark",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "mark C-a: beginning of line",
+          "from": {
+            "key_code": "a",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "emacs_mark",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "mark C-e: end of line",
+          "from": {
+            "key_code": "e",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "emacs_mark",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "mark C-v: scroll up (page down)",
+          "from": {
+            "key_code": "v",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "page_down",
+              "modifiers": [
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "emacs_mark",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "M-d: kill word forward",
+          "from": {
+            "key_code": "d",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_option",
+                "left_shift"
+              ]
+            },
+            {
+              "key_code": "x",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "M-DEL: kill word backward",
+          "from": {
+            "key_code": "delete_or_backspace",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_option",
+                "left_shift"
+              ]
+            },
+            {
+              "key_code": "x",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "M-w: copy region",
+          "from": {
+            "key_code": "w",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "c",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "set_variable": {
+                "name": "emacs_mark",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "M-f: forward word",
+          "from": {
+            "key_code": "f",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_option"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "M-b: backward word",
+          "from": {
+            "key_code": "b",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_option"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "M-v: scroll down (page up)",
+          "from": {
+            "key_code": "v",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "page_up"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "M-a: backward sentence",
+          "from": {
+            "key_code": "a",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow",
+              "modifiers": [
+                "left_option"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "M-e: forward sentence",
+          "from": {
+            "key_code": "e",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow",
+              "modifiers": [
+                "left_option"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "M-<: beginning of buffer",
+          "from": {
+            "key_code": "comma",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "M->: end of buffer",
+          "from": {
+            "key_code": "period",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-w: kill region",
+          "from": {
+            "key_code": "w",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "x",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "set_variable": {
+                "name": "emacs_mark",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-y: yank",
+          "from": {
+            "key_code": "y",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "v",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "set_variable": {
+                "name": "emacs_mark",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-k: kill to end of line",
+          "from": {
+            "key_code": "k",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ]
+            },
+            {
+              "key_code": "x",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-d: delete char",
+          "from": {
+            "key_code": "d",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "delete_forward"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-h: delete backward char",
+          "from": {
+            "key_code": "h",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "delete_or_backspace"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-o: open line",
+          "from": {
+            "key_code": "o",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "return_or_enter"
+            },
+            {
+              "key_code": "left_arrow"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-j: newline",
+          "from": {
+            "key_code": "j",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "return_or_enter"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-m: RET",
+          "from": {
+            "key_code": "m",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "return_or_enter"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-i: TAB",
+          "from": {
+            "key_code": "i",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "tab"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-s: search forward",
+          "from": {
+            "key_code": "s",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "f",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-r: search backward (find previous)",
+          "from": {
+            "key_code": "r",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "g",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-/: undo",
+          "from": {
+            "key_code": "slash",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "z",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-f: forward char",
+          "from": {
+            "key_code": "f",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-b: backward char",
+          "from": {
+            "key_code": "b",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-n: next line",
+          "from": {
+            "key_code": "n",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-p: previous line",
+          "from": {
+            "key_code": "p",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-a: beginning of line",
+          "from": {
+            "key_code": "a",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-e: end of line",
+          "from": {
+            "key_code": "e",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-v: scroll up (page down)",
+          "from": {
+            "key_code": "v",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "page_down"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-x: start two-stroke sequence",
+          "from": {
+            "key_code": "x",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "set_variable": {
+                "name": "emacs_x",
+                "value": 1
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "emacs_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_unless",
+              "name": "emacs_x",
+              "value": 1
+            }
+          ],
+          "to_delayed_action": {
+            "to_if_invoked": [
+              {
+                "set_variable": {
+                  "name": "emacs_x",
+                  "value": 0
+                }
+              }
+            ],
+            "to_if_canceled": [
+              {
+                "set_variable": {
+                  "name": "emacs_x",
+                  "value": 0
+                }
+              }
+            ]
+          },
+          "parameters": {
+            "basic.to_delayed_action_delay_milliseconds": 800
+          }
+        }
+      ]
+    }
+  ]
+}

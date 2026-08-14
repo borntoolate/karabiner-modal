@@ -1,0 +1,3257 @@
+{
+  "title": "Vim Mode (Caps Lock Leader) - US layout",
+  "maintainers": [
+    "generated-for-naosuke"
+  ],
+  "rules": [
+    {
+      "description": "Vim mode (Caps Lock leader) - hold Caps Lock for Vim-style navigation & editing; selection via visual mode [US layout]",
+      "manipulators": [
+        {
+          "type": "basic",
+          "description": "Caps Lock: hold = Vim leader / tap = nothing",
+          "from": {
+            "key_code": "caps_lock",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "set_variable": {
+                "name": "vim_mode",
+                "value": 1
+              }
+            }
+          ],
+          "to_after_key_up": [
+            {
+              "set_variable": {
+                "name": "vim_mode",
+                "value": 0
+              }
+            },
+            {
+              "set_variable": {
+                "name": "vim_visual",
+                "value": 0
+              }
+            },
+            {
+              "set_variable": {
+                "name": "vim_g",
+                "value": 0
+              }
+            },
+            {
+              "set_variable": {
+                "name": "vim_d",
+                "value": 0
+              }
+            },
+            {
+              "set_variable": {
+                "name": "vim_y",
+                "value": 0
+              }
+            },
+            {
+              "set_variable": {
+                "name": "vim_colon",
+                "value": 0
+              }
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "esc: leave visual mode / cancel (also passes Esc through)",
+          "from": {
+            "key_code": "escape",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "escape"
+            },
+            {
+              "set_variable": {
+                "name": "vim_visual",
+                "value": 0
+              }
+            },
+            {
+              "set_variable": {
+                "name": "vim_g",
+                "value": 0
+              }
+            },
+            {
+              "set_variable": {
+                "name": "vim_d",
+                "value": 0
+              }
+            },
+            {
+              "set_variable": {
+                "name": "vim_y",
+                "value": 0
+              }
+            },
+            {
+              "set_variable": {
+                "name": "vim_colon",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual C-f: page down",
+          "from": {
+            "key_code": "f",
+            "modifiers": {
+              "mandatory": [
+                "control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "page_down",
+              "modifiers": [
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual C-b: page up",
+          "from": {
+            "key_code": "b",
+            "modifiers": {
+              "mandatory": [
+                "control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "page_up",
+              "modifiers": [
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual C-d: half page down",
+          "from": {
+            "key_code": "d",
+            "modifiers": {
+              "mandatory": [
+                "control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "page_down",
+              "modifiers": [
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual C-u: half page up",
+          "from": {
+            "key_code": "u",
+            "modifiers": {
+              "mandatory": [
+                "control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "page_up",
+              "modifiers": [
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual h: left",
+          "from": {
+            "key_code": "h",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual j: down",
+          "from": {
+            "key_code": "j",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow",
+              "modifiers": [
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual k: up",
+          "from": {
+            "key_code": "k",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow",
+              "modifiers": [
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual l: right",
+          "from": {
+            "key_code": "l",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual 0: true start of line",
+          "from": {
+            "key_code": "0",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual ^: start of line",
+          "from": {
+            "key_code": "6",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual ^: start of line",
+          "from": {
+            "key_code": "6",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual $: end of line",
+          "from": {
+            "key_code": "4",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual $: end of line",
+          "from": {
+            "key_code": "4",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual w / W: next word",
+          "from": {
+            "key_code": "w",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_option",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual w / W: next word",
+          "from": {
+            "key_code": "w",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_option",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual e / E: end of word",
+          "from": {
+            "key_code": "e",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_option",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual e / E: end of word",
+          "from": {
+            "key_code": "e",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_option",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual b / B: previous word",
+          "from": {
+            "key_code": "b",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_option",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual b / B: previous word",
+          "from": {
+            "key_code": "b",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_option",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual (: previous sentence",
+          "from": {
+            "key_code": "9",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow",
+              "modifiers": [
+                "left_option",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual (: previous sentence",
+          "from": {
+            "key_code": "9",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow",
+              "modifiers": [
+                "left_option",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual ): next sentence",
+          "from": {
+            "key_code": "0",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow",
+              "modifiers": [
+                "left_option",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual {: previous paragraph",
+          "from": {
+            "key_code": "open_bracket",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow",
+              "modifiers": [
+                "left_option",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual }: next paragraph",
+          "from": {
+            "key_code": "close_bracket",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow",
+              "modifiers": [
+                "left_option",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-f: page down",
+          "from": {
+            "key_code": "f",
+            "modifiers": {
+              "mandatory": [
+                "control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "page_down"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-b: page up",
+          "from": {
+            "key_code": "b",
+            "modifiers": {
+              "mandatory": [
+                "control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "page_up"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-d: half page down",
+          "from": {
+            "key_code": "d",
+            "modifiers": {
+              "mandatory": [
+                "control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "page_down"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-u: half page up",
+          "from": {
+            "key_code": "u",
+            "modifiers": {
+              "mandatory": [
+                "control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "page_up"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "C-r: redo",
+          "from": {
+            "key_code": "r",
+            "modifiers": {
+              "mandatory": [
+                "control"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "z",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "v: leave visual mode",
+          "from": {
+            "key_code": "v",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "set_variable": {
+                "name": "vim_visual",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "v: enter visual mode",
+          "from": {
+            "key_code": "v",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "set_variable": {
+                "name": "vim_visual",
+                "value": 1
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_unless",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "V: line-wise visual mode (selects the current line)",
+          "from": {
+            "key_code": "v",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "key_code": "down_arrow",
+              "modifiers": [
+                "left_shift"
+              ]
+            },
+            {
+              "set_variable": {
+                "name": "vim_visual",
+                "value": 1
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual y: copy selection",
+          "from": {
+            "key_code": "y",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "c",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "set_variable": {
+                "name": "vim_visual",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual Y: copy selection",
+          "from": {
+            "key_code": "y",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "c",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "set_variable": {
+                "name": "vim_visual",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual d: cut selection",
+          "from": {
+            "key_code": "d",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "x",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "set_variable": {
+                "name": "vim_visual",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual D: cut selection",
+          "from": {
+            "key_code": "d",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "x",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "set_variable": {
+                "name": "vim_visual",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual x: cut selection",
+          "from": {
+            "key_code": "x",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "x",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "set_variable": {
+                "name": "vim_visual",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual X: cut selection",
+          "from": {
+            "key_code": "x",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "x",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "set_variable": {
+                "name": "vim_visual",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual c: cut selection",
+          "from": {
+            "key_code": "c",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "x",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "set_variable": {
+                "name": "vim_visual",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual C: cut selection",
+          "from": {
+            "key_code": "c",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "x",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "set_variable": {
+                "name": "vim_visual",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual p: replace selection with clipboard",
+          "from": {
+            "key_code": "p",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "v",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "set_variable": {
+                "name": "vim_visual",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual P: replace selection with clipboard",
+          "from": {
+            "key_code": "p",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "v",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "set_variable": {
+                "name": "vim_visual",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": ":w: save",
+          "from": {
+            "key_code": "w",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "s",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "set_variable": {
+                "name": "vim_colon",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_colon",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": ":q: close window/tab",
+          "from": {
+            "key_code": "q",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "w",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "set_variable": {
+                "name": "vim_colon",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_colon",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": ":x: save and close",
+          "from": {
+            "key_code": "x",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "s",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "key_code": "w",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "set_variable": {
+                "name": "vim_colon",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_colon",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual gg: select to start of document",
+          "from": {
+            "key_code": "g",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ]
+            },
+            {
+              "set_variable": {
+                "name": "vim_g",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_g",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "gg: go to start of document",
+          "from": {
+            "key_code": "g",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "set_variable": {
+                "name": "vim_g",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_g",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "visual G: select to end of document",
+          "from": {
+            "key_code": "g",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_unless",
+              "name": "vim_g",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_visual",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "G: go to end of document",
+          "from": {
+            "key_code": "g",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_unless",
+              "name": "vim_g",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "dd: cut the whole line",
+          "from": {
+            "key_code": "d",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "key_code": "down_arrow",
+              "modifiers": [
+                "left_shift"
+              ]
+            },
+            {
+              "key_code": "x",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "set_variable": {
+                "name": "vim_d",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_d",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "D: delete from cursor to end of line",
+          "from": {
+            "key_code": "d",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ]
+            },
+            {
+              "key_code": "delete_or_backspace"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_unless",
+              "name": "vim_d",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "yy: yank (copy) the whole line",
+          "from": {
+            "key_code": "y",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "key_code": "down_arrow",
+              "modifiers": [
+                "left_shift"
+              ]
+            },
+            {
+              "key_code": "c",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "key_code": "left_arrow"
+            },
+            {
+              "set_variable": {
+                "name": "vim_y",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "vim_y",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "Y: yank the whole line (same as yy)",
+          "from": {
+            "key_code": "y",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "key_code": "down_arrow",
+              "modifiers": [
+                "left_shift"
+              ]
+            },
+            {
+              "key_code": "c",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "key_code": "left_arrow"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "X: backspace",
+          "from": {
+            "key_code": "x",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "delete_or_backspace"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "x: forward delete",
+          "from": {
+            "key_code": "x",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "delete_forward"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "J: join this line with the next",
+          "from": {
+            "key_code": "j",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "key_code": "delete_forward"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "o: open a line below",
+          "from": {
+            "key_code": "o",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "key_code": "return_or_enter"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "O: open a line above",
+          "from": {
+            "key_code": "o",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            },
+            {
+              "key_code": "return_or_enter"
+            },
+            {
+              "key_code": "up_arrow"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "P: paste",
+          "from": {
+            "key_code": "p",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "v",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "p: paste",
+          "from": {
+            "key_code": "p",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "v",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "U: redo",
+          "from": {
+            "key_code": "u",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "z",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "u: undo",
+          "from": {
+            "key_code": "u",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "z",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "a: select all",
+          "from": {
+            "key_code": "a",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "a",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "?: search",
+          "from": {
+            "key_code": "slash",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "f",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "/: search",
+          "from": {
+            "key_code": "slash",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "f",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "N: previous match",
+          "from": {
+            "key_code": "n",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "g",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "n: next match",
+          "from": {
+            "key_code": "n",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "g",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "space: switch input source (control+space)",
+          "from": {
+            "key_code": "spacebar",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "spacebar",
+              "modifiers": [
+                "left_control"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "h: left",
+          "from": {
+            "key_code": "h",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "j: down",
+          "from": {
+            "key_code": "j",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "k: up",
+          "from": {
+            "key_code": "k",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "l: right",
+          "from": {
+            "key_code": "l",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "0: true start of line",
+          "from": {
+            "key_code": "0",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "^: start of line",
+          "from": {
+            "key_code": "6",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "^: start of line",
+          "from": {
+            "key_code": "6",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "$: end of line",
+          "from": {
+            "key_code": "4",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "$: end of line",
+          "from": {
+            "key_code": "4",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "w / W: next word",
+          "from": {
+            "key_code": "w",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_option"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "w / W: next word",
+          "from": {
+            "key_code": "w",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_option"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "e / E: end of word",
+          "from": {
+            "key_code": "e",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_option"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "e / E: end of word",
+          "from": {
+            "key_code": "e",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_option"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "b / B: previous word",
+          "from": {
+            "key_code": "b",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_option"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "b / B: previous word",
+          "from": {
+            "key_code": "b",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_option"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "(: previous sentence",
+          "from": {
+            "key_code": "9",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow",
+              "modifiers": [
+                "left_option"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "(: previous sentence",
+          "from": {
+            "key_code": "9",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow",
+              "modifiers": [
+                "left_option"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "): next sentence",
+          "from": {
+            "key_code": "0",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow",
+              "modifiers": [
+                "left_option"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "{: previous paragraph",
+          "from": {
+            "key_code": "open_bracket",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow",
+              "modifiers": [
+                "left_option"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "}: next paragraph",
+          "from": {
+            "key_code": "close_bracket",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow",
+              "modifiers": [
+                "left_option"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "g: start gg",
+          "from": {
+            "key_code": "g",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "set_variable": {
+                "name": "vim_g",
+                "value": 1
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_unless",
+              "name": "vim_g",
+              "value": 1
+            }
+          ],
+          "to_delayed_action": {
+            "to_if_invoked": [
+              {
+                "set_variable": {
+                  "name": "vim_g",
+                  "value": 0
+                }
+              }
+            ],
+            "to_if_canceled": [
+              {
+                "set_variable": {
+                  "name": "vim_g",
+                  "value": 0
+                }
+              }
+            ]
+          },
+          "parameters": {
+            "basic.to_delayed_action_delay_milliseconds": 800
+          }
+        },
+        {
+          "type": "basic",
+          "description": "d: start dd",
+          "from": {
+            "key_code": "d",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "set_variable": {
+                "name": "vim_d",
+                "value": 1
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_unless",
+              "name": "vim_d",
+              "value": 1
+            }
+          ],
+          "to_delayed_action": {
+            "to_if_invoked": [
+              {
+                "set_variable": {
+                  "name": "vim_d",
+                  "value": 0
+                }
+              }
+            ],
+            "to_if_canceled": [
+              {
+                "set_variable": {
+                  "name": "vim_d",
+                  "value": 0
+                }
+              }
+            ]
+          },
+          "parameters": {
+            "basic.to_delayed_action_delay_milliseconds": 800
+          }
+        },
+        {
+          "type": "basic",
+          "description": "y: start yy",
+          "from": {
+            "key_code": "y",
+            "modifiers": {
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "set_variable": {
+                "name": "vim_y",
+                "value": 1
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_unless",
+              "name": "vim_y",
+              "value": 1
+            }
+          ],
+          "to_delayed_action": {
+            "to_if_invoked": [
+              {
+                "set_variable": {
+                  "name": "vim_y",
+                  "value": 0
+                }
+              }
+            ],
+            "to_if_canceled": [
+              {
+                "set_variable": {
+                  "name": "vim_y",
+                  "value": 0
+                }
+              }
+            ]
+          },
+          "parameters": {
+            "basic.to_delayed_action_delay_milliseconds": 800
+          }
+        },
+        {
+          "type": "basic",
+          "description": ": start ex command (:w / :q / :x)",
+          "from": {
+            "key_code": "semicolon",
+            "modifiers": {
+              "mandatory": [
+                "shift"
+              ],
+              "optional": [
+                "caps_lock"
+              ]
+            }
+          },
+          "to": [
+            {
+              "set_variable": {
+                "name": "vim_colon",
+                "value": 1
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_if",
+              "name": "vim_mode",
+              "value": 1
+            },
+            {
+              "type": "variable_unless",
+              "name": "vim_colon",
+              "value": 1
+            }
+          ],
+          "to_delayed_action": {
+            "to_if_invoked": [
+              {
+                "set_variable": {
+                  "name": "vim_colon",
+                  "value": 0
+                }
+              }
+            ],
+            "to_if_canceled": [
+              {
+                "set_variable": {
+                  "name": "vim_colon",
+                  "value": 0
+                }
+              }
+            ]
+          },
+          "parameters": {
+            "basic.to_delayed_action_delay_milliseconds": 800
+          }
+        }
+      ]
+    }
+  ]
+}

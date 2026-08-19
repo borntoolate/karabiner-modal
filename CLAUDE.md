@@ -68,6 +68,8 @@ make venv           # .venv に playwright（Chromium で組版）を用意す�
 | Vim 版の選択はビジュアルモード（`v` / `V`）のみ | `vim/ARCHITECTURE.md` §5 |
 | Emacs 版の Meta は Caps + Shift（`META_MOD = "shift"`） | `emacs/DESIGN.md` §2 |
 | `dd` はクリップボードを使う（`p` で貼り戻せる） | `vim/LIMITATIONS.md` |
+| **ビジュアルの `x` はクリップボードを汚さない削除**（Vim では `d` と同義） | `vim/ARCHITECTURE.md` §5 |
+| 行選択（`dd` `yy` `V`）は ⌘← + ⇧↓ ではなく桁に依存しない5手 | `vim/ARCHITECTURE.md` §4 |
 | `%` `H` `L` `f` `t` `.` などは実装しない | `vim/LIMITATIONS.md` |
 | Figma などの除外アプリは設定しない | `COMPARISON.md` §5 |
 | hjkl に転送するのは ⌥ と ⌘ だけ。⌃ は転送しない | `vim/ARCHITECTURE.md` §2b |
@@ -92,6 +94,16 @@ Shift や Control を「受け付けるが出力しない」場合は `mandatory
 ```bash
 make leakcheck
 ```
+
+### ⇧↓ は「桁」を覚えている
+
+行単位の操作を「⌘← で行頭へ → ⇧↓ で次の行頭まで選択」と書きたくなりますが、
+**⇧↓ は開始した桁を保ったまま下の行へ動きます。** VS Code や JetBrains 系の ⌘← は
+最初の非空白文字で止まるので、インデントされたコードでは選択が次の行の同じ桁まで
+伸び、次の行が短ければその行の末尾まで飲み込みます（`}` だけの行が消えます）。
+
+行を選ぶときは `gen.py` の `SELECT_LINE`（⌘→ → ⌘← → ⌘← → ⌘⇧→ → ⇧→）を使ってください。
+桁の計算がどこにも入りません。理由は `vim/ARCHITECTURE.md` §4 にあります。
 
 ### 「効かない」の原因は競合とは限らない
 

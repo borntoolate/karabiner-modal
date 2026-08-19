@@ -172,6 +172,40 @@ for _k, _arrow in ARROW_KEYS:
             f"{_label}+{_k}: forward {_label} to {_arrow}"))
 
 # ---------------------------------------------------------------------------
+# Selecting "the current line, newline included".
+#
+# The obvious spelling is ⌘← then ⇧↓, and it is wrong.  ⇧↓ keeps the column it
+# started from, so if ⌘← did not land on column 0 the selection ends at that
+# same column on the NEXT line -- and if the next line is shorter, at its end.
+# VS Code and JetBrains make ⌘← stop at the first non-whitespace character, so
+# on indented code the selection runs past the newline and eats what follows.
+# Measured in Monaco (VS Code's editor core): with the caret in
+# `  position: relative;` above a `}` line, ⌘← ⇧↓ selects
+# `position: relative;\n}` -- dd then deletes the closing brace as well.
+#
+# So: never let the column matter.
+#
+#   ⌘→        end of the line.  Unambiguous, and it puts the caret to the
+#             right of the first non-whitespace character, which is what makes
+#             the next step deterministic.
+#   ⌘← ⌘←     line start.  Smart-home apps stop at the indent on the first
+#             press and toggle to column 0 on the second; apps with a plain
+#             line start are already there and the second press is a no-op
+#             (verified in Chromium's <textarea>).
+#   ⌘⇧→       select to the end of the line.  No column arithmetic involved.
+#   ⇧→        one more character: the newline.  On the last line of a document
+#             there is none and this simply does nothing.
+#
+# The worst case is an app with a smart line start that does NOT toggle: the
+# indentation is left behind, but the next line is never touched.
+# ---------------------------------------------------------------------------
+SELECT_LINE = [key("right_arrow", ["left_command"]),
+               key("left_arrow", ["left_command"]),
+               key("left_arrow", ["left_command"]),
+               key("right_arrow", ["left_command", "left_shift"]),
+               key("right_arrow", ["left_shift"])]
+
+# ---------------------------------------------------------------------------
 # 3. Visual mode
 # ---------------------------------------------------------------------------
 manipulators.append(manip(
@@ -179,20 +213,28 @@ manipulators.append(manip(
 manipulators.append(manip(
     "v", [setv("vim_visual", 1)], [VM, VIS_OFF], NONE, "v: enter visual mode"))
 manipulators.append(manip(
-    "v",
-    [key("left_arrow", ["left_command"]),
-     key("down_arrow", ["left_shift"]),
-     setv("vim_visual", 1)],
+    "v", SELECT_LINE + [setv("vim_visual", 1)],
     [VM], SHIFT, "V: line-wise visual mode (selects the current line)"))
 
 # operators that act on the selection and then leave visual mode
 # Shift/no-Shift are spelled out separately so a stray Shift cannot leak into
 # the output (Cmd-Shift-V is "paste and match style", not what we want here).
+#
+# `x` is deliberately NOT a synonym for `d` here, which is where this parts
+# company with Vim.  Vim keeps what you delete in a register, so `d` costs you
+# nothing; the unnamed register is a separate box from the system clipboard.
+# macOS has only the one box.  Making every deletion a Cmd-X means the ordinary
+# "copy this, select the old text, get rid of it, paste" sequence loses what you
+# copied halfway through.  So the two meanings get one key each: `d` and `c`
+# cut (Vim's contract -- `p` pastes back what you just removed), `x` deletes and
+# leaves the clipboard alone.  It matches what `x` already does outside visual
+# mode, where it is a plain forward delete.
 VISUAL_OPS = [
     ("y", key("c", ["left_command"]), "copy selection"),
     ("d", key("x", ["left_command"]), "cut selection"),
-    ("x", key("x", ["left_command"]), "cut selection"),
     ("c", key("x", ["left_command"]), "cut selection"),
+    ("x", key("delete_or_backspace"),
+     "delete selection without touching the clipboard"),
     ("p", key("v", ["left_command"]), "replace selection with clipboard"),
 ]
 for k, ev, desc in VISUAL_OPS:
@@ -251,11 +293,7 @@ manipulators.append(manip(
 
 # --- dd / D ----------------------------------------------------------------
 manipulators.append(manip(
-    "d",
-    [key("left_arrow", ["left_command"]),
-     key("down_arrow", ["left_shift"]),
-     key("x", ["left_command"]),
-     setv("vim_d", 0)],
+    "d", SELECT_LINE + [key("x", ["left_command"]), setv("vim_d", 0)],
     [VM, D_ON], NONE, "dd: cut the whole line"))
 manipulators.append(manip(
     "d",
@@ -264,10 +302,7 @@ manipulators.append(manip(
     [VM, D_OFF], SHIFT, "D: delete from cursor to end of line"))
 
 # --- yy / Y ----------------------------------------------------------------
-YANK_LINE = [key("left_arrow", ["left_command"]),
-             key("down_arrow", ["left_shift"]),
-             key("c", ["left_command"]),
-             key("left_arrow")]
+YANK_LINE = SELECT_LINE + [key("c", ["left_command"]), key("left_arrow")]
 manipulators.append(manip(
     "y", YANK_LINE + [setv("vim_y", 0)], [VM, Y_ON], NONE,
     "yy: yank (copy) the whole line"))

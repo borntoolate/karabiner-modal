@@ -21,18 +21,23 @@ from pathlib import Path
 
 
 def parse(md_text):
-    """Return [(heading, [rows]), ...] keeping only headings that own a table."""
-    sections, heading, rows, in_table = [], None, [], False
+    """Return [(level, heading, [rows]), ...] for the headings that own a table.
+
+    The level is kept so that `###` renders as a subheading attached to the
+    `##` above it.  Two tables under one heading would otherwise print their
+    column labels twice in a row with nothing to tell them apart.
+    """
+    sections, level, heading, rows, in_table = [], 2, None, [], False
 
     def flush():
         if heading and rows:
-            sections.append((heading, list(rows)))
+            sections.append((level, heading, list(rows)))
 
     for line in md_text.splitlines():
         h = re.match(r"^(#{2,3})\s+(.*)", line)
         if h:
             flush()
-            heading, rows, in_table = h.group(2).strip(), [], False
+            level, heading, rows, in_table = len(h.group(1)), h.group(2).strip(), [], False
             continue
         if line.startswith("|"):
             cells = [c.strip() for c in line.strip().strip("|").split("|")]
@@ -79,6 +84,13 @@ h2 {{
   font-size: 1.08em; margin: 0 0 1mm 0; padding: 0.7mm 1.6mm;
   background: #14171a; color: #fff; border-radius: 1.2pt; font-weight: 600;
 }}
+h3 {{
+  font-size: 1em; margin: 0 0 1mm 0; padding: 0.6mm 1.6mm;
+  background: #eef2f5; color: #14171a; border-left: 1.4pt solid #14171a;
+  border-radius: 1.2pt; font-weight: 600;
+}}
+section.subsec {{ margin-top: -2mm; }}
+h3 .parent {{ color: #6b7680; font-weight: 400; }}
 table {{ width: 100%; border-collapse: collapse; }}
 td, th {{
   text-align: left; vertical-align: top; padding: 0.75mm 1.4mm;
@@ -109,8 +121,22 @@ def build_html(title, subtitle, sections, font_pt):
         f"<div class='sub'>{subtitle}</div>",
         "<div class='cols'>",
     ]
-    for heading, rows in sections:
-        parts.append(f"<section><h2>{inline(heading)}</h2><table>")
+    parent = ""
+    for level, heading, rows in sections:
+        # A `###` belongs to the `##` above it.  Rather than nail the two
+        # together -- which makes them one unbreakable block and costs about a
+        # point of font size over the whole card -- the subheading carries the
+        # parent's name, so it still reads correctly when the columns break
+        # between them.
+        if level == 2:
+            parent = heading
+            label, htag, cls = inline(heading), "h2", ""
+        else:
+            label = (f"<span class='parent'>{inline(parent)} / </span>"
+                     + inline(heading))
+            htag, cls = "h3", " class='subsec'"
+        parts.append(
+            f"<section{cls}><{htag}>{label}</{htag}><table>")
         for kind, cells in rows:
             tag = "th" if kind == "head" else "td"
             tds = "".join(f"<{tag}>{inline(c)}</{tag}>" for c in cells)
@@ -194,7 +220,7 @@ def main():
     fs = asyncio.run(render_autofit(title, subtitle, sections, out))
     normalize(out, title)
 
-    rows = sum(len(r) for _, r in sections)
+    rows = sum(len(r) for *_, r in sections)
     print(f"{src} -> {out}  ({len(sections)} sections, {rows} rows, "
           f"{fs}pt, {page_count(out)} page, {out.stat().st_size // 1024} KB)")
 

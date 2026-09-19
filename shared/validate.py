@@ -97,6 +97,10 @@ for i, m in enumerate(manips):
                     errors.append(
                         f"{tag}: bad {bucket} pointing_button "
                         f"{ev['pointing_button']!r}")
+                # ⌥クリックなど。modifiers は pointing_button にも効く
+                for x in ev.get("modifiers", []):
+                    if x not in VALID_MODIFIERS:
+                        errors.append(f"{tag}: bad {bucket} modifier {x!r}")
             elif "consumer_key_code" in ev:
                 if ev["consumer_key_code"] not in VALID_CONSUMER_KEYS:
                     errors.append(

@@ -5482,6 +5482,411 @@
       ]
     },
     {
+      "description": "[SN30] Claude Desktop（R2 を押しながら）",
+      "manipulators": [
+        {
+          "type": "basic",
+          "description": "R2 + A -> ⌘N (新規セッション（Chat タブでは新規チャット）)",
+          "from": {
+            "pointing_button": "button1",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "n",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.anthropic\\.claudefordesktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 ↑ -> ⌘B (サイドバーの表示 / 非表示)",
+          "from": {
+            "generic_desktop": "dpad_up",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "b",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.anthropic\\.claudefordesktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 ↓ -> ⌃⌘\\ (右に新しいセッションを開く（分割ビュー）)",
+          "from": {
+            "generic_desktop": "dpad_down",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "backslash",
+              "modifiers": [
+                "left_control",
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.anthropic\\.claudefordesktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 ← -> ⌘⌥← (前のサーフェス（Code → Cowork → Chat）)",
+          "from": {
+            "generic_desktop": "dpad_left",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_command",
+                "left_option"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.anthropic\\.claudefordesktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 → -> ⌘⌥→ (次のサーフェス（Chat → Cowork → Code）)",
+          "from": {
+            "generic_desktop": "dpad_right",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_command",
+                "left_option"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.anthropic\\.claudefordesktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + L -> ⌘⇧[ (前のセッション（サイドバーの1つ上）)",
+          "from": {
+            "pointing_button": "button7",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "open_bracket",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.anthropic\\.claudefordesktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + R -> ⌘⇧] (次のセッション（サイドバーの1つ下）)",
+          "from": {
+            "pointing_button": "button8",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "close_bracket",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.anthropic\\.claudefordesktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + Start（＋） -> ⌘K (セッションを検索 / 開始（コマンドパレット）)",
+          "from": {
+            "pointing_button": "button12",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "k",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.anthropic\\.claudefordesktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 左スティック押込 -> ⌥マウス左 (⌥クリック（サイドバーのセッションを分割ビューで開く）)",
+          "from": {
+            "pointing_button": "button14",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "pointing_button": "button1",
+              "modifiers": [
+                "left_option"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.anthropic\\.claudefordesktop$"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       "description": "[SN30] ターミナル / Claude Code（R2 を押しながら）",
       "manipulators": [
         {
@@ -5526,7 +5931,6 @@
                 "^com\\.apple\\.Terminal$",
                 "^com\\.lambdalisue\\.Arto$",
                 "^com\\.microsoft\\.VSCode$",
-                "^com\\.anthropic\\.claudefordesktop$",
                 "^com\\.googlecode\\.iterm2$",
                 "^com\\.mitchellh\\.ghostty$",
                 "^dev\\.warp\\.Warp-Stable$",
@@ -5577,7 +5981,6 @@
                 "^com\\.apple\\.Terminal$",
                 "^com\\.lambdalisue\\.Arto$",
                 "^com\\.microsoft\\.VSCode$",
-                "^com\\.anthropic\\.claudefordesktop$",
                 "^com\\.googlecode\\.iterm2$",
                 "^com\\.mitchellh\\.ghostty$",
                 "^dev\\.warp\\.Warp-Stable$",
@@ -5628,7 +6031,6 @@
                 "^com\\.apple\\.Terminal$",
                 "^com\\.lambdalisue\\.Arto$",
                 "^com\\.microsoft\\.VSCode$",
-                "^com\\.anthropic\\.claudefordesktop$",
                 "^com\\.googlecode\\.iterm2$",
                 "^com\\.mitchellh\\.ghostty$",
                 "^dev\\.warp\\.Warp-Stable$",
@@ -5658,6 +6060,103 @@
               "key_code": "t",
               "modifiers": [
                 "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.google\\.Chrome$",
+                "^com\\.apple\\.Safari$",
+                "^org\\.mozilla\\.firefox$",
+                "^com\\.brave\\.Browser$",
+                "^company\\.thebrowser\\.Browser$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 ↑ -> ⌘L (アドレスバー（検索欄）を選択)",
+          "from": {
+            "generic_desktop": "dpad_up",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "l",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.google\\.Chrome$",
+                "^com\\.apple\\.Safari$",
+                "^org\\.mozilla\\.firefox$",
+                "^com\\.brave\\.Browser$",
+                "^company\\.thebrowser\\.Browser$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 ↓ -> ⌘⌥B (ブックマークの一覧を開く（Chrome: ブックマーク マネージャー / Safari: ブックマークを編集）)",
+          "from": {
+            "generic_desktop": "dpad_down",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "b",
+              "modifiers": [
+                "left_command",
+                "left_option"
               ],
               "repeat": false
             }
@@ -6302,6 +6801,44 @@
           "to": [
             {
               "key_code": "spacebar",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 右スティック押込 -> ⌘N (新規（新しい書類 / ウィンドウ / セッション）)",
+          "from": {
+            "pointing_button": "button15",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "n",
               "modifiers": [
                 "left_command"
               ],

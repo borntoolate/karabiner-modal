@@ -21,12 +21,17 @@ Mac 上のローカル Claude Code で続きをやるための申し送りです
   TextEdit が前面のときだけ R2 + 十字 ↑ ↓ ← → / Start = `refine code` / `research` /
   `doc` / `ticket` / `message`。`shell_command` で prompt-refiner を直接呼ぶ。
   実機未確認（下記「やること 3」）
-- ルール 12 本 / manipulator 163 件
+- **Claude Desktop 層とブラウザの追加、⌘N のグローバル化**（2026-09-20）。Claude Desktop は
+  独立した R2 層（サーフェス切り替え ⌘⌥←→、サイドバー ⌘B、新規セッション ⌘N、前後の
+  セッション ⌘⇧[ ]、パレット ⌘K、右に新しいセッション ⌃⌘\、R2 + 左スティック押込 =
+  ⌥クリックで分割ビューに開く）。ブラウザは R2 + ↑ = ⌘L、↓ = ⌥⌘B。R2 + 右スティック押込は
+  どのアプリでも ⌘N。実機未確認（下記「やること 4」）
+- ルール 13 本 / manipulator 175 件
 - 長押しで繰り返すのは矢印と削除だけ（`repeat: false` が既定。`hold:` で押しっぱなし）
 - スティックは左右で挙動を変えてある（下記「やること 1」）
 - マニュアルは `CHEATSHEET.md`（生成物。PDF の元）
 
-`karabiner.json` には反映済みです（`make install-gamepad`）。直前の状態は
+`karabiner.json` には反映済みです（`make install-gamepad`、2026-09-20）。直前の状態は
 `~/.config/karabiner/automatic_backups/karabiner_before_sn30_<日時>.json` にあります。
 
 ---
@@ -51,8 +56,8 @@ Mac 上のローカル Claude Code で続きをやるための申し送りです
 
 ### 使いながら足すもの
 
-- **R2 の上書きは 9 枠まで**（`MOD_DEFAULT` のうち `MOD_LOCKED` 以外）。アプリを足すときは
-  `APPS` に `mod` だけ書く。単押しは変えない
+- **R2 の上書きは既定のある 10 枠 + 既定のない左スティック押込**（`MOD_DEFAULT` のうち
+  `MOD_LOCKED` 以外と `MOD_APP_ONLY`）。アプリを足すときは `APPS` に `mod` だけ書く。単押しは変えない
 - ブラウザの DevTools（⌘⌥I）、VS Code のコマンドパレット（⌘⇧P）は外してある。
   要るなら R2 の空き枠（↑ ↓ または B）へ
 - Figma / Photoshop / Illustrator / After Effects / Logic は `DESK_APPS`（単押しも上書き）。
@@ -159,6 +164,39 @@ Start は既定（PgUp / PgDn / 単語移動 / 書式なし貼り付け）のま
 
 ---
 
+## やること 4 — Claude Desktop 層・ブラウザ層・⌘N を実機で確かめる
+
+配線は済んでいて `make gamepad` / `make check` は通り、`karabiner.json` にも入れてあります
+（2026-09-20）。次の順で確かめてください。キーは Desktop 2.2553.1 の `app.asar` と Web 層の
+ショートカット一覧から取った実物ですが、**ボタンからは一度も押していません**（`DESIGN.md` §9）。
+
+| 確認 | ボタン | 期待 | 外れたら |
+|---|---|---|---|
+| サーフェスの切り替え | R2 + 十字 ← / → | Chat ↔ Cowork ↔ Code が1つずつ動く。長押しで連打にならない | `once:` が効いていない。EventViewer で ⌘⌥← が1回だけ出ているか |
+| サイドバー | R2 + 十字 ↑ | 表示 / 非表示が反転する | 効かなければ ⌘. に差し替え（Web 層の同じ機能。`CLAUDE_DESKTOP_APP["mod"]["UP"]`） |
+| 新規セッション | R2 + A、R2 + 右スティック押込 | Code タブなら新規セッション、Chat タブなら新規チャット | — |
+| 前後のセッション | R2 + L / R | サイドバーの1つ上 / 下のセッションに移る | 効かなければ ⌃⇧Tab / ⌃Tab（既定）に戻す |
+| 分割ビュー（新規） | R2 + 十字 ↓ | 右に新しいセッションの列ができる | View → Split View に項目があるか確認 |
+| 分割ビュー（既存） | サイドバーの項目を指して R2 + 左スティック押込 | そのセッションが分割ビューで開く | 押込でポインタが跳ねて隣を掴む → deadzone を 0.12 に。⌥ が付いていない → EventViewer で button1 の前に left_option が出ているか |
+| パレット | R2 + Start | 「セッションを検索 / 開始」が開く | — |
+| 権限プロンプト | ハート + A / B | 今回は許可 / 拒否 | 許可が ⌘Enter でなく Enter のプロンプトもある（プランモードの承認）。A だけで足りることもある |
+| ブラウザ | R2 + 十字 ↑ / ↓ | アドレスバーが選択される / ブックマークの一覧がタブに開く | Chrome の一覧は押込 2 回で開く。A は名前の変更、X / Y は削除 |
+| ⌘N | R2 + 右スティック押込（TextEdit / VS Code） | 新しい書類 / ファイル | 押込で右スティックが傾いてスクロールしても ⌘N は出る |
+
+### 見送ったもの（要るなら）
+
+- **返事待ちのセッションへ飛ぶ** `open "claude://code/needs-input"`（Dock メニューの "Sessions
+  Waiting for You" と同じ）。`shell_command` になり、整形中に押すと `refine` が消えるので置いて
+  いない。要るなら `CLAUDE_DESKTOP_APP["mod"]["DOWN"]` を `shell("open claude://code/needs-input")`
+  に差し替える（`DESIGN.md` §5 / §8）
+- **メニューバーにフォーカス** ⌃F2（macOS のキーボードショートカット）。十字と A でどのメニュー
+  項目にも届くので、ブックマークの一覧や Go メニューの Chat / Cowork / Code にも使える。
+  R2 層に空きがないので置いていない
+- ⌘⇧N「同じ設定で新規セッション」、⌘⇧⌫「セッションをアーカイブ」、⌘⇧D / ⌘J / ⌘⇧B の
+  ペイン切り替え。どれも Web 層に定義がある。枠を空けるなら R2 + B（⌘W）から
+
+---
+
 ## このリポジトリで守ること
 
 `CLAUDE.md` を必ず読んでから作業してください。特にゲームパッド版で効くのは:
@@ -170,7 +208,7 @@ Start は既定（PgUp / PgDn / 単語移動 / 書式なし貼り付け）のま
   同じイベントなので、付け忘れるとトラックパッドのクリックが死ぬ（`DESIGN.md` §4）。
   `gen.py` 経由なら自動で付く
 - **単押し（`BASE`）はエンジニア業務のアプリで変えない。** アプリ別は `APPS[].mod` の
-  9 枠だけ。`MOD_LOCKED` の枠を上書きすると `gen.py` が止まる。机に向かうアプリだけ
+  10 枠と左スティック押込だけ。`MOD_LOCKED` の枠を上書きすると `gen.py` が止まる。机に向かうアプリだけ
   `DESK_APPS` で単押しも上書きできるが、ハート（`DESK_LOCKED`）は不可
 - **`optional: ["any"]` は狙い。** 外すと L / ハートを握っている間ルールが効かなくなる
 - **`make check` を通す。** エラーが出た状態で「たぶん動く」と報告しない

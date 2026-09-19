@@ -178,7 +178,9 @@ ORDER = ["A", "B", "X", "Y",
 #     "cmd+shift+open_bracket"    修飾キー付き（cmd / shift / opt / ctrl / fn）
 #     "escape escape"             スペース区切りで連続入力
 #     "click:button1"             マウスクリックを送る
+#     "opt+click:button1"         修飾キー付きのクリック（⌥クリックなど）
 #     "hold:spacebar"             押している間だけ押しっぱなしにする
+#     "once:cmd+opt+left_arrow"   矢印でも長押しで繰り返さない（切り替えに使うとき）
 #     "shell:$HOME/bin/refine code"  シェルコマンドを実行する（/bin/sh -c）。
 #                                 空白を含むので、他のトークンと並べられない
 # ===========================================================================
@@ -255,6 +257,7 @@ COMBOS = [
     ("L + R", "⇧Tab（前の要素へ。Claude Code では権限モードの切り替え）"),
     ("L + 右スティック", "横スクロール"),
     ("ハート + R", "⌘Tab を続けて送る。ハートを離すまでスイッチャーが出たまま"),
+    ("ハート + A", "⌘Enter（Claude Desktop の権限プロンプトでは「今回は許可」。拒否は B の Esc）"),
     ("ハート + 十字 ←→", "行頭 / 行末（⌘矢印）"),
     ("ハート + 十字 ↑↓", "文頭 / 文末"),
     ("ハート + Y", "行頭まで削除（⌘Backspace）"),
@@ -264,6 +267,12 @@ COMBOS = [
 ]
 
 # R2 を押しながら。アプリ別に上書きできるのはこの層だけ。
+#
+# ⌘N（新規）はアプリ別の 9 枠の外、右スティック押込に置いてある。TextEdit / VS Code の新規ファイル、
+# Claude Desktop の新規セッション、ブラウザの新規ウィンドウ、どのアプリでも ⌘N は「新しく
+# 作る」で意味が揃うので、アプリ別の枠を使わずグローバルにした。押し込みでポインタが跳ねても
+# ⌘N は困らない。アプリ別にすると TextEdit の R2 層（口述の整形で埋まっている）に置き場が
+# なく、アプリを足すたびに配線が要る（DESIGN.md §5）。
 MOD_DEFAULT = {
     "A":      ("cmd+a", "すべて選択"),
     "B":      ("cmd+w", "閉じる"),
@@ -278,9 +287,14 @@ MOD_DEFAULT = {
     "SELECT": ("cmd+x", "切り取り"),
     "START":  ("cmd+shift+v", "書式なしで貼り付け"),
     "HEART":  ("cmd+spacebar", "Spotlight / ランチャー"),
+    "R3":     ("cmd+n", "新規（新しい書類 / ウィンドウ / セッション）"),
 }
 # アプリ別に上書きできない枠。編集の芯はどのアプリでも同じ場所にある。
 MOD_LOCKED = {"X", "Y", "SELECT", "HEART"}
+# 既定を置かない枠。R2 を握ったままの左スティック押込は、どのアプリでも意味のある
+# 「クリックの変種」がない（⌥クリックは Chrome ではリンクのダウンロード）ので、
+# 必要なアプリだけが置く。既定では素の button14 が素通りし、macOS は何もしない。
+MOD_APP_ONLY = {"L3"}
 
 # ===========================================================================
 # アプリ別（R2 を押しながらの上書きだけ）
@@ -308,8 +322,45 @@ DICTATION_APP = {
     },
 }
 
+# Claude Desktop（Code タブで複数セッションを並列に回す前提）。キーは Desktop 2.2553.1 の
+# アプリメニューと、同梱 Web 層のショートカット一覧（Help → Keyboard Shortcuts ⌘/）から
+# 取った実物で、推測ではない（DESIGN.md §5）。単押しの B（Esc）は応答の停止、
+# ハート + A（⌘Enter）は権限プロンプトの「今回は許可」に当たる。
+# 「サーフェス」は Chat / Cowork / Code の切り替えで、macOS ではサイドバーの有無や
+# 分割ビューの有無に関わらず効く。分割ビューで「既存のセッションを開く」に相当する
+# キーは ⌥クリックしかない（Web 層の一覧に "alt+click" として載っている）ので、
+# 既定のない左スティック押込に置く。
+CLAUDE_DESKTOP_APP = {
+    "name": "Claude Desktop",
+    "apps": [r"^com\.anthropic\.claudefordesktop$"],
+    "mod": {
+        "A":      ("cmd+n", "新規セッション（Chat タブでは新規チャット）"),
+        "UP":     ("cmd+b", "サイドバーの表示 / 非表示"),
+        "DOWN":   ("ctrl+cmd+backslash", "右に新しいセッションを開く（分割ビュー）"),
+        "LEFT":   ("once:cmd+opt+left_arrow", "前のサーフェス（Code → Cowork → Chat）"),
+        "RIGHT":  ("once:cmd+opt+right_arrow", "次のサーフェス（Chat → Cowork → Code）"),
+        "L":      ("cmd+shift+open_bracket", "前のセッション（サイドバーの1つ上）"),
+        "R":      ("cmd+shift+close_bracket", "次のセッション（サイドバーの1つ下）"),
+        "START":  ("cmd+k", "セッションを検索 / 開始（コマンドパレット）"),
+        "L3":     ("opt+click:button1", "⌥クリック（サイドバーのセッションを分割ビューで開く）"),
+    },
+    "notes": [
+        "既存のセッションを開くのは、サイドバーの項目を左スティックで指して左スティック押込"
+        "（クリック）か、R2 + L / R で1つずつ送る。**分割ビューで開くときは R2 を握ったまま"
+        "押し込む**（⌥クリック）",
+        "新規セッションは R2 + A でも R2 + 右スティック押込（どのアプリでも ⌘N）でも同じ",
+        "権限プロンプトは ハート + A（⌘Enter）で今回は許可、B（Esc）で拒否。"
+        "Claude の応答を止めるのも B",
+        "サーフェスの切り替え（⌘⌥←→）と分割ビュー（⌃⌘\\）は Code タブ以外でも押せるが、"
+        "分割ビューは Code タブにしかない",
+        "セッション番号で飛ぶ ⌘1〜9、Changes / ターミナル / ブラウザのペイン切り替え"
+        "（⌘⇧D / ⌘J / ⌘⇧B）はキーボードのまま。ペインはヘッダーのアイコンをクリックしても開く",
+    ],
+}
+
 APPS = [
     DICTATION_APP,
+    CLAUDE_DESKTOP_APP,
 
     {
         "name": "ターミナル / Claude Code",
@@ -317,7 +368,6 @@ APPS = [
             r"^com\.apple\.Terminal$",
             r"^com\.lambdalisue\.Arto$",
             r"^com\.microsoft\.VSCode$",
-            r"^com\.anthropic\.claudefordesktop$",
             r"^com\.googlecode\.iterm2$",
             r"^com\.mitchellh\.ghostty$",
             r"^dev\.warp\.Warp-Stable$",
@@ -328,8 +378,14 @@ APPS = [
             "B":      ("ctrl+c", "強制中断"),
             "START":  ("cmd+k", "画面をクリア"),
         },
+        "notes": [
+            "VS Code の新規ファイル（⌘N）は R2 + 右スティック押込（どのアプリでも同じ）",
+        ],
     },
 
+    # ⌘L はどのブラウザでもアドレスバー（検索欄）の選択。⌥⌘B は Chrome 系では
+    # ブックマーク マネージャー（新しいタブに一覧が開く）、Safari では「ブックマークを編集」
+    # （同じくタブに一覧）。どちらも一覧の項目をスティックで指して開ける。
     {
         "name": "ブラウザ",
         "apps": [
@@ -342,9 +398,19 @@ APPS = [
         "mod": {
             "A":      ("cmd+t", "新規タブ"),
             "START":  ("cmd+r", "リロード"),
+            "UP":     ("cmd+l", "アドレスバー（検索欄）を選択"),
+            "DOWN":   ("cmd+opt+b", "ブックマークの一覧を開く（Chrome: ブックマーク マネージャー / Safari: ブックマークを編集）"),
             "LEFT":   ("cmd+open_bracket", "戻る"),
             "RIGHT":  ("cmd+close_bracket", "進む"),
         },
+        "notes": [
+            "ブックマークの一覧では、項目を左スティックで指してクリックで選び、**押込を2回（ダブルクリック）で開く**。"
+            "A（Enter）は名前の変更になる（Chrome / Safari とも）。Chrome は ハート + A（⌘Enter）で新しいタブに開く。"
+            "X / Y は選んだブックマークの削除なので押さない（消したら R2 + Y で取り消す）",
+            "ブックマーク バーを常に出しておくなら ⌘⇧B（Chrome / Safari とも）。キーボードから一度切り替えれば、"
+            "以後はバーの項目を1クリックで開ける",
+            "新規ウィンドウは R2 + 右スティック押込（⌘N）",
+        ],
     },
 ]
 
@@ -547,7 +613,7 @@ KEY_SYMBOL = {
     "spacebar": "space", "escape": "esc", "tab": "tab",
     "up_arrow": "↑", "down_arrow": "↓", "left_arrow": "←", "right_arrow": "→",
     "page_up": "PgUp", "page_down": "PgDn",
-    "open_bracket": "[", "close_bracket": "]",
+    "open_bracket": "[", "close_bracket": "]", "backslash": "\\",
     "hyphen": "-", "equal_sign": "=", "comma": ",", "period": ".",
     "keypad_0": "テンキー0",
 }
@@ -572,28 +638,42 @@ def from_event(button):
 # repeat: false にして、ボタンを長めに押しても1回しか出ないようにする。Enter や
 # ⌘W がキーリピートで連打される事故を防ぐため。押している間だけ効かせたいキー
 # （Photoshop の手のひらツール = スペース）は "hold:" を付ける。クリックは押している間
-# ドラッグになるので対象外。
+# ドラッグになるので対象外。矢印でも「切り替え」に使うもの（Claude Desktop の ⌘⌥←→ は
+# サーフェスの切り替え）は "once:" を付けて1回だけにする。繰り返すと表示が飛ぶ。
 REPEAT_KEYS = {"up_arrow", "down_arrow", "left_arrow", "right_arrow",
                "page_up", "page_down", "delete_or_backspace", "delete_forward"}
 
 
-def parse_to_token(token):
-    if token.startswith("click:"):
-        return {"pointing_button": token.split(":", 1)[1]}
-    hold = token.startswith("hold:")
-    if hold:
-        token = token[len("hold:"):]
-    parts = token.split("+")
-    key, mods = parts[-1], []
-    for raw in parts[:-1]:
+def parse_modifiers(parts, token):
+    mods = []
+    for raw in parts:
         alias = raw.strip().lower()
         if alias not in MODIFIER_ALIASES:
             raise ValueError("未知の修飾キー: %s (in %r)" % (raw, token))
         mods.append(MODIFIER_ALIASES[alias])
+    return mods
+
+
+def parse_to_token(token):
+    if "click:" in token:
+        # "click:button1" / "opt+click:button1"。to の modifiers は pointing_button にも
+        # 効く（16.3.0 の to_event_definition.hpp。修飾キーを押してからボタンを送る）
+        prefix, _, button = token.partition("click:")
+        event = {"pointing_button": button}
+        mods = parse_modifiers(prefix.rstrip("+").split("+"), token) if prefix else []
+        if mods:
+            event["modifiers"] = mods
+        return event
+    hold = token.startswith("hold:")
+    once = token.startswith("once:")
+    if hold or once:
+        token = token.split(":", 1)[1]
+    parts = token.split("+")
+    key, mods = parts[-1], parse_modifiers(parts[:-1], token)
     event = {"key_code": key}
     if mods:
         event["modifiers"] = mods
-    if key not in REPEAT_KEYS and not hold:
+    if (key not in REPEAT_KEYS or once) and not hold:
         event["repeat"] = False
     return event
 
@@ -619,11 +699,13 @@ def pretty(spec):
         return " ".join(words)
     out = []
     for token in spec.split():
-        if token.startswith("click:"):
-            out.append("マウス左" if token.endswith("button1") else "マウス右")
+        if "click:" in token:
+            prefix, _, button = token.partition("click:")
+            syms = "".join(MOD_SYMBOL.get(p.lower(), p) for p in prefix.rstrip("+").split("+") if p)
+            out.append(syms + ("マウス左" if button == "button1" else "マウス右"))
             continue
-        if token.startswith("hold:"):
-            token = token[len("hold:"):]
+        if token.startswith(("hold:", "once:")):
+            token = token.split(":", 1)[1]
         parts = token.split("+")
         key = parts[-1]
         syms = "".join(MOD_SYMBOL.get(p.lower(), p) for p in parts[:-1])
@@ -646,7 +728,7 @@ def mod_layer(app, locked=MOD_LOCKED):
     over = app.get("mod", {})
     bad = set(over) & locked
     assert not bad, "%s: 上書きできない枠 %s" % (app["name"], sorted(bad))
-    unknown = set(over) - set(MOD_DEFAULT)
+    unknown = set(over) - set(MOD_DEFAULT) - MOD_APP_ONLY
     assert not unknown, "%s: R2 既定にない枠 %s" % (app["name"], sorted(unknown))
     merged = dict(MOD_DEFAULT)
     merged.update(over)
@@ -923,6 +1005,12 @@ def build_cheatsheet():
           [["R2 + " + LABEL[b], "`%s`" % pretty(MOD_DEFAULT[b][0]), MOD_DEFAULT[b][1],
             "不可" if b in MOD_LOCKED else "可"]
            for b in ORDER if b in MOD_DEFAULT])
+    L.append("- R2 + %s は既定では何も送りません（アプリ別にだけ置く枠。Claude Desktop の"
+             " ⌥クリック）。R2 + %s の ⌘N は「新規」の意味がアプリで揃うのでグローバルです"
+             "（TextEdit / VS Code は新しいファイル、Claude Desktop は新しいセッション、"
+             "ブラウザやターミナルは新しいウィンドウ）"
+             % (LABEL["L3"], LABEL["R3"]))
+    L.append("")
     L.append("---")
     L.append("")
 
@@ -960,8 +1048,8 @@ def build_cheatsheet():
     ]
     table(L, ["手順", "ボタン", "送るもの"], steps)
     L.append("- **他のアプリで口述した文はキーボードの ⌥⌘1〜5 で整形してください。** "
-             "整形ボタンは TextEdit でしか効きません。ターミナル / Claude Code グループ"
-             "（Claude Desktop を含む）とブラウザは R2 + A も ⌘A ではないので、コントローラー"
+             "整形ボタンは TextEdit でしか効きません。Claude Desktop、ターミナル / Claude Code、"
+             "ブラウザの各グループは R2 + A も ⌘A ではないので、コントローラー"
              "だけでは完結しません")
     L.append("- **整形中にもう一度押さないでください。** Karabiner はシェルコマンドを同時に"
              "1つしか走らせず、次を押すと走っている整形が強制終了されます"
@@ -1012,6 +1100,10 @@ def build_cheatsheet():
               [["R2 + " + LABEL[b], "`%s`" % pretty(merged[b][0]), merged[b][1],
                 "★" if b in over else ""]
                for b in ORDER if b in merged])
+        for note in app.get("notes", []):
+            L.append("- " + note)
+        if app.get("notes"):
+            L.append("")
         L.append("---")
         L.append("")
 
@@ -1076,9 +1168,9 @@ def build_cheatsheet():
     L.append("## 注意")
     L.append("")
     L.append("- **エンジニア業務とブラウジングでは単押しを変えません。** アプリ固有の操作は"
-             " `gen.py` の `APPS` に R2 の上書きとして足します（9 枠まで。取り消し / やり直し /"
-             " 切り取り / Spotlight は上書き不可）。机に向かうアプリだけ `DESK_APPS` で単押しも"
-             "上書きします。ハートはどこでも ⌘Tab です")
+             " `gen.py` の `APPS` に R2 の上書きとして足します（既定のある 10 枠と、既定のない"
+             "左スティック押込。取り消し / やり直し / 切り取り / Spotlight は上書き不可）。"
+             "机に向かうアプリだけ `DESK_APPS` で単押しも上書きします。ハートはどこでも ⌘Tab です")
     L.append("- **長押しで繰り返すのは矢印・PgUp / PgDn・Backspace / Delete だけです。**"
              "他のボタンは押し続けても1回しか出ません。⇧Tab は L を先に押してから R です")
     L.append("- **シェルコマンド（R2 + L2 の `dictate`、TextEdit の整形）は1つずつ。**"

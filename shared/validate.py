@@ -106,6 +106,12 @@ for i, m in enumerate(manips):
                 sv = ev["set_variable"]
                 if set(sv) != {"name", "value"}:
                     errors.append(f"{tag}: malformed set_variable {sv}")
+            elif "shell_command" in ev:
+                # /bin/sh -c に渡す文字列。ゲームパッドの整形ボタンが prompt-refiner を呼ぶ。
+                # 空なら Karabiner は黙って何もしないので、ここで止める
+                cmd = ev["shell_command"]
+                if not isinstance(cmd, str) or not cmd.strip():
+                    errors.append(f"{tag}: empty {bucket} shell_command {cmd!r}")
             else:
                 errors.append(f"{tag}: unknown {bucket} event {ev}")
     for c in m.get("conditions", []):

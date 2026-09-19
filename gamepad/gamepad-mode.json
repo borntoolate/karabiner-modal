@@ -6081,6 +6081,74 @@
               "value": 1
             }
           ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 左スティック押込 -> refine code (整形: 口述を Claude Code 向けの依頼文に（prompt-refiner）)",
+          "from": {
+            "pointing_button": "button14",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "shell_command": "$HOME/bin/refine code >/dev/null"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 右スティック押込 -> refine research (整形: 口述を調査・壁打ち向けに（prompt-refiner）)",
+          "from": {
+            "pointing_button": "button15",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "shell_command": "$HOME/bin/refine research >/dev/null"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
         }
       ]
     },

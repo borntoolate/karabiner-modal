@@ -179,6 +179,8 @@ ORDER = ["A", "B", "X", "Y",
 #     "escape escape"             スペース区切りで連続入力
 #     "click:button1"             マウスクリックを送る
 #     "hold:spacebar"             押している間だけ押しっぱなしにする
+#     "shell:$HOME/bin/refine code"  シェルコマンドを実行する（/bin/sh -c）。
+#                                 空白を含むので、他のトークンと並べられない
 # ===========================================================================
 # L2 = 音声入力の開始 / 終了。
 # Apple のキーボードのマイクキー（F5）と同じ HID イベント（consumer usage
@@ -197,6 +199,20 @@ SHIFT_BUTTON = "L"
 CMD_BUTTON = "HEART"
 # ハートを単押ししたとき（他のボタンを押さずに離したとき）
 APP_SWITCH = ("cmd+tab", "直前のアプリへ。押したまま R で順送り")
+
+
+# 口述の整形は prompt-refiner（~/works/prompt-refiner）の `refine <mode>`。クリップボードを
+# 読んで claude -p で整形し、クリップボードへ書き戻す。数秒かかり、終わると通知が出る。
+#
+# prompt-refiner 自身のホットキー ⌥⌘1〜5 を送っても発火しない。Karabiner は自分が
+# 出したイベントを再 manipulate しないので、ボタンからはコマンドを直接呼ぶ。
+# $HOME は Karabiner が shell_command に渡す数少ない環境変数のひとつ。claude の PATH と
+# ロケールは refine 自身が補うので、ここで export するものはない。
+# 標準出力は捨てる。捨てないと Karabiner が console_user_server.log に先頭 256 文字を
+# 記録し、整形結果（案件名を含みうる）がログに残る。エラーは stderr なので残る。
+def refine(mode):
+    return "shell:$HOME/bin/refine %s >/dev/null" % mode
+
 
 # 単押し。全アプリで同じ。
 BASE = {
@@ -246,9 +262,15 @@ MOD_DEFAULT = {
     "SELECT": ("cmd+x", "切り取り"),
     "START":  ("cmd+shift+v", "書式なしで貼り付け"),
     "HEART":  ("cmd+spacebar", "Spotlight / ランチャー"),
+    # 整形はスティック押込。押し込みでポインタが跳ねても、クリップボードを読むだけなので
+    # 困らない（DESIGN.md §5）。モードは2つだけ。doc / ticket / message はキーボードの
+    # ⌥⌘3〜5 のまま
+    "L3":     (refine("code"), "整形: 口述を Claude Code 向けの依頼文に（prompt-refiner）"),
+    "R3":     (refine("research"), "整形: 口述を調査・壁打ち向けに（prompt-refiner）"),
 }
-# アプリ別に上書きできない枠。編集の芯はどのアプリでも同じ場所にある。
-MOD_LOCKED = {"X", "Y", "SELECT", "HEART"}
+# アプリ別に上書きできない枠。編集の芯と、口述から整形までの手順は
+# どのアプリでも同じ場所にある。
+MOD_LOCKED = {"X", "Y", "SELECT", "HEART", "L3", "R3"}
 
 # ===========================================================================
 # アプリ別（R2 を押しながらの上書きだけ）
@@ -546,11 +568,24 @@ def parse_to_token(token):
 
 
 def parse_to(spec):
+    # shell: は空白を含むコマンドをそのまま渡すので、spec 全体で1イベント。
+    # キーの連続入力とは混ぜない（shell_command は即座に走り、キーイベントは
+    # あとから届くので、順序を当てにできない。DESIGN.md §5）
+    if spec.startswith("shell:"):
+        return [{"shell_command": spec[len("shell:"):].strip()}]
     return [parse_to_token(t) for t in spec.split() if t]
 
 
 def pretty(spec):
-    """'cmd+shift+open_bracket' -> '⌘⇧['  /  'escape escape' -> 'esc esc'"""
+    """'cmd+shift+open_bracket' -> '⌘⇧['  /  'escape escape' -> 'esc esc'
+    'shell:$HOME/bin/refine code >/dev/null' -> 'refine code'"""
+    if spec.startswith("shell:"):
+        # パスとリダイレクトは省く。PDF の「送るキー」列は折り返さないので、
+        # フルパスを入れると隣の列を押し出す。実際に走る文字列は gamepad-mode.json の to
+        words = [w for w in spec[len("shell:"):].split()
+                 if w[0] not in "<>" and not w.startswith("2>")]
+        words[0] = os.path.basename(words[0])
+        return " ".join(words)
     out = []
     for token in spec.split():
         if token.startswith("click:"):
@@ -853,6 +888,51 @@ def build_cheatsheet():
     L.append("---")
     L.append("")
 
+    L.append("## 口述から整形まで（prompt-refiner）")
+    L.append("")
+    L.append("喋った文を prompt-refiner の `refine` で構造化プロンプトに整形する手順です。"
+             "`refine` はクリップボードを読んで、整形した結果をクリップボードへ書き戻すので、"
+             "選択 → コピー → 整形 → 貼り付けの形になります。整形には数秒かかり、"
+             "終わると通知センターに「整形完了」が出ます。")
+    L.append("")
+    L.append("整形ボタンが実行するのは `%s`（R2 + %s）と `%s`（R2 + %s）で、"
+             "Karabiner が `/bin/sh -c` で走らせます。"
+             % (parse_to(MOD_DEFAULT["L3"][0])[0]["shell_command"], LABEL["L3"],
+                parse_to(MOD_DEFAULT["R3"][0])[0]["shell_command"], LABEL["R3"]))
+    L.append("")
+    table(L, ["手順", "ボタン", "送るもの"], [
+        ["1. 口述を始める", "L2", "マイクキー（音声入力の開始）"],
+        ["2. 喋る", "—", "—"],
+        ["3. 口述を終える", "L2", "マイクキー（音声入力の終了）"],
+        ["4. すべて選択", "R2 + A", "`%s`" % pretty(MOD_DEFAULT["A"][0])],
+        ["5. コピー", LABEL["SELECT"], "`%s`" % pretty(BASE["SELECT"][0])],
+        ["6. 整形（Claude Code 向け）", "R2 + " + LABEL["L3"],
+         "`%s`" % pretty(MOD_DEFAULT["L3"][0])],
+        ["6'. 整形（調査・壁打ち向け）", "R2 + " + LABEL["R3"],
+         "`%s`" % pretty(MOD_DEFAULT["R3"][0])],
+        ["7. 「整形完了」の通知を待って貼り付け", LABEL["START"],
+         "`%s`" % pretty(BASE["START"][0])],
+    ])
+    # R2 + A を上書きしているアプリでは手順 4 が ⌘A にならない。表から拾って書く
+    not_select_all = [(app["name"], pretty(app["mod"]["A"][0]))
+                      for app in APPS if "A" in app.get("mod", {})]
+    L.append("- **手順 4 の R2 + A は、%sでは ⌘A になりません。** "
+             "そこでは ⌘A をキーボードで打つか、TextEdit などの R2 上書きのないアプリで"
+             "口述して、整形後に貼り付け先へ移ってください"
+             % "、".join("%s（`%s`）" % (n, k) for n, k in not_select_all))
+    L.append("- **整形中にもう一度押さないでください。** Karabiner はシェルコマンドを同時に"
+             "1つしか走らせず、次を押すと走っている整形が強制終了されます"
+             "（prompt-refiner のホットキー ⌥⌘1〜5 も同じ枠です）。終了した整形は"
+             "クリップボードに何も書きません")
+    L.append("- doc / ticket / message モードはコントローラーにありません。キーボードの"
+             " ⌥⌘3〜5 で呼んでください")
+    L.append("- ⌘A → ⌘C を整形ボタンに畳み込んでいないのは、シェルコマンドが即座に走るのに"
+             "対してキーイベントはあとから届き、⌘C より先にクリップボードを読んでしまうためです"
+             "（`DESIGN.md` §5）")
+    L.append("")
+    L.append("---")
+    L.append("")
+
     for app in DESK_APPS:
         L.append("## %s（左手デバイス特化）" % app["name"])
         L.append("")
@@ -954,10 +1034,14 @@ def build_cheatsheet():
     L.append("")
     L.append("- **エンジニア業務とブラウジングでは単押しを変えません。** アプリ固有の操作は"
              " `gen.py` の `APPS` に R2 の上書きとして足します（9 枠まで。取り消し / やり直し /"
-             " 切り取り / Spotlight は上書き不可）。机に向かうアプリだけ `DESK_APPS` で単押しも"
+             " 切り取り / Spotlight / 整形は上書き不可）。机に向かうアプリだけ `DESK_APPS` で単押しも"
              "上書きします。ハートはどこでも ⌘Tab です")
     L.append("- **長押しで繰り返すのは矢印・PgUp / PgDn・Backspace / Delete だけです。**"
              "他のボタンは押し続けても1回しか出ません。⇧Tab は L を先に押してから R です")
+    L.append("- **R2 + スティック押込の整形は1つずつ。** シェルコマンドは Karabiner 全体で"
+             "同時に1つだけで、次を押すと走っているほうが強制終了されます。整形結果の"
+             "先頭が Karabiner のログに残らないよう、標準出力は捨てています"
+             "（エラーは `~/.local/share/karabiner/log/console_user_server.log` に出ます）")
     L.append("- **作り直した割り当ては実機未検証です。** 送るキーはこの表のとおりなので、"
              "動きが違うときは `DESIGN.md` §9 と突き合わせてください")
     L.append("- **A ボタンは実マウスの左クリックと同じイベント**（`button1`）です。"

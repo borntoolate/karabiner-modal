@@ -21,23 +21,34 @@ from pathlib import Path
 
 
 def parse(md_text):
-    """Return [(level, heading, [rows]), ...] for the headings that own a table.
+    """Return [(level, heading, parent, [rows]), ...] for the headings that own a table.
 
     The level is kept so that `###` renders as a subheading attached to the
     `##` above it.  Two tables under one heading would otherwise print their
-    column labels twice in a row with nothing to tell them apart.
+    column labels twice in a row with nothing to tell them apart.  `parent` is
+    the nearest `##` above, tracked here rather than from the emitted sections
+    because a `##` that has only prose of its own never gets emitted.
+
+    A `<!-- pdf: skip -->` line anywhere under a heading keeps that heading's
+    table off the card (a legend for a figure the PDF cannot show, tuning
+    tables that belong in the manual rather than on paper).
     """
-    sections, level, heading, rows, in_table = [], 2, None, [], False
+    sections, level, heading, parent, rows, in_table, skip = [], 2, None, "", [], False, False
 
     def flush():
-        if heading and rows:
-            sections.append((level, heading, list(rows)))
+        if heading and rows and not skip:
+            sections.append((level, heading, parent, list(rows)))
 
     for line in md_text.splitlines():
         h = re.match(r"^(#{2,3})\s+(.*)", line)
         if h:
             flush()
-            level, heading, rows, in_table = len(h.group(1)), h.group(2).strip(), [], False
+            level, heading, rows, in_table, skip = len(h.group(1)), h.group(2).strip(), [], False, False
+            if level == 2:
+                parent = heading
+            continue
+        if re.fullmatch(r"\s*<!--\s*pdf:\s*skip\s*-->\s*", line):
+            skip = True
             continue
         if line.startswith("|"):
             cells = [c.strip() for c in line.strip().strip("|").split("|")]
@@ -121,15 +132,13 @@ def build_html(title, subtitle, sections, font_pt):
         f"<div class='sub'>{subtitle}</div>",
         "<div class='cols'>",
     ]
-    parent = ""
-    for level, heading, rows in sections:
+    for level, heading, parent, rows in sections:
         # A `###` belongs to the `##` above it.  Rather than nail the two
         # together -- which makes them one unbreakable block and costs about a
         # point of font size over the whole card -- the subheading carries the
         # parent's name, so it still reads correctly when the columns break
         # between them.
         if level == 2:
-            parent = heading
             label, htag, cls = inline(heading), "h2", ""
         else:
             label = (f"<span class='parent'>{inline(parent)} / </span>"
@@ -145,6 +154,12 @@ def build_html(title, subtitle, sections, font_pt):
     parts.append("</div>")
     return "\n".join(parts)
 
+
+SUBTITLES = {
+    "vim": "Karabiner-Elements / US (ANSI) layout / Caps Lock リーダー",
+    "emacs": "Karabiner-Elements / US (ANSI) layout / Caps Lock リーダー",
+    "gamepad": "Karabiner-Elements / 8BitDo SN30 Pro / D-input",
+}
 
 # Largest first: we keep the biggest type size that still fits on one page.
 FONT_SIZES = [11.0, 10.5, 10.0, 9.5, 9.0, 8.6, 8.2, 7.8, 7.4, 7.0, 6.6, 6.2]
@@ -179,21 +194,35 @@ def normalize(path, title):
 
 
 async def render_autofit(title, subtitle, sections, out_path, max_pages=1):
-    """Render at the largest font size that still fits within max_pages."""
+    """Render at the largest font size that still fits within max_pages.
+
+    A sheet that cannot fit even at the smallest size (the gamepad one runs to
+    several pages) is rendered at the largest size that does not add a page
+    beyond that minimum, rather than at the smallest size for no gain.
+    """
     from playwright.async_api import async_playwright
-    chosen = FONT_SIZES[-1]
+
+    async def render(page, fs):
+        await page.set_content(build_html(title, subtitle, sections, fs),
+                               wait_until="networkidle")
+        await page.pdf(path=str(out_path), format="A4", print_background=True,
+                       margin={"top": "9mm", "bottom": "8mm",
+                               "left": "8mm", "right": "8mm"})
+        return page_count(out_path)
+
     async with async_playwright() as p:
         browser = await p.chromium.launch()
         page = await browser.new_page()
+        pages = {}
         for fs in FONT_SIZES:
-            await page.set_content(build_html(title, subtitle, sections, fs),
-                                   wait_until="networkidle")
-            await page.pdf(path=str(out_path), format="A4", print_background=True,
-                           margin={"top": "9mm", "bottom": "8mm",
-                                   "left": "8mm", "right": "8mm"})
-            if page_count(out_path) <= max_pages:
+            pages[fs] = await render(page, fs)
+            if pages[fs] <= max_pages:
                 chosen = fs
                 break
+        else:
+            fewest = min(pages.values())
+            chosen = max(fs for fs, n in pages.items() if n == fewest)
+            await render(page, chosen)
         await browser.close()
     return chosen
 
@@ -207,10 +236,10 @@ def main():
     m = re.match(r"^#\s+(.*)", md.splitlines()[0])
     title = m.group(1).strip() if m else src.stem
 
-    mode = "vim" if "vim" in str(src).lower() else "emacs"
-    subtitle = ("<span>Karabiner-Elements / US (ANSI) layout / "
-                "Caps Lock リーダー</span>"
-                f"<span>{mode}-mode.json</span>")
+    # The mode is the directory the sheet lives in: vim/, emacs/ or gamepad/.
+    mode = src.resolve().parent.name
+    subtitle = (f"<span>{html.escape(SUBTITLES.get(mode, 'Karabiner-Elements'))}</span>"
+                f"<span>{html.escape(mode)}-mode.json</span>")
 
     sections = parse(md)
     if not sections:

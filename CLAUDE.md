@@ -86,7 +86,7 @@ make venv           # .venv に playwright（Chromium で組版）を用意す�
 | **ゲームパッドの全 manipulator に `device_if` を付ける** | `gamepad/DESIGN.md` §4 |
 | ゲームパッド版は `karabiner.json` を直接書き換える（assets ではない） | `gamepad/DESIGN.md` §3 |
 | L2 = 音声入力の開始 / 終了（マイクキー `consumer_key_code: dictation`）、R2 = レイヤー修飾 | `gamepad/DESIGN.md` §5 |
-| **整形（prompt-refiner）は R2 + スティック押込から `shell_command` で `refine` を直接呼ぶ。** ⌥⌘1 は送らない（Karabiner は自分の出力を再 manipulate しない）。⌘A ⌘C ⌘V は畳み込まない | `gamepad/DESIGN.md` §5 |
+| **口述（prompt-refiner）は R2 + L2 の `dictate` が起点。整形ボタンは TextEdit 層にだけ置く。** どちらも `shell_command` で直接呼ぶ（⌥⌘V / ⌥⌘1 は送らない。Karabiner は自分の出力を再 manipulate しない）。⌘A ⌘C ⌘V は畳み込まない | `gamepad/DESIGN.md` §5 |
 | **ゲームパッドの単押しは固定ベース。エンジニア業務のアプリは R2 層の 9 枠だけ上書き**（`MOD_LOCKED` は不可）。机に向かうアプリ（`DESK_APPS`）だけ単押しも特化 | `gamepad/DESIGN.md` §5 |
 | ゲームパッドのハートはどのアプリでも ⌘Tab / ⌘。上書き不可（`DESK_LOCKED`） | `gamepad/DESIGN.md` §5 |
 | ゲームパッドで長押しリピートするのは矢印と削除だけ（`repeat: false` が既定） | `gamepad/DESIGN.md` §5 |

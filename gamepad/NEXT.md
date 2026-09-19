@@ -17,10 +17,11 @@ Mac 上のローカル Claude Code で続きをやるための申し送りです
   `DESK_APPS` で左手デバイス特化（単押しも上書き。割り当ては未検証の初期案）。
   L / ハートは本物の修飾キー。ハートはどこでも ⌘Tab。L2 は macOS 音声入力のマイクキー
   （トグル）。設計は `DESIGN.md` §5
-- **整形ボタンを足した**（2026-09-20）。R2 + 左スティック押込 = `refine code`、
-  R2 + 右スティック押込 = `refine research`。`shell_command` で prompt-refiner を直接呼ぶ。
-  どのアプリでも同じ（`MOD_LOCKED`）。実機未確認（下記「やること 3」）
-- ルール 11 本 / manipulator 159 件
+- **口述の手順を足した**（2026-09-20）。R2 + L2 = `dictate`（どのアプリでも）、
+  TextEdit が前面のときだけ R2 + 十字 ↑ ↓ ← → / Start = `refine code` / `research` /
+  `doc` / `ticket` / `message`。`shell_command` で prompt-refiner を直接呼ぶ。
+  実機未確認（下記「やること 3」）
+- ルール 12 本 / manipulator 163 件
 - 長押しで繰り返すのは矢印と削除だけ（`repeat: false` が既定。`hold:` で押しっぱなし）
 - スティックは左右で挙動を変えてある（下記「やること 1」）
 - マニュアルは `CHEATSHEET.md`（生成物。PDF の元）
@@ -101,60 +102,60 @@ Karabiner のソースを直すしかない（`update_continued_movement_timer()
 
 ---
 
-## やること 3 — 整形ボタンを実機で確かめる
+## やること 3 — 口述の手順を実機で確かめる
 
-配線は済んでいます（2026-09-20）。R2 + スティック押込で prompt-refiner の `refine` を
-`shell_command` から呼びます。`make gamepad` / `make check` は通り、`karabiner.json` にも
-入れてあります。**実機では未確認**なので、一連の流れを一度通してください。
+配線は済んでいます（2026-09-20）。起点は R2 + L2（prompt-refiner の `dictate`）で、
+整形ボタンはそれが開く TextEdit にだけあります。`make gamepad` / `make check` は通り、
+`karabiner.json` にも入れてあります。**実機では未確認**なので、一連の流れを一度通してください。
 
 ### 何を送るか
 
 | 操作 | ボタン | Karabiner が出すもの |
 |---|---|---|
+| 下書きを開く | R2 + L2（どのアプリでも） | `shell_command: $HOME/bin/dictate >/dev/null`（draft.md を空にして TextEdit を前面に） |
 | 口述の開始 / 終了 | L2 | `consumer_key_code: dictation`（マイクキー。押すたびにトグル） |
-| すべて選択 | R2 + A | `⌘A`（**ターミナル / Claude Code グループでは ⌥Enter、ブラウザでは ⌘T**。下記） |
+| すべて選択 | R2 + A（TextEdit） | `⌘A` |
 | コピー | Select（−） | `⌘C` |
-| 整形（Claude Code 向け） | R2 + 左スティック押込 | `shell_command: $HOME/bin/refine code >/dev/null` |
-| 整形（調査・壁打ち向け） | R2 + 右スティック押込 | `shell_command: $HOME/bin/refine research >/dev/null` |
+| 整形（Claude Code 向け） | R2 + 十字 ↑（TextEdit） | `shell_command: $HOME/bin/refine code >/dev/null` |
+| 整形（調査・壁打ち向け） | R2 + 十字 ↓（TextEdit） | `... refine research ...` |
+| 整形（文章作成の依頼） | R2 + 十字 ←（TextEdit） | `... refine doc ...` |
+| 整形（起票文） | R2 + 十字 →（TextEdit） | `... refine ticket ...` |
+| 清書（送信メッセージ） | R2 + Start（TextEdit） | `... refine message ...` |
+| 貼り付け先へ | ハート | `⌘Tab` |
 | 貼り付け | Start（＋） | `⌘V` |
 
-`refine` は `/bin/sh -c` で走り、クリップボードを読んで `claude -p` で整形し、
-クリップボードへ書き戻します。始まると通知「整形中…」、終わると「整形完了 — ⌘V で
-貼り付け」が出ます。生と整形後は `~/prompt-log/` に残ります。
+`dictate` / `refine` は `/bin/sh -c` で走ります。`refine` はクリップボードを読んで `claude -p` で
+整形し、クリップボードへ書き戻します。始まると通知「整形中…」、終わると「整形完了 — ⌘V で
+貼り付け」が出ます。生と整形後は `~/prompt-log/` に残ります。TextEdit 以外では R2 + 十字 /
+Start は既定（PgUp / PgDn / 単語移動 / 書式なし貼り付け）のままです。
 
 ### 試す順
 
-1. TextEdit など、R2 上書きのないアプリで空のウィンドウを開く
+1. どのアプリからでもよいので R2 + L2。TextEdit が空の `draft.md` で前面に来る
 2. L2 → 喋る → L2
-3. R2 + A → Select → R2 + 左スティック押込
-4. 「整形完了」の通知を待って Start
+3. R2 + A → Select → R2 + 十字 ↑
+4. 「整形完了」の通知を待って、ハートで貼り付け先へ → Start
 
 | 症状 | 見るところ |
 |---|---|
-| 通知が何も出ない | `~/.local/share/karabiner/log/console_user_server.log` に `shell_command stderr:` があるか。`refine` の `die()` は stderr に出る |
-| 「入力が空です」 | ⌘C が届いていない。R2 + A が ⌘A でないアプリ（下記）か、Select が押せていない |
+| R2 + L2 で TextEdit が開かない | `~/.local/share/karabiner/log/console_user_server.log` に `shell_command stderr:` があるか。EventViewer で L2 がマイクキー（dictation）になっていたら R2 の `sn30_mod` が立っていない |
+| R2 + 十字が PgUp などになる | 前面が TextEdit ではない（`com.apple.TextEdit`）。Karabiner の EventViewer → Frontmost Application で bundle id を確認 |
+| 通知が何も出ない | 上のログに `shell_command stderr:` があるか。`refine` の `die()` は stderr に出る |
+| 「入力が空です」 | ⌘C が届いていない。R2 + A か Select が押せていない |
 | 「claude コマンドが見つかりません」 | `refine` が足す PATH（`~/.local/bin` `/opt/homebrew/bin` `/usr/local/bin`）に `claude` がない |
-| 「整形中…」のあと「整形完了」が来ない | 整形中にもう一度整形ボタンか ⌥⌘1〜5 を押した。Karabiner は `shell_command` を同時に1つしか走らせず、次で前を強制終了する |
+| 「整形中…」のあと「整形完了」が来ない | 整形中にもう一度整形ボタン・R2 + L2・⌥⌘V / ⌥⌘1〜5 を押した。Karabiner は `shell_command` を同時に1つしか走らせず、次で前を強制終了する |
 | Start で生の文が貼られる | 通知を待たずに押した。整形は数秒〜十数秒かかる |
-
-### R2 + A が ⌘A でないアプリがある
-
-ターミナル / Claude Code グループ（Terminal / iTerm2 / VS Code / Ghostty / Warp /
-WezTerm / **Claude Desktop**）では R2 + A は ⌥Enter、ブラウザでは ⌘T です。
-Claude Desktop の入力欄で口述して整形したいなら、⌘A だけキーボードで打つか、
-TextEdit で口述して整形後に貼りに行く形になります。R2 + A を固定にする
-（`MOD_LOCKED` に入れて ⌥Enter を別の枠へ移す）かどうかは、使ってから決めてください。
 
 ### やらなかったこと
 
 - ⌘A ⌘C ⌘V を整形ボタンに畳み込む。`shell_command` は即座に走り、キーイベントは
   あとから届くので、⌘C より先にクリップボードを読みうる。まとめるなら prompt-refiner 側に
   `--grab`（osascript で ⌘A ⌘C を打ってから読む）のような口を足す。あちらの CLAUDE.md の
-  作法（`make test`、モード追加は5か所）に従う
-- prompt-refiner のホットキー ⌥⌘1 を送る。Karabiner は自分の出力を再 manipulate しない
-- doc / ticket / message モード。空きがスティック押込の2枠だけ。キーボードの ⌥⌘3〜5 のまま
-- `dictate`（下書きファイルを TextEdit で開く）のボタン。要るなら R2 の空き枠はないので、
-  何かを譲る
+  作法（`make test`、モード追加は5か所）に従う。⌘S → `refine --from draft` も同じ賭け
+- prompt-refiner のホットキー ⌥⌘V / ⌥⌘1 を送る。Karabiner は自分の出力を再 manipulate しない
+- 整形ボタンを TextEdit 以外にも置く。5 モードぶんの枠がなく、他アプリでは R2 + A が
+  ⌘A でないので、どのみちキーボードが要る。そちらは ⌥⌘1〜5 のまま
+- `dictate --keep`（前の口述に言い足す）のボタン。要るならキーボードから
 
 ---
 

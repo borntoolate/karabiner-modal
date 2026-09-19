@@ -2,8 +2,42 @@
   "title": "8BitDo SN30 Pro（gen.py の生成物。直接編集しないこと）",
   "rules": [
     {
-      "description": "[SN30] 音声入力の開始 / 終了（L2 でマイクキー）",
+      "description": "[SN30] 音声入力（L2 でマイクキー、R2 + L2 で下書きを開く）",
       "manipulators": [
+        {
+          "type": "basic",
+          "description": "R2 + L2 -> dictate (口述の下書きを開く（draft.md を空にして TextEdit へ）)",
+          "from": {
+            "pointing_button": "button9",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "shell_command": "$HOME/bin/dictate >/dev/null"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
         {
           "type": "basic",
           "description": "L2 -> マイクキー（音声入力の開始 / 終了）",
@@ -31,6 +65,11 @@
                   "is_game_pad": true
                 }
               ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
             }
           ]
         }
@@ -5238,6 +5277,211 @@
       ]
     },
     {
+      "description": "[SN30] TextEdit（口述の下書き）（R2 を押しながら）",
+      "manipulators": [
+        {
+          "type": "basic",
+          "description": "R2 + 十字 ↑ -> refine code (整形: Claude Code 向けの依頼文に（⌥⌘1）)",
+          "from": {
+            "generic_desktop": "dpad_up",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "shell_command": "$HOME/bin/refine code >/dev/null"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.TextEdit$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 ↓ -> refine research (整形: 調査・壁打ち向けに（⌥⌘2）)",
+          "from": {
+            "generic_desktop": "dpad_down",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "shell_command": "$HOME/bin/refine research >/dev/null"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.TextEdit$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 ← -> refine doc (整形: 文章作成の依頼に（⌥⌘3）)",
+          "from": {
+            "generic_desktop": "dpad_left",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "shell_command": "$HOME/bin/refine doc >/dev/null"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.TextEdit$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 → -> refine ticket (整形: 起票文に（⌥⌘4）)",
+          "from": {
+            "generic_desktop": "dpad_right",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "shell_command": "$HOME/bin/refine ticket >/dev/null"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.TextEdit$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + Start（＋） -> refine message (清書: Slack などに送る本文に（⌥⌘5）)",
+          "from": {
+            "pointing_button": "button12",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "shell_command": "$HOME/bin/refine message >/dev/null"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.TextEdit$"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       "description": "[SN30] ターミナル / Claude Code（R2 を押しながら）",
       "manipulators": [
         {
@@ -6062,74 +6306,6 @@
                 "left_command"
               ],
               "repeat": false
-            }
-          ],
-          "conditions": [
-            {
-              "type": "device_if",
-              "identifiers": [
-                {
-                  "vendor_id": 11720,
-                  "product_id": 24833,
-                  "is_game_pad": true
-                }
-              ]
-            },
-            {
-              "type": "variable_if",
-              "name": "sn30_mod",
-              "value": 1
-            }
-          ]
-        },
-        {
-          "type": "basic",
-          "description": "R2 + 左スティック押込 -> refine code (整形: 口述を Claude Code 向けの依頼文に（prompt-refiner）)",
-          "from": {
-            "pointing_button": "button14",
-            "modifiers": {
-              "optional": [
-                "any"
-              ]
-            }
-          },
-          "to": [
-            {
-              "shell_command": "$HOME/bin/refine code >/dev/null"
-            }
-          ],
-          "conditions": [
-            {
-              "type": "device_if",
-              "identifiers": [
-                {
-                  "vendor_id": 11720,
-                  "product_id": 24833,
-                  "is_game_pad": true
-                }
-              ]
-            },
-            {
-              "type": "variable_if",
-              "name": "sn30_mod",
-              "value": 1
-            }
-          ]
-        },
-        {
-          "type": "basic",
-          "description": "R2 + 右スティック押込 -> refine research (整形: 口述を調査・壁打ち向けに（prompt-refiner）)",
-          "from": {
-            "pointing_button": "button15",
-            "modifiers": {
-              "optional": [
-                "any"
-              ]
-            }
-          },
-          "to": [
-            {
-              "shell_command": "$HOME/bin/refine research >/dev/null"
             }
           ],
           "conditions": [

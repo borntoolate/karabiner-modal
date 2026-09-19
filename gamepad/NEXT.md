@@ -102,6 +102,54 @@ Karabiner のソースを直すしかない（`update_continued_movement_timer()
 
 ---
 
+## やること 3 — prompt-refiner をコントローラーから回す（次のセッション）
+
+`/Users/nwakahara/works/prompt-refiner` は、口述した文を Claude Code / Cowork / チャット向けの
+構造化プロンプトに整形する CLI。**このリポジトリで作業する**（変えるのはコントローラー側）。
+prompt-refiner 側は読むだけで足りる見込み。内蔵ディスクにあるので、このセッションから
+読める。
+
+### prompt-refiner の入口（2026-09-19 時点で確認）
+
+| コマンド | 何をするか |
+|---|---|
+| `~/bin/dictate` | `~/prompt-log/draft.md` を空にして TextEdit で開く（`--keep` で残す） |
+| `~/bin/refine <mode>` | **クリップボード**を読み、`claude -p` で整形し、**クリップボードへ**書き戻す。mode は `code` / `research` / `doc` / `ticket` |
+| `refine <mode> --from draft` | クリップボードの代わりに `draft.md` を読む |
+
+想定している手順は「口述 → ⌘A → ⌘C → ホットキー → ⌘V」。ホットキーは
+`karabiner/prompt-refiner.json` の ⌥⌘V / ⌥⌘1〜4 で、`to` は `shell_command`。
+
+### コントローラー側の設計メモ
+
+- **⌥⌘1 を送っても prompt-refiner のルールは発火しない。** Karabiner は自分が出した
+  イベントを再度 manipulate しない（event modification chaining）。ボタンからは
+  `shell_command` で `$HOME/bin/refine code` を直接呼ぶ。`gen.py` の `parse_to_token()` に
+  `"shell:..."` の形を足し、`validate.py` に `shell_command` を教える
+- ホットキーから呼ばれる `refine` は非ログインシェル。`claude` の場所とロケールは
+  `refine` 自身が補うので、`shell_command` 側の配慮は要らない
+- 手順をボタンに落とすと: L2（口述開始）→ 喋る → L2（終了）→ R2 + A（⌘A）→ Select（⌘C）→
+  [整形ボタン] → Start（⌘V）。整形ボタンの置き場は R2 レイヤーに空きがない
+  （`MOD_DEFAULT` は 13 枠すべて使用）。候補は `R2 + 左 / 右スティック押込`——押し込みで
+  ポインタが跳ねても、整形はクリップボードを読むだけなので困らない。モードは code と
+  research の2つに絞るか、`ticket` / `doc` は Raycast 側に残す
+- 「⌘A → ⌘C → refine」を1ボタンにまとめるのは競合に注意。Karabiner の `to` は
+  キーイベントを順に出すが、`shell_command` は即座に走り、`refine` はその場で
+  `pbpaste` する。⌘C がアプリに届く前に読む可能性がある。まとめるなら prompt-refiner に
+  `--grab`（osascript で ⌘A ⌘C を打ってから読む）のような口を足す。それは
+  prompt-refiner 側の作業で、あちらの CLAUDE.md の作法（`make test`、モード追加は4か所）に従う
+- ⌘V の自動化も同じ。整形が終わるのは数秒後で、その間にフォーカスが動く
+
+### 手順
+
+1. `prompt-refiner/README.md` と `CLAUDE.md` を読む（変更はしない）
+2. `gen.py` に `shell:` トークンを足して `validate.py` を通す
+3. 整形ボタンを R2 + スティック押込に置く。`make gamepad && make install-gamepad`
+4. 実機で L2 → 口述 → R2 + A → Select → 整形 → Start の一連を試す
+5. ⌘A ⌘C ⌘V を省きたくなったら、そのときに prompt-refiner 側のセッションを起こす
+
+---
+
 ## このリポジトリで守ること
 
 `CLAUDE.md` を必ず読んでから作業してください。特にゲームパッド版で効くのは:

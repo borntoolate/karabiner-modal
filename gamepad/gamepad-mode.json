@@ -1,0 +1,6624 @@
+{
+  "title": "8BitDo SN30 Pro（gen.py の生成物。直接編集しないこと）",
+  "rules": [
+    {
+      "description": "[SN30] 音声入力 Push-to-Talk（L2 押しっぱなしで F13）",
+      "manipulators": [
+        {
+          "type": "basic",
+          "description": "L2 -> f13",
+          "from": {
+            "pointing_button": "button9",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "f13"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "[SN30] レイヤー修飾（R2 を押している間だけ sn30_mod=1）",
+      "manipulators": [
+        {
+          "type": "basic",
+          "description": "R2 -> sn30_mod",
+          "from": {
+            "pointing_button": "button10",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "set_variable": {
+                "name": "sn30_mod",
+                "value": 1
+              }
+            }
+          ],
+          "to_after_key_up": [
+            {
+              "set_variable": {
+                "name": "sn30_mod",
+                "value": 0
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "[SN30] Figma（左手デバイス特化）",
+      "manipulators": [
+        {
+          "type": "basic",
+          "description": "R2 + A -> ⌘D (複製)",
+          "from": {
+            "pointing_button": "button1",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "d",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.figma\\.Desktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + B -> ⌘⇧Z (やり直す)",
+          "from": {
+            "pointing_button": "button2",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "z",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.figma\\.Desktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + X -> ⌘G (グループ化)",
+          "from": {
+            "pointing_button": "button4",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "g",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.figma\\.Desktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + Y -> ⌘⇧G (グループ解除)",
+          "from": {
+            "pointing_button": "button5",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "g",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.figma\\.Desktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 ↑ -> ⇧↑ (10px 上へ)",
+          "from": {
+            "generic_desktop": "dpad_up",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow",
+              "modifiers": [
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.figma\\.Desktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 ↓ -> ⇧↓ (10px 下へ)",
+          "from": {
+            "generic_desktop": "dpad_down",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow",
+              "modifiers": [
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.figma\\.Desktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 ← -> ⇧← (10px 左へ)",
+          "from": {
+            "generic_desktop": "dpad_left",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.figma\\.Desktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 → -> ⇧→ (10px 右へ)",
+          "from": {
+            "generic_desktop": "dpad_right",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.figma\\.Desktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + L -> ⇧0 (100% 表示)",
+          "from": {
+            "pointing_button": "button7",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "0",
+              "modifiers": [
+                "left_shift"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.figma\\.Desktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + R -> ⇧2 (選択範囲にズーム)",
+          "from": {
+            "pointing_button": "button8",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "2",
+              "modifiers": [
+                "left_shift"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.figma\\.Desktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + Select（−） -> ⌘⌥C (プロパティをコピー)",
+          "from": {
+            "pointing_button": "button11",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "c",
+              "modifiers": [
+                "left_command",
+                "left_option"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.figma\\.Desktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + Start（＋） -> ⌘⌥V (プロパティを貼り付け)",
+          "from": {
+            "pointing_button": "button12",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "v",
+              "modifiers": [
+                "left_command",
+                "left_option"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.figma\\.Desktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "A -> return (中に入る / 編集)",
+          "from": {
+            "pointing_button": "button1",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "return_or_enter",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.figma\\.Desktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "B -> esc (抜ける)",
+          "from": {
+            "pointing_button": "button2",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "escape",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.figma\\.Desktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "X -> V (移動ツール)",
+          "from": {
+            "pointing_button": "button4",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "v",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.figma\\.Desktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "Y -> ⌘Z (取り消し)",
+          "from": {
+            "pointing_button": "button5",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "z",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.figma\\.Desktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "十字 ↑ -> ↑ (1px 上へ)",
+          "from": {
+            "generic_desktop": "dpad_up",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.figma\\.Desktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "十字 ↓ -> ↓ (1px 下へ)",
+          "from": {
+            "generic_desktop": "dpad_down",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.figma\\.Desktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "十字 ← -> ← (1px 左へ)",
+          "from": {
+            "generic_desktop": "dpad_left",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.figma\\.Desktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "十字 → -> → (1px 右へ)",
+          "from": {
+            "generic_desktop": "dpad_right",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.figma\\.Desktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "L -> ⌘- (ズームアウト)",
+          "from": {
+            "pointing_button": "button7",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "hyphen",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.figma\\.Desktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R -> ⌘= (ズームイン)",
+          "from": {
+            "pointing_button": "button8",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "equal_sign",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.figma\\.Desktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "Select（−） -> ⇧1 (全体を表示)",
+          "from": {
+            "pointing_button": "button11",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "1",
+              "modifiers": [
+                "left_shift"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.figma\\.Desktop$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "Start（＋） -> ⇧2 (選択範囲にズーム)",
+          "from": {
+            "pointing_button": "button12",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "2",
+              "modifiers": [
+                "left_shift"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.figma\\.Desktop$"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "[SN30] Photoshop（左手デバイス特化）",
+      "manipulators": [
+        {
+          "type": "basic",
+          "description": "R2 + A -> V (移動ツール)",
+          "from": {
+            "pointing_button": "button1",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "v",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.Photoshop"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + B -> ⌘D (選択を解除)",
+          "from": {
+            "pointing_button": "button2",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "d",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.Photoshop"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + X -> ⌘⇧I (選択範囲を反転)",
+          "from": {
+            "pointing_button": "button4",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "i",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.Photoshop"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + Y -> G (塗りつぶし)",
+          "from": {
+            "pointing_button": "button5",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "g",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.Photoshop"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 ↑ -> ⌘] (レイヤーを前面へ)",
+          "from": {
+            "generic_desktop": "dpad_up",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "close_bracket",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.Photoshop"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 ↓ -> ⌘[ (レイヤーを背面へ)",
+          "from": {
+            "generic_desktop": "dpad_down",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "open_bracket",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.Photoshop"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 ← -> ⌘0 (画面に合わせる)",
+          "from": {
+            "generic_desktop": "dpad_left",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "0",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.Photoshop"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 → -> ⌘1 (100% 表示)",
+          "from": {
+            "generic_desktop": "dpad_right",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "1",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.Photoshop"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + L -> ⌘- (ズームアウト)",
+          "from": {
+            "pointing_button": "button7",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "hyphen",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.Photoshop"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + R -> ⌘= (ズームイン)",
+          "from": {
+            "pointing_button": "button8",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "equal_sign",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.Photoshop"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + Select（−） -> ⌘J (レイヤーを複製)",
+          "from": {
+            "pointing_button": "button11",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "j",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.Photoshop"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + Start（＋） -> ⌘⇧S (別名で保存)",
+          "from": {
+            "pointing_button": "button12",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "s",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.Photoshop"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "A -> B (ブラシ)",
+          "from": {
+            "pointing_button": "button1",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "b",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.Photoshop"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "B -> E (消しゴム)",
+          "from": {
+            "pointing_button": "button2",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "e",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.Photoshop"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "X -> ⌘Z (取り消し)",
+          "from": {
+            "pointing_button": "button4",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "z",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.Photoshop"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "Y -> I (スポイト)",
+          "from": {
+            "pointing_button": "button5",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "i",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.Photoshop"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "十字 ↑ -> ⌥] (上のレイヤーを選択)",
+          "from": {
+            "generic_desktop": "dpad_up",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "close_bracket",
+              "modifiers": [
+                "left_option"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.Photoshop"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "十字 ↓ -> ⌥[ (下のレイヤーを選択)",
+          "from": {
+            "generic_desktop": "dpad_down",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "open_bracket",
+              "modifiers": [
+                "left_option"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.Photoshop"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "十字 ← -> ⌘⌥Z (段階的に戻る)",
+          "from": {
+            "generic_desktop": "dpad_left",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "z",
+              "modifiers": [
+                "left_command",
+                "left_option"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.Photoshop"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "十字 → -> ⌘⇧Z (段階的に進む)",
+          "from": {
+            "generic_desktop": "dpad_right",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "z",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.Photoshop"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "L -> [ (ブラシを小さく)",
+          "from": {
+            "pointing_button": "button7",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "open_bracket",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.Photoshop"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R -> ] (ブラシを大きく)",
+          "from": {
+            "pointing_button": "button8",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "close_bracket",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.Photoshop"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "Select（−） -> ⌘⇧N (新規レイヤー)",
+          "from": {
+            "pointing_button": "button11",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "n",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.Photoshop"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "Start（＋） -> ⌘S (保存)",
+          "from": {
+            "pointing_button": "button12",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "s",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.Photoshop"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "左スティック押込 -> space (押している間だけ手のひらツール（パン）)",
+          "from": {
+            "pointing_button": "button14",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "spacebar"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.Photoshop"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "右スティック押込 -> マウス右 (右クリック（ブラシ設定）)",
+          "from": {
+            "pointing_button": "button15",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "pointing_button": "button2"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.Photoshop"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "[SN30] Illustrator（左手デバイス特化）",
+      "manipulators": [
+        {
+          "type": "basic",
+          "description": "R2 + A -> ⌘⇧Z (やり直す)",
+          "from": {
+            "pointing_button": "button1",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "z",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.illustrator"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + B -> ⌘⇧A (選択を解除)",
+          "from": {
+            "pointing_button": "button2",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "a",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.illustrator"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + X -> ⌘2 (ロック)",
+          "from": {
+            "pointing_button": "button4",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "2",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.illustrator"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + Y -> ⌘⌥2 (すべてロック解除)",
+          "from": {
+            "pointing_button": "button5",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "2",
+              "modifiers": [
+                "left_command",
+                "left_option"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.illustrator"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 ↑ -> ⇧↑ (大きく上へ)",
+          "from": {
+            "generic_desktop": "dpad_up",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow",
+              "modifiers": [
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.illustrator"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 ↓ -> ⇧↓ (大きく下へ)",
+          "from": {
+            "generic_desktop": "dpad_down",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow",
+              "modifiers": [
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.illustrator"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 ← -> ⇧← (大きく左へ)",
+          "from": {
+            "generic_desktop": "dpad_left",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.illustrator"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 → -> ⇧→ (大きく右へ)",
+          "from": {
+            "generic_desktop": "dpad_right",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.illustrator"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + L -> ⌘0 (アートボードに合わせる)",
+          "from": {
+            "pointing_button": "button7",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "0",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.illustrator"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + R -> ⌘1 (100% 表示)",
+          "from": {
+            "pointing_button": "button8",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "1",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.illustrator"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + Select（−） -> ⌘⇧G (グループ解除)",
+          "from": {
+            "pointing_button": "button11",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "g",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.illustrator"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + Start（＋） -> ⌘⇧S (別名で保存)",
+          "from": {
+            "pointing_button": "button12",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "s",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.illustrator"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "A -> V (選択ツール)",
+          "from": {
+            "pointing_button": "button1",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "v",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.illustrator"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "B -> A (ダイレクト選択)",
+          "from": {
+            "pointing_button": "button2",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "a",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.illustrator"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "X -> ⌘Z (取り消し)",
+          "from": {
+            "pointing_button": "button4",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "z",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.illustrator"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "Y -> I (スポイト)",
+          "from": {
+            "pointing_button": "button5",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "i",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.illustrator"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "L -> ⌘- (ズームアウト)",
+          "from": {
+            "pointing_button": "button7",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "hyphen",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.illustrator"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R -> ⌘= (ズームイン)",
+          "from": {
+            "pointing_button": "button8",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "equal_sign",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.illustrator"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "Select（−） -> ⌘G (グループ化)",
+          "from": {
+            "pointing_button": "button11",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "g",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.illustrator"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "Start（＋） -> ⌘S (保存)",
+          "from": {
+            "pointing_button": "button12",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "s",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.illustrator"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "左スティック押込 -> space (押している間だけ手のひらツール（パン）)",
+          "from": {
+            "pointing_button": "button14",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "spacebar"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.illustrator"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "[SN30] After Effects（左手デバイス特化）",
+      "manipulators": [
+        {
+          "type": "basic",
+          "description": "R2 + A -> テンキー0 (プレビュー)",
+          "from": {
+            "pointing_button": "button1",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "keypad_0",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.AfterEffects"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + B -> ⌘D (複製)",
+          "from": {
+            "pointing_button": "button2",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "d",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.AfterEffects"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + X -> ⌘⌥Z (段階的に戻る)",
+          "from": {
+            "pointing_button": "button4",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "z",
+              "modifiers": [
+                "left_command",
+                "left_option"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.AfterEffects"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + Y -> E (エフェクトを表示)",
+          "from": {
+            "pointing_button": "button5",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "e",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.AfterEffects"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 ↑ -> ⌘↑ (レイヤーを上へ)",
+          "from": {
+            "generic_desktop": "dpad_up",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.AfterEffects"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 ↓ -> ⌘↓ (レイヤーを下へ)",
+          "from": {
+            "generic_desktop": "dpad_down",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.AfterEffects"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 ← -> ⇧PgUp (10フレーム戻る)",
+          "from": {
+            "generic_desktop": "dpad_left",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "page_up",
+              "modifiers": [
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.AfterEffects"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 → -> ⇧PgDn (10フレーム進む)",
+          "from": {
+            "generic_desktop": "dpad_right",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "page_down",
+              "modifiers": [
+                "left_shift"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.AfterEffects"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + L -> , (ズームアウト)",
+          "from": {
+            "pointing_button": "button7",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "comma",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.AfterEffects"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + R -> . (ズームイン)",
+          "from": {
+            "pointing_button": "button8",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "period",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.AfterEffects"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + Select（−） -> ⌘⇧S (別名で保存)",
+          "from": {
+            "pointing_button": "button11",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "s",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.AfterEffects"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + Start（＋） -> ⌘M (レンダーキューに追加)",
+          "from": {
+            "pointing_button": "button12",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "m",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.AfterEffects"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "A -> space (再生 / 停止)",
+          "from": {
+            "pointing_button": "button1",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "spacebar",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.AfterEffects"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "B -> esc (中断)",
+          "from": {
+            "pointing_button": "button2",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "escape",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.AfterEffects"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "X -> ⌘Z (取り消し)",
+          "from": {
+            "pointing_button": "button4",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "z",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.AfterEffects"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "Y -> ⌘⇧Z (やり直す)",
+          "from": {
+            "pointing_button": "button5",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "z",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.AfterEffects"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "十字 ↑ -> ↑ (上のレイヤーを選択)",
+          "from": {
+            "generic_desktop": "dpad_up",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.AfterEffects"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "十字 ↓ -> ↓ (下のレイヤーを選択)",
+          "from": {
+            "generic_desktop": "dpad_down",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.AfterEffects"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "十字 ← -> PgUp (1フレーム戻る)",
+          "from": {
+            "generic_desktop": "dpad_left",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "page_up"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.AfterEffects"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "十字 → -> PgDn (1フレーム進む)",
+          "from": {
+            "generic_desktop": "dpad_right",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "page_down"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.AfterEffects"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "L -> J (前のキーフレームへ)",
+          "from": {
+            "pointing_button": "button7",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "j",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.AfterEffects"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R -> K (次のキーフレームへ)",
+          "from": {
+            "pointing_button": "button8",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "k",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.AfterEffects"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "Select（−） -> U (キーフレームを表示)",
+          "from": {
+            "pointing_button": "button11",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "u",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.AfterEffects"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "Start（＋） -> ⌘S (保存)",
+          "from": {
+            "pointing_button": "button12",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "s",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.AfterEffects"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "左スティック押込 -> space (再生 / 停止)",
+          "from": {
+            "pointing_button": "button14",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "spacebar",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.adobe\\.AfterEffects"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "[SN30] Logic Pro（左手デバイス特化）",
+      "manipulators": [
+        {
+          "type": "basic",
+          "description": "R2 + A -> ⌘S (保存)",
+          "from": {
+            "pointing_button": "button1",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "s",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.logic10$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + B -> ⌘⇧Z (やり直す)",
+          "from": {
+            "pointing_button": "button2",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "z",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.logic10$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + X -> ⌘R (リージョンを繰り返す)",
+          "from": {
+            "pointing_button": "button4",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "r",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.logic10$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + Y -> ⌘B (バウンス)",
+          "from": {
+            "pointing_button": "button5",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "b",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.logic10$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 ↑ -> ⌘↑ (垂直ズームイン)",
+          "from": {
+            "generic_desktop": "dpad_up",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.logic10$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 ↓ -> ⌘↓ (垂直ズームアウト)",
+          "from": {
+            "generic_desktop": "dpad_down",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.logic10$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 ← -> ⌘← (水平ズームアウト)",
+          "from": {
+            "generic_desktop": "dpad_left",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.logic10$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 → -> ⌘→ (水平ズームイン)",
+          "from": {
+            "generic_desktop": "dpad_right",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.logic10$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + L -> O (サイクル範囲を選択範囲に合わせる)",
+          "from": {
+            "pointing_button": "button7",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "o",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.logic10$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + R -> ⌘0 (ズームを戻す)",
+          "from": {
+            "pointing_button": "button8",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "0",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.logic10$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + Select（−） -> ⌘C (コピー)",
+          "from": {
+            "pointing_button": "button11",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "c",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.logic10$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + Start（＋） -> ⌘V (貼り付け)",
+          "from": {
+            "pointing_button": "button12",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "v",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.logic10$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "A -> space (再生 / 停止)",
+          "from": {
+            "pointing_button": "button1",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "spacebar",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.logic10$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "B -> return (先頭へ戻る)",
+          "from": {
+            "pointing_button": "button2",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "return_or_enter",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.logic10$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "X -> R (録音)",
+          "from": {
+            "pointing_button": "button4",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "r",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.logic10$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "Y -> ⌘Z (取り消し)",
+          "from": {
+            "pointing_button": "button5",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "z",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.logic10$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "十字 ↑ -> ↑ (上のトラックを選択)",
+          "from": {
+            "generic_desktop": "dpad_up",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.logic10$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "十字 ↓ -> ↓ (下のトラックを選択)",
+          "from": {
+            "generic_desktop": "dpad_down",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.logic10$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "十字 ← -> , (1小節戻る)",
+          "from": {
+            "generic_desktop": "dpad_left",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "comma",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.logic10$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "十字 → -> . (1小節進む)",
+          "from": {
+            "generic_desktop": "dpad_right",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "period",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.logic10$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "L -> C (サイクルを ON / OFF)",
+          "from": {
+            "pointing_button": "button7",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "c",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.logic10$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R -> Z (選択範囲にズーム / 戻す)",
+          "from": {
+            "pointing_button": "button8",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "z",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.logic10$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "Select（−） -> M (ミュート)",
+          "from": {
+            "pointing_button": "button11",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "m",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.logic10$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "Start（＋） -> S (ソロ)",
+          "from": {
+            "pointing_button": "button12",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "s",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.logic10$"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "[SN30] ターミナル / Claude Code（R2 を押しながら）",
+      "manipulators": [
+        {
+          "type": "basic",
+          "description": "R2 + A -> ⌥return (改行（送信しない）)",
+          "from": {
+            "pointing_button": "button1",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "return_or_enter",
+              "modifiers": [
+                "left_option"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.Terminal$",
+                "^com\\.lambdalisue\\.Arto$",
+                "^com\\.microsoft\\.VSCode$",
+                "^com\\.anthropic\\.claudefordesktop$",
+                "^com\\.googlecode\\.iterm2$",
+                "^com\\.mitchellh\\.ghostty$",
+                "^dev\\.warp\\.Warp-Stable$",
+                "^com\\.github\\.wez\\.wezterm$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + B -> ⌃C (強制中断)",
+          "from": {
+            "pointing_button": "button2",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "c",
+              "modifiers": [
+                "left_control"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.Terminal$",
+                "^com\\.lambdalisue\\.Arto$",
+                "^com\\.microsoft\\.VSCode$",
+                "^com\\.anthropic\\.claudefordesktop$",
+                "^com\\.googlecode\\.iterm2$",
+                "^com\\.mitchellh\\.ghostty$",
+                "^dev\\.warp\\.Warp-Stable$",
+                "^com\\.github\\.wez\\.wezterm$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + Start（＋） -> ⌘K (画面をクリア)",
+          "from": {
+            "pointing_button": "button12",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "k",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.apple\\.Terminal$",
+                "^com\\.lambdalisue\\.Arto$",
+                "^com\\.microsoft\\.VSCode$",
+                "^com\\.anthropic\\.claudefordesktop$",
+                "^com\\.googlecode\\.iterm2$",
+                "^com\\.mitchellh\\.ghostty$",
+                "^dev\\.warp\\.Warp-Stable$",
+                "^com\\.github\\.wez\\.wezterm$"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "[SN30] ブラウザ（R2 を押しながら）",
+      "manipulators": [
+        {
+          "type": "basic",
+          "description": "R2 + A -> ⌘T (新規タブ)",
+          "from": {
+            "pointing_button": "button1",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "t",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.google\\.Chrome$",
+                "^com\\.apple\\.Safari$",
+                "^org\\.mozilla\\.firefox$",
+                "^com\\.brave\\.Browser$",
+                "^company\\.thebrowser\\.Browser$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 ← -> ⌘[ (戻る)",
+          "from": {
+            "generic_desktop": "dpad_left",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "open_bracket",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.google\\.Chrome$",
+                "^com\\.apple\\.Safari$",
+                "^org\\.mozilla\\.firefox$",
+                "^com\\.brave\\.Browser$",
+                "^company\\.thebrowser\\.Browser$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 → -> ⌘] (進む)",
+          "from": {
+            "generic_desktop": "dpad_right",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "close_bracket",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.google\\.Chrome$",
+                "^com\\.apple\\.Safari$",
+                "^org\\.mozilla\\.firefox$",
+                "^com\\.brave\\.Browser$",
+                "^company\\.thebrowser\\.Browser$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + Start（＋） -> ⌘R (リロード)",
+          "from": {
+            "pointing_button": "button12",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "r",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.google\\.Chrome$",
+                "^com\\.apple\\.Safari$",
+                "^org\\.mozilla\\.firefox$",
+                "^com\\.brave\\.Browser$",
+                "^company\\.thebrowser\\.Browser$"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "[SN30] R2 を押しながら（どのアプリでも）",
+      "manipulators": [
+        {
+          "type": "basic",
+          "description": "R2 + A -> ⌘A (すべて選択)",
+          "from": {
+            "pointing_button": "button1",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "a",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + B -> ⌘W (閉じる)",
+          "from": {
+            "pointing_button": "button2",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "w",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + X -> ⌘⇧Z (やり直す)",
+          "from": {
+            "pointing_button": "button4",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "z",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + Y -> ⌘Z (取り消す)",
+          "from": {
+            "pointing_button": "button5",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "z",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 ↑ -> PgUp (1画面ぶん上へ)",
+          "from": {
+            "generic_desktop": "dpad_up",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "page_up"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 ↓ -> PgDn (1画面ぶん下へ)",
+          "from": {
+            "generic_desktop": "dpad_down",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "page_down"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 ← -> ⌥← (1単語左へ)",
+          "from": {
+            "generic_desktop": "dpad_left",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_option"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 十字 → -> ⌥→ (1単語右へ)",
+          "from": {
+            "generic_desktop": "dpad_right",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_option"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + L -> ⌃⇧tab (前のタブ)",
+          "from": {
+            "pointing_button": "button7",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "tab",
+              "modifiers": [
+                "left_control",
+                "left_shift"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + R -> ⌃tab (次のタブ)",
+          "from": {
+            "pointing_button": "button8",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "tab",
+              "modifiers": [
+                "left_control"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + Select（−） -> ⌘X (切り取り)",
+          "from": {
+            "pointing_button": "button11",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "x",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + Start（＋） -> ⌘⇧V (書式なしで貼り付け)",
+          "from": {
+            "pointing_button": "button12",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "v",
+              "modifiers": [
+                "left_command",
+                "left_shift"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + ハート -> ⌘space (Spotlight / ランチャー)",
+          "from": {
+            "pointing_button": "button13",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "spacebar",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "[SN30] 単押し（どのアプリでも）",
+      "manipulators": [
+        {
+          "type": "basic",
+          "description": "L -> ⇧（押している間）",
+          "from": {
+            "pointing_button": "button7",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_shift",
+              "lazy": true
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "ハート -> ⌘（押している間）/ 単押しで ⌘tab (直前のアプリへ。押したまま R で順送り)",
+          "from": {
+            "pointing_button": "button13",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_command",
+              "lazy": true
+            }
+          ],
+          "to_if_alone": [
+            {
+              "key_code": "tab",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "A -> return (Enter / 決定)",
+          "from": {
+            "pointing_button": "button1",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "return_or_enter",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "B -> esc (Esc / 中断)",
+          "from": {
+            "pointing_button": "button2",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "escape",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "X -> ⌦ (Delete（前方削除）)",
+          "from": {
+            "pointing_button": "button4",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "delete_forward"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "Y -> ⌫ (Backspace)",
+          "from": {
+            "pointing_button": "button5",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "delete_or_backspace"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "十字 ↑ -> ↑ (↑)",
+          "from": {
+            "generic_desktop": "dpad_up",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "十字 ↓ -> ↓ (↓)",
+          "from": {
+            "generic_desktop": "dpad_down",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "十字 ← -> ← (←)",
+          "from": {
+            "generic_desktop": "dpad_left",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "十字 → -> → (→)",
+          "from": {
+            "generic_desktop": "dpad_right",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R -> tab (Tab（次の要素へ）。L + R で ⇧Tab)",
+          "from": {
+            "pointing_button": "button8",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "tab",
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "Select（−） -> ⌘C (コピー)",
+          "from": {
+            "pointing_button": "button11",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "c",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "Start（＋） -> ⌘V (貼り付け)",
+          "from": {
+            "pointing_button": "button12",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "v",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "左スティック押込 -> マウス左 (左クリック)",
+          "from": {
+            "pointing_button": "button14",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "pointing_button": "button1"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "右スティック押込 -> マウス右 (右クリック)",
+          "from": {
+            "pointing_button": "button15",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "pointing_button": "button2"
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_unless",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

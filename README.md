@@ -6,6 +6,10 @@ macOS 全体で **Vim 風 / Emacs 風のキー操作**を実現する Karabiner-
 モードに入る同じ仕組みで、違うのはキー割り当てだけ。使い比べて体に合うほうを選ぶための
 構成になっています。
 
+`gamepad/` は毛色が違います。**8BitDo SN30 Pro をサブ入力デバイスにする設定**で、
+キーボードのキーを一つも使いません。Caps Lock も掴まないので、Vim / Emacs モードと
+**同時に有効にできます**。
+
 ```
 Caps Lock 押しっぱなし  →  モードに入る（離すと自動で抜ける）
 Caps Lock 単押し        →  何も起きない
@@ -35,24 +39,70 @@ US（ANSI）配列前提です。
 
 ---
 
+## ゲームパッド版（`gamepad/`）
+
+8BitDo SN30 Pro を **D-input モード**（`Start + B` を3秒長押し）で Bluetooth 接続して使います。
+
+```
+左 / 右スティック                 →  マウスカーソル / スクロール
+十字・A・B・X・Y・Select・Start  →  矢印・Enter・Esc・Delete・Backspace・コピー・貼り付け（全アプリ固定）
+L / ハート 押しっぱなし           →  ⇧ / ⌘（本物の修飾キー。十字やクリックと合成される）
+R / ハート 単押し                 →  Tab / ⌘Tab
+L2 押しっぱなし                   →  音声入力の Push-to-Talk（F13 を送出）
+R2 押しっぱなし                   →  レイヤー2（ここだけ前面アプリで出し分け）
+```
+
+音声入力と組み合わせて、楽な姿勢でのエンジニア業務とブラウジングをキーボードとマウスなしで
+回す設計です。単押しはどのアプリでも同じで、R2 レイヤーだけをターミナル / Claude Code と
+ブラウザで上書きしています。机に向かって使う Figma / Photoshop / Illustrator / After Effects /
+Logic だけは左手デバイスとして特化させ、単押しも別の割り当てです。どこでもハートは ⌘Tab です。
+
+```bash
+make gamepad          # 再生成 + 検査 + 早見表 PDF
+make install-gamepad  # karabiner.json に書き込む（GUI 操作は不要）
+```
+
+**Karabiner は DirectInput のパッドしか扱えません。** X-input モードだとデバイス一覧に
+すら出ません。接続後、Karabiner-Elements → Devices で **Modify events** を ON にしてください。
+
+使い方と割り当ての一覧は **[gamepad/CHEATSHEET.md](gamepad/CHEATSHEET.md)**（マニュアル。
+ボタンの位置図つき）にあります。**[gamepad/CHEATSHEET.pdf](gamepad/CHEATSHEET.pdf)** は
+その表だけを抜いた印刷用です。設計判断は **[gamepad/DESIGN.md](gamepad/DESIGN.md)** にあります。
+
+---
+
 ## インストール
 
 ```bash
-make install          # 両方の JSON を Karabiner の設定ディレクトリに置く
+make install          # vim と emacs の JSON を Karabiner の設定ディレクトリに置く
 make install-vim      # vim だけ
 make install-emacs    # emacs だけ
+make install-gamepad  # ゲームパッド版（karabiner.json に直接書き込む。下記参照）
 ```
 
 置いたあと、Karabiner-Elements → **Complex Modifications** → **Add rule** で
 使いたいほうを **Enable** します。
 
-### 両方を同時に有効にしないでください
+### ゲームパッド版だけインストール方法が違います
+
+`make install-gamepad` は assets へのコピーではなく、`karabiner.json` を直接
+書き換えます。**スティックの効き（速度・デッドゾーン）が complex_modifications では
+表現できず、デバイス設定として書くしかない**ためです。理由は
+[gamepad/DESIGN.md](gamepad/DESIGN.md) §3 にあります。
+
+`[SN30]` で始まるルールだけを入れ替えるので、Vim / Emacs モードには触りません。
+書き込み前に `automatic_backups/` へバックアップを取ります。剥がすときは
+`make uninstall-gamepad` です。
+
+### vim と emacs を同時に有効にしないでください
 
 **どちらも Caps Lock を掴むので、両方 Enable にすると先に並んでいるほうだけが動きます。**
 壊れはしませんが、片方が沈黙して原因が分かりにくくなります。
 
 切り替えるときは、使わないほうを **Remove** してから、使うほうを **Add rule** してください。
 JSON ファイルは残るので、付け外しは何度でもできます。
+
+ゲームパッド版はキーボードのキーを一つも掴まないので、どちらと組み合わせても衝突しません。
 
 ### Caps Lock を Control にリマップしていた場合
 
@@ -72,15 +122,18 @@ Karabiner は物理キーボードを占有するため、macOS 側の「Caps Lo
 設定ファイルは**生成物**です。`gen.py` を編集して作り直します。
 
 ```bash
-make            # 両方を再生成 + 検査 + PDF
+make            # 全モードを再生成 + 検査 + PDF
 make vim        # vim だけ
 make emacs      # emacs だけ
+make gamepad    # ゲームパッドだけ
 make check      # 検査だけ（綴り・評価順・修飾キーの漏れ）
 make pdf        # チートシートの PDF だけ
 make help       # ターゲット一覧
 ```
 
-`vim-mode.json` / `emacs-mode.json` を手で編集しないでください。次の生成で消えます。
+`vim-mode.json` / `emacs-mode.json` / `gamepad-mode.json` を手で編集しないでください。
+次の生成で消えます。**ゲームパッド版は `CHEATSHEET.md`（マニュアル）も生成物です**
+（割り当てが 200 通り以上あり、手で維持するとずれるため。理由は `gamepad/DESIGN.md` §7）。
 
 Claude Code で作業する場合は **[CLAUDE.md](CLAUDE.md)** を先に読んでください。
 守るべき設計判断と、過去に踏んだ落とし穴がまとまっています。
@@ -106,10 +159,17 @@ Claude Code で作業する場合は **[CLAUDE.md](CLAUDE.md)** を先に読ん�
 │   ├── CHEATSHEET.md  CHEATSHEET.pdf
 │   ├── ARCHITECTURE.md   仕組みの解説（両モード共通の土台もここ）
 │   └── LIMITATIONS.md    実装しなかったものと macOS 側の制約
-└── emacs/
-    ├── gen.py  emacs-mode.json
-    ├── CHEATSHEET.md  CHEATSHEET.pdf
-    └── DESIGN.md         Emacs 版固有の設計判断
+├── emacs/
+│   ├── gen.py  emacs-mode.json
+│   ├── CHEATSHEET.md  CHEATSHEET.pdf
+│   └── DESIGN.md         Emacs 版固有の設計判断
+└── gamepad/
+    ├── gen.py                    ← 編集するのはここ（割り当て・スティック・マニュアルの文面）
+    ├── gamepad-mode.json         生成物（ルール）
+    ├── gamepad-device.json       生成物（スティックの効き）
+    ├── CHEATSHEET.md             生成物（マニュアル。位置図つき）  CHEATSHEET.pdf（印刷用）
+    ├── apply.py                  karabiner.json への流し込み
+    └── DESIGN.md                 ゲームパッド版固有の設計判断
 ```
 
 Karabiner の設定ファイルそのものの仕組み（変数リーダー、`mandatory` と `optional` の違い、

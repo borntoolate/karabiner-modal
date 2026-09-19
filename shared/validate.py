@@ -13,6 +13,10 @@ hyphen equal_sign open_bracket close_bracket backslash semicolon quote
 grave_accent_and_tilde comma period slash
 left_shift right_shift left_command right_command left_option right_option
 left_control right_control fn
+f1 f2 f3 f4 f5 f6 f7 f8 f9 f10 f11 f12
+f13 f14 f15 f16 f17 f18 f19 f20
+keypad_0 keypad_1 keypad_2 keypad_3 keypad_4
+keypad_5 keypad_6 keypad_7 keypad_8 keypad_9 keypad_enter
 """.split())
 
 VALID_MODIFIERS = set("""
@@ -27,12 +31,18 @@ VALID_COND_TYPES = {"variable_if", "variable_unless", "frontmost_application_if"
 # `from.any` matches every event of the named kind instead of one key_code.
 VALID_ANY = {"key_code", "consumer_key_code", "pointing_button"}
 
+# ゲームパッド（SN30 Pro）の from / to に出てくるイベント。
+# DirectInput のパッドのボタンは pointing_button として、十字キーは
+# generic_desktop として届く（Karabiner-EventViewer で実測）。
+VALID_POINTING_BUTTONS = {"button%d" % i for i in range(1, 33)}
+VALID_GENERIC_DESKTOP = {"dpad_up", "dpad_down", "dpad_left", "dpad_right"}
+
 errors, warnings = [], []
 TARGET = sys.argv[1] if len(sys.argv) > 1 else "vim-mode.json"
 doc = json.load(open(TARGET, encoding="utf-8"))
 
 assert "title" in doc and "rules" in doc, "top-level keys missing"
-manips = doc["rules"][0]["manipulators"]
+manips = [m for rule in doc["rules"] for m in rule["manipulators"]]
 
 
 def modspec(m):
@@ -51,6 +61,14 @@ for i, m in enumerate(manips):
             errors.append(f"{tag}: bad from.any {m['from']['any']!r}")
         if "key_code" in m["from"]:
             errors.append(f"{tag}: from has both any and key_code")
+    elif "pointing_button" in m["from"]:
+        if m["from"]["pointing_button"] not in VALID_POINTING_BUTTONS:
+            errors.append(
+                f"{tag}: bad from.pointing_button {m['from']['pointing_button']!r}")
+    elif "generic_desktop" in m["from"]:
+        if m["from"]["generic_desktop"] not in VALID_GENERIC_DESKTOP:
+            errors.append(
+                f"{tag}: bad from.generic_desktop {m['from']['generic_desktop']!r}")
     else:
         fk = m["from"].get("key_code")
         if fk not in VALID_KEYS:
@@ -68,6 +86,11 @@ for i, m in enumerate(manips):
                 for x in ev.get("modifiers", []):
                     if x not in VALID_MODIFIERS:
                         errors.append(f"{tag}: bad {bucket} modifier {x!r}")
+            elif "pointing_button" in ev:
+                if ev["pointing_button"] not in VALID_POINTING_BUTTONS:
+                    errors.append(
+                        f"{tag}: bad {bucket} pointing_button "
+                        f"{ev['pointing_button']!r}")
             elif "set_variable" in ev:
                 sv = ev["set_variable"]
                 if set(sv) != {"name", "value"}:
@@ -90,13 +113,24 @@ for i, m in enumerate(manips):
 
 # ---- shadowing: does an earlier manipulator make a later one unreachable? ----
 def conds(m):
-    return frozenset((c["type"], c["name"], c["value"]) for c in m.get("conditions", []))
+    """条件の同一性。variable 系は name/value、アプリ / デバイス系は識別子で比べる。"""
+    out = []
+    for c in m.get("conditions", []):
+        if "name" in c:
+            out.append((c["type"], c["name"], c.get("value")))
+        else:
+            ident = c.get("bundle_identifiers") or c.get("identifiers") or []
+            out.append((c["type"], json.dumps(ident, sort_keys=True), None))
+    return frozenset(out)
 
 
 def fromkey(m):
-    """('any', kind) for a from.any manipulator, else ('key', key_code)."""
+    """('any', kind) for a from.any manipulator, else (kind, value)."""
     if "any" in m["from"]:
         return ("any", m["from"]["any"])
+    for kind in ("pointing_button", "generic_desktop"):
+        if kind in m["from"]:
+            return (kind, m["from"][kind])
     return ("key", m["from"].get("key_code"))
 
 

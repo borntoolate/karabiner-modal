@@ -6,11 +6,11 @@ STAMP := $(VENV)/.installed
 KDIR  := $(HOME)/.config/karabiner/assets/complex_modifications
 
 .DEFAULT_GOAL := all
-.PHONY: all vim emacs check leakcheck pdf venv install install-vim install-emacs \
-        clean clean-venv help
+.PHONY: all vim emacs gamepad check leakcheck pdf venv install install-vim \
+        install-emacs install-gamepad uninstall-gamepad clean clean-venv help
 
-## all: 両モードを再生成 → 検査 → PDF
-all: vim emacs
+## all: 全モードを再生成 → 検査 → PDF
+all: vim emacs gamepad
 
 ## vim: vim-mode.json と CHEATSHEET.pdf を作り直して検査する
 vim:
@@ -24,10 +24,17 @@ emacs:
 	$(PY) shared/validate.py emacs/emacs-mode.json
 	$(MAKE) --no-print-directory emacs/CHEATSHEET.pdf
 
+## gamepad: gamepad-mode.json と CHEATSHEET.md（マニュアル）と PDF を作り直して検査する
+gamepad:
+	cd gamepad && $(PY) gen.py
+	$(PY) shared/validate.py gamepad/gamepad-mode.json
+	$(MAKE) --no-print-directory gamepad/CHEATSHEET.pdf
+
 ## check: 生成せずに既存の JSON を検査する（順序・綴り・修飾キーの漏れ）
 check:
 	$(PY) shared/validate.py vim/vim-mode.json
 	$(PY) shared/validate.py emacs/emacs-mode.json
+	$(PY) shared/validate.py gamepad/gamepad-mode.json
 	$(PY) shared/leakcheck.py vim/vim-mode.json emacs/emacs-mode.json
 
 ## leakcheck: optional:any のルールが修飾キーを出力に漏らしていないか調べる
@@ -35,7 +42,7 @@ leakcheck:
 	$(PY) shared/leakcheck.py vim/vim-mode.json emacs/emacs-mode.json
 
 ## pdf: チートシートの PDF だけ作り直す
-pdf: vim/CHEATSHEET.pdf emacs/CHEATSHEET.pdf
+pdf: vim/CHEATSHEET.pdf emacs/CHEATSHEET.pdf gamepad/CHEATSHEET.pdf
 
 # ---------------------------------------------------------------------------
 # PDF は Python の playwright（Chromium で組版）と qpdf（バイト再現性のための
@@ -47,6 +54,14 @@ vim/CHEATSHEET.pdf: vim/CHEATSHEET.md $(STAMP)
 	$(VPY) shared/make_cheatsheet_pdf.py $< $@
 
 emacs/CHEATSHEET.pdf: emacs/CHEATSHEET.md $(STAMP)
+	@command -v qpdf >/dev/null || { echo "qpdf がありません → brew install qpdf"; exit 1; }
+	$(VPY) shared/make_cheatsheet_pdf.py $< $@
+
+# ゲームパッド版の CHEATSHEET.md は gen.py の生成物なので、先に gen.py を通します。
+gamepad/CHEATSHEET.md: gamepad/gen.py
+	cd gamepad && $(PY) gen.py
+
+gamepad/CHEATSHEET.pdf: gamepad/CHEATSHEET.md $(STAMP)
 	@command -v qpdf >/dev/null || { echo "qpdf がありません → brew install qpdf"; exit 1; }
 	$(VPY) shared/make_cheatsheet_pdf.py $< $@
 
@@ -79,10 +94,21 @@ install-emacs:
 	@echo "placed. Karabiner-Elements > Complex Modifications > Add rule で有効化してください"
 	@echo "※ vim と emacs はどちらも Caps Lock を掴みます。同時に有効にしないでください"
 
+## install-gamepad: ルールとスティックの効きを karabiner.json に直接書き込む
+## （vim / emacs と違い assets へのコピーではありません。理由は gamepad/DESIGN.md §3）
+install-gamepad:
+	$(PY) gamepad/apply.py
+
+## uninstall-gamepad: [SN30] ルールを karabiner.json から剥がす
+uninstall-gamepad:
+	$(PY) gamepad/apply.py --remove
+
 ## clean: 生成物を消す（gen.py から作り直せます）
 clean:
 	rm -f vim/vim-mode.json emacs/emacs-mode.json
-	rm -f vim/CHEATSHEET.pdf emacs/CHEATSHEET.pdf
+	rm -f gamepad/gamepad-mode.json gamepad/gamepad-device.json
+	rm -f gamepad/CHEATSHEET.md
+	rm -f vim/CHEATSHEET.pdf emacs/CHEATSHEET.pdf gamepad/CHEATSHEET.pdf
 
 ## clean-venv: PDF 用の Python 環境を消す（作り直しは make venv）
 clean-venv:

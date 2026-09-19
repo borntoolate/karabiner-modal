@@ -8,17 +8,28 @@ macOS 全体で Vim 風 / Emacs 風のキー操作を実現する **Karabiner-El
 `vim/` と `emacs/` は**対等な2つの実装**で、どちらか一方を有効にして使い比べます。
 どちらかが本命ということはありません。片方を変えたら、もう片方にも同じ配慮が必要か検討してください。
 
+`gamepad/` は3つめのモードですが、性質が違います。**8BitDo SN30 Pro を
+サブ入力デバイスにする設定**で、キーボードのキーも Caps Lock も使いません。
+vim / emacs とは衝突しないので、片方を変えても `gamepad/` への配慮は不要です。
+逆も同じです。固有の事情は `gamepad/DESIGN.md` にまとまっています。
+
 ## 最重要ルール
 
 ### 1. `*-mode.json` を直接編集しない
 
-`vim/vim-mode.json` と `emacs/emacs-mode.json` は**生成物**です。
+`vim/vim-mode.json` `emacs/emacs-mode.json` `gamepad/gamepad-mode.json` は**生成物**です。
 必ず `gen.py` を編集して再生成してください。JSON を手で直すと次の生成で消えます。
 
+**ゲームパッド版は `gamepad/CHEATSHEET.md`（マニュアル）と `gamepad/gamepad-device.json`
+も生成物です。** 割り当てが 200 通り以上あり、早見表を手で維持するとずれるためです
+（`gamepad/DESIGN.md` §7）。マニュアルの文面を変えるときも `gen.py` の
+`build_cheatsheet()` を編集してください。
+
 ```bash
-make            # 両方を再生成 + 検査 + PDF
+make            # 全モードを再生成 + 検査 + PDF
 make vim        # vim だけ
 make emacs      # emacs だけ
+make gamepad    # ゲームパッドだけ
 make check      # 検査だけ（依存ゼロ。venv も qpdf も要りません）
 ```
 
@@ -72,6 +83,15 @@ make venv           # .venv に playwright（Chromium で組版）を用意す�
 | 行選択（`dd` `yy` `V`）は ⌘← + ⇧↓ ではなく桁に依存しない5手 | `vim/ARCHITECTURE.md` §4 |
 | `%` `H` `L` `f` `t` `.` などは実装しない | `vim/LIMITATIONS.md` |
 | Figma などの除外アプリは設定しない | `COMPARISON.md` §5 |
+| **ゲームパッドの全 manipulator に `device_if` を付ける** | `gamepad/DESIGN.md` §4 |
+| ゲームパッド版は `karabiner.json` を直接書き換える（assets ではない） | `gamepad/DESIGN.md` §3 |
+| L2 = 音声入力 PTT（F13）、R2 = レイヤー修飾 | `gamepad/DESIGN.md` §5 |
+| **ゲームパッドの単押しは固定ベース。エンジニア業務のアプリは R2 層の 9 枠だけ上書き**（`MOD_LOCKED` は不可）。机に向かうアプリ（`DESK_APPS`）だけ単押しも特化 | `gamepad/DESIGN.md` §5 |
+| ゲームパッドのハートはどのアプリでも ⌘Tab / ⌘。上書き不可（`DESK_LOCKED`） | `gamepad/DESIGN.md` §5 |
+| ゲームパッドで長押しリピートするのは矢印と削除だけ（`repeat: false` が既定） | `gamepad/DESIGN.md` §5 |
+| ゲームパッドの L / ハートは本物の修飾キー（全ルール `optional: ["any"]` は狙い） | `gamepad/DESIGN.md` §5 |
+| **スティックの連続移動には 300 ms の空白がある。設定では消えない** | `gamepad/DESIGN.md` §6 |
+| ゲームパッドの `CHEATSHEET.md` は生成物 | `gamepad/DESIGN.md` §7 |
 | hjkl に転送するのは ⌥ と ⌘ だけ。⌃ は転送しない | `vim/ARCHITECTURE.md` §2b |
 | **Vim 版は未定義の ⌃ / ⌥ を吸収する**（`from.any` + `to: []`） | `vim/ARCHITECTURE.md` §2c |
 | **Emacs 版は ⌥ だけ吸収し、⌃ は素通りさせる** | `emacs/DESIGN.md` §7 |
@@ -88,6 +108,10 @@ make venv           # .venv に playwright（Chromium で組版）を用意す�
 
 Shift や Control を「受け付けるが出力しない」場合は `mandatory` を使ってください。
 `mandatory` に指定した修飾キーは出力から取り除かれます。
+
+**ゲームパッド版だけは例外です。** L / ハートを本物の ⇧ / ⌘ として合成させるために、
+全ルールで `optional: ["any"]` を使っています（`gamepad/DESIGN.md` §5）。
+`make leakcheck` の対象に入れていないのはそのためです。
 
 追加・変更したら、この確認を走らせてください。
 

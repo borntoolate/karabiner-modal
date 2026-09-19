@@ -1,0 +1,22 @@
+{
+  "identifiers": {
+    "vendor_id": 11720,
+    "product_id": 24833,
+    "is_game_pad": true
+  },
+  "settings": {
+    "game_pad_xy_stick_deadzone": 0.05,
+    "game_pad_xy_stick_delta_magnitude_detection_threshold": 0.005,
+    "game_pad_xy_stick_continued_movement_absolute_magnitude_threshold": 0.9,
+    "game_pad_xy_stick_continued_movement_interval_milliseconds": 10,
+    "game_pad_stick_x_formula": "var m:= 0;\n\nif (continued_movement == false) {\n  m := delta_magnitude * 150;\n} else if (absolute_magnitude < 1.5) {\n  m := absolute_magnitude * 13;\n} else if (absolute_magnitude < 2) {\n  m := absolute_magnitude * 24;\n} else {\n  m := absolute_magnitude * 40;\n};\n\ncos(radian) * m;\n",
+    "game_pad_stick_y_formula": "var m:= 0;\n\nif (continued_movement == false) {\n  m := delta_magnitude * 150;\n} else if (absolute_magnitude < 1.5) {\n  m := absolute_magnitude * 13;\n} else if (absolute_magnitude < 2) {\n  m := absolute_magnitude * 24;\n} else {\n  m := absolute_magnitude * 40;\n};\n\nsin(radian) * m;\n",
+    "game_pad_wheels_stick_deadzone": 0.05,
+    "game_pad_wheels_stick_delta_magnitude_detection_threshold": 0.005,
+    "game_pad_wheels_stick_continued_movement_absolute_magnitude_threshold": 0.05,
+    "game_pad_wheels_stick_continued_movement_interval_milliseconds": 10,
+    "game_pad_stick_vertical_wheel_formula": "var m := 0;\n\nif (abs(cos(radian)) < abs(sin(radian))) {\n  if (continued_movement == false) {\n    m := delta_magnitude * 1.0;\n  } else {\n    m := absolute_magnitude * 0.15;\n  };\n};\n\nsin(radian) * m;\n",
+    "game_pad_stick_horizontal_wheel_formula": "var m := 0;\n\nif (abs(cos(radian)) > abs(sin(radian))) {\n  if (continued_movement == false) {\n    m := delta_magnitude * 1.0;\n  } else {\n    m := absolute_magnitude * 0.15;\n  };\n};\n\ncos(radian) * m;\n",
+    "game_pad_swap_sticks": false
+  }
+}

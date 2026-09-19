@@ -85,7 +85,7 @@ make venv           # .venv に playwright（Chromium で組版）を用意す�
 | Figma などの除外アプリは設定しない | `COMPARISON.md` §5 |
 | **ゲームパッドの全 manipulator に `device_if` を付ける** | `gamepad/DESIGN.md` §4 |
 | ゲームパッド版は `karabiner.json` を直接書き換える（assets ではない） | `gamepad/DESIGN.md` §3 |
-| L2 = 音声入力 PTT（F13）、R2 = レイヤー修飾 | `gamepad/DESIGN.md` §5 |
+| L2 = 音声入力の開始 / 終了（マイクキー `consumer_key_code: dictation`）、R2 = レイヤー修飾 | `gamepad/DESIGN.md` §5 |
 | **ゲームパッドの単押しは固定ベース。エンジニア業務のアプリは R2 層の 9 枠だけ上書き**（`MOD_LOCKED` は不可）。机に向かうアプリ（`DESK_APPS`）だけ単押しも特化 | `gamepad/DESIGN.md` §5 |
 | ゲームパッドのハートはどのアプリでも ⌘Tab / ⌘。上書き不可（`DESK_LOCKED`） | `gamepad/DESIGN.md` §5 |
 | ゲームパッドで長押しリピートするのは矢印と削除だけ（`repeat: false` が既定） | `gamepad/DESIGN.md` §5 |

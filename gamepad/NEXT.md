@@ -15,7 +15,8 @@ Mac 上のローカル Claude Code で続きをやるための申し送りです
   固定、R2 レイヤーだけアプリ別に上書き（ターミナル / Claude Code、ブラウザ）。
   机に向かうアプリ（Figma / Photoshop / Illustrator / After Effects / Logic）は
   `DESK_APPS` で左手デバイス特化（単押しも上書き。割り当ては未検証の初期案）。
-  L / ハートは本物の修飾キー。ハートはどこでも ⌘Tab。設計は `DESIGN.md` §5
+  L / ハートは本物の修飾キー。ハートはどこでも ⌘Tab。L2 は macOS 音声入力のマイクキー
+  （トグル）。設計は `DESIGN.md` §5
 - ルール 11 本 / manipulator 157 件
 - 長押しで繰り返すのは矢印と削除だけ（`repeat: false` が既定。`hold:` で押しっぱなし）
 - スティックは左右で挙動を変えてある（下記「やること 1」）
@@ -36,6 +37,7 @@ Mac 上のローカル Claude Code で続きをやるための申し送りです
 
 | 確認 | 期待 | 外れたら |
 |---|---|---|
+| L2 | macOS の音声入力が始まる。もう一度で終わる | `consumer_key_code: dictation` が仮想キーボード経由で効いていない。代替は `to` を `right_command` 2回（システム設定のショートカットに合わせる） |
 | R を押してから L | 何も起きない（Tab は1回だけ）。⇧Tab は L → R の順 | 仕様。`DESIGN.md` §5 |
 | L を握って十字 | 選択が伸びる | `L -> ⇧` の `lazy` を外す（`build_rules()`） |
 | L を握って左スティック押込 | ⇧クリック | 同上 |

@@ -2,11 +2,11 @@
   "title": "8BitDo SN30 Pro（gen.py の生成物。直接編集しないこと）",
   "rules": [
     {
-      "description": "[SN30] 音声入力 Push-to-Talk（L2 押しっぱなしで F13）",
+      "description": "[SN30] 音声入力の開始 / 終了（L2 でマイクキー）",
       "manipulators": [
         {
           "type": "basic",
-          "description": "L2 -> f13",
+          "description": "L2 -> マイクキー（音声入力の開始 / 終了）",
           "from": {
             "pointing_button": "button9",
             "modifiers": {
@@ -17,7 +17,8 @@
           },
           "to": [
             {
-              "key_code": "f13"
+              "consumer_key_code": "dictation",
+              "repeat": false
             }
           ],
           "conditions": [

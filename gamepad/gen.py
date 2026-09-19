@@ -180,11 +180,13 @@ ORDER = ["A", "B", "X", "Y",
 #     "click:button1"             マウスクリックを送る
 #     "hold:spacebar"             押している間だけ押しっぱなしにする
 # ===========================================================================
-# L2 押しっぱなし = 音声入力 Push-to-Talk。
-# 音声入力アプリ側のホットキーを F13 にしておく。F13 は素の macOS が何にも
-# 使っていないので、どのアプリとも衝突しない。
-PTT_BUTTON = "L2"
-PTT_KEY = "f13"
+# L2 = 音声入力の開始 / 終了。
+# Apple のキーボードのマイクキー（F5）と同じ HID イベント（consumer usage
+# "dictation"）を送る。macOS の音声入力はこれで起動・終了するので、システム設定の
+# ショートカット（⌘ を2回など）には依存しない。トグルなので押している間ではなく、
+# 押すたびに開始 / 終了（DESIGN.md §5）。
+VOICE_BUTTON = "L2"
+VOICE_KEY = {"consumer_key_code": "dictation"}
 
 # R2 押しっぱなし = レイヤー2 修飾
 MOD_BUTTON = "R2"
@@ -604,13 +606,12 @@ def build_rules():
 
     rules = [
         {
-            "description": "%s 音声入力 Push-to-Talk（L2 押しっぱなしで %s）"
-                           % (RULE_PREFIX, PTT_KEY.upper()),
+            "description": "%s 音声入力の開始 / 終了（L2 でマイクキー）" % RULE_PREFIX,
             "manipulators": [{
                 "type": "basic",
-                "description": "L2 -> %s" % PTT_KEY,
-                "from": from_event(PTT_BUTTON),
-                "to": [{"key_code": PTT_KEY}],
+                "description": "L2 -> マイクキー（音声入力の開始 / 終了）",
+                "from": from_event(VOICE_BUTTON),
+                "to": [dict(VOICE_KEY, repeat=False)],
                 "conditions": [dev],
             }],
         },
@@ -781,7 +782,9 @@ def build_cheatsheet():
     L.append("3. Karabiner-Elements → **Devices** → 8Bitdo SN30 Pro の **Modify events** を ON にする")
     L.append("4. `make install-gamepad`（`karabiner.json` に直接書き込みます。剥がすときは "
              "`make uninstall-gamepad`）")
-    L.append("5. 音声入力アプリの Push-to-Talk ホットキーを **%s** にする" % PTT_KEY.upper())
+    L.append("5. システム設定 → キーボード → **音声入力** を ON にする。ショートカットの設定は"
+             "何でもよい（L2 は Apple キーボードのマイクキーと同じイベントを送るので、"
+             "ショートカットに依存しない）")
     L.append("6. システム設定 → キーボード → **キーボードナビゲーション** を ON にする。"
              "OFF だと Tab がテキスト欄とリストの間しか動かず、ボタンにフォーカスが移りません")
     L.append("")
@@ -812,7 +815,7 @@ def build_cheatsheet():
     L.append("## 常に同じもの")
     L.append("")
     table(L, ["ボタン", "動作"], [
-        ["L2 押しっぱなし", "音声入力（%s を送出）。離すと確定" % PTT_KEY.upper()],
+        ["L2", "音声入力の開始 / 終了（マイクキーを送出）。押すたびに切り替わる"],
         ["R2 押しっぱなし", "レイヤー2。他のボタンの意味が変わる（下の表）"],
         ["左スティック", "マウスカーソル。%s" % stick_note("xy")],
         ["右スティック", "スクロール。%s" % stick_note("wheels")],

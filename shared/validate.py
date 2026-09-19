@@ -31,6 +31,12 @@ VALID_COND_TYPES = {"variable_if", "variable_unless", "frontmost_application_if"
 # `from.any` matches every event of the named kind instead of one key_code.
 VALID_ANY = {"key_code", "consumer_key_code", "pointing_button"}
 
+# `to` に書ける consumer_key_code。ゲームパッドの L2 が音声入力のマイクキーを送る。
+VALID_CONSUMER_KEYS = {"dictation", "mute", "volume_increment", "volume_decrement",
+                       "play_or_pause", "fastforward", "rewind",
+                       "scan_next_track", "scan_previous_track", "eject",
+                       "display_brightness_increment", "display_brightness_decrement"}
+
 # ゲームパッド（SN30 Pro）の from / to に出てくるイベント。
 # DirectInput のパッドのボタンは pointing_button として、十字キーは
 # generic_desktop として届く（Karabiner-EventViewer で実測）。
@@ -91,6 +97,11 @@ for i, m in enumerate(manips):
                     errors.append(
                         f"{tag}: bad {bucket} pointing_button "
                         f"{ev['pointing_button']!r}")
+            elif "consumer_key_code" in ev:
+                if ev["consumer_key_code"] not in VALID_CONSUMER_KEYS:
+                    errors.append(
+                        f"{tag}: bad {bucket} consumer_key_code "
+                        f"{ev['consumer_key_code']!r}")
             elif "set_variable" in ev:
                 sv = ev["set_variable"]
                 if set(sv) != {"name", "value"}:

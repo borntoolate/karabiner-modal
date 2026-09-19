@@ -202,9 +202,14 @@ APP_SWITCH = ("cmd+tab", "直前のアプリへ。押したまま R で順送り
 
 
 # 口述は prompt-refiner（~/works/prompt-refiner）の2コマンドで回す。
-#   dictate        draft.md を空にして TextEdit で開く（口述の場）
+#   dictate        新しい下書き ~/prompt-log/draft-<日時>.md を作って TextEdit で開く（口述の場）
 #   refine <mode>  クリップボードを読んで claude -p で整形し、クリップボードへ書き戻す。
 #                  数秒かかり、終わると通知が出る
+#
+# prompt-refiner は作者の非公開ツールで、このリポジトリには入っていない。ここが当てにするのは
+# 上の 2 行の契約（パス・引数・クリップボード経由の入出力）だけで、生成と検査には要らない。
+# 無い環境では呼ぶ 6 ボタンだけが無音で失敗する（sh のエラーが console_user_server.log に
+# 残る）。呼び先を差し替える場所は shell() / refine() / DICTATE の 3 つ（README「口述の 6 ボタン」）。
 #
 # prompt-refiner 自身のホットキー ⌥⌘V / ⌥⌘1〜5 を送っても発火しない。Karabiner は
 # 自分が出したイベントを再 manipulate しないので、ボタンからはコマンドを直接呼ぶ。
@@ -222,7 +227,7 @@ def refine(mode):
 
 
 # R2 + L2。口述の手順の起点で、どのアプリでも同じ。
-DICTATE = (shell("$HOME/bin/dictate"), "口述の下書きを開く（draft.md を空にして TextEdit へ）")
+DICTATE = (shell("$HOME/bin/dictate"), "口述の下書きを開く（新しい下書きを作って TextEdit へ）")
 
 
 # 単押し。全アプリで同じ。
@@ -288,6 +293,9 @@ MOD_LOCKED = {"X", "Y", "SELECT", "HEART"}
 # 口述の手順はここで完結し、全アプリの R2 層に整形の枠を固定しなくて済む（DESIGN.md §5）。
 # 並びは prompt-refiner のホットキー ⌥⌘1〜5 と同じ順。他のアプリで口述した文は
 # キーボードの ⌥⌘1〜5 で整形する。
+# LIMITATION: モード名 5 つと並びは prompt-refiner の事実を写した固定値。あちらでモードを
+# 増やしても名前を変えてもここは追従しない。同期は手作業で、prompt-refiner 側のモード追加手順が
+# ここを指す逆向きの参照だけが頼り（DESIGN.md §5）。
 DICTATION_APP = {
     "name": "TextEdit（口述の下書き）",
     "apps": [r"^com\.apple\.TextEdit$"],
@@ -921,13 +929,16 @@ def build_cheatsheet():
     L.append("## 口述から整形まで（prompt-refiner）")
     L.append("")
     L.append("喋った文を prompt-refiner の `refine` で構造化プロンプトに整形する手順です。"
-             "起点は R2 + L2 の `dictate` で、下書き（`~/prompt-log/draft.md`）を空にして"
-             " TextEdit で開きます。**整形ボタンはその TextEdit にだけあります**（R2 + 十字と"
+             "prompt-refiner は喋った文を `claude -p` で用途別の構造化プロンプトにする作者の"
+             " CLI で、このリポジトリには入っていません（呼び出しの契約は README）。"
+             "起点は R2 + L2 の `dictate` で、新しい下書き（`~/prompt-log/draft-<日時>.md`）を"
+             "作って TextEdit で開きます。**整形ボタンはその TextEdit にだけあります**（R2 + 十字と"
              " Start。並びはキーボードの ⌥⌘1〜5 と同じ）。`refine` はクリップボードを読んで、"
              "整形した結果をクリップボードへ書き戻すので、選択 → コピー → 整形 → 貼り付けの"
              "形になります。整形には数秒かかり、終わると通知センターに「整形完了」が出ます。")
     L.append("")
     L.append("ボタンが実行するのは `%s` と `%s` などで、Karabiner が `/bin/sh -c` で走らせます。"
+             "コマンドが無ければこの 6 ボタンだけが無音で失敗し、他のボタンは影響を受けません。"
              % (parse_to(DICTATE[0])[0]["shell_command"],
                 parse_to(DICTATION_APP["mod"]["UP"][0])[0]["shell_command"]))
     L.append("")
@@ -956,7 +967,7 @@ def build_cheatsheet():
              "1つしか走らせず、次を押すと走っている整形が強制終了されます"
              "（R2 + L2 の `dictate` も、prompt-refiner のホットキー ⌥⌘V / ⌥⌘1〜5 も"
              "同じ枠です）。終了した整形はクリップボードに何も書きません")
-    L.append("- `dictate` は下書きを空にします。前の口述を残したまま言い足すことはできません"
+    L.append("- `dictate` は毎回新しい下書きを作ります。前の口述に言い足すボタンはありません"
              "（キーボードから `dictate --keep`）")
     L.append("- ⌘A → ⌘C を整形ボタンに畳み込んでいないのは、シェルコマンドが即座に走るのに"
              "対してキーイベントはあとから届き、⌘C より先にクリップボードを読んでしまうためです"

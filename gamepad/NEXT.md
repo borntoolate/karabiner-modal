@@ -112,7 +112,7 @@ Karabiner のソースを直すしかない（`update_continued_movement_timer()
 
 | 操作 | ボタン | Karabiner が出すもの |
 |---|---|---|
-| 下書きを開く | R2 + L2（どのアプリでも） | `shell_command: $HOME/bin/dictate >/dev/null`（draft.md を空にして TextEdit を前面に） |
+| 下書きを開く | R2 + L2（どのアプリでも） | `shell_command: $HOME/bin/dictate >/dev/null`（新しい `draft-<日時>.md` を作って TextEdit を前面に） |
 | 口述の開始 / 終了 | L2 | `consumer_key_code: dictation`（マイクキー。押すたびにトグル） |
 | すべて選択 | R2 + A（TextEdit） | `⌘A` |
 | コピー | Select（−） | `⌘C` |
@@ -131,7 +131,7 @@ Start は既定（PgUp / PgDn / 単語移動 / 書式なし貼り付け）のま
 
 ### 試す順
 
-1. どのアプリからでもよいので R2 + L2。TextEdit が空の `draft.md` で前面に来る
+1. どのアプリからでもよいので R2 + L2。TextEdit が空の `draft-<日時>.md` で前面に来る
 2. L2 → 喋る → L2
 3. R2 + A → Select → R2 + 十字 ↑
 4. 「整形完了」の通知を待って、ハートで貼り付け先へ → Start
@@ -151,7 +151,7 @@ Start は既定（PgUp / PgDn / 単語移動 / 書式なし貼り付け）のま
 - ⌘A ⌘C ⌘V を整形ボタンに畳み込む。`shell_command` は即座に走り、キーイベントは
   あとから届くので、⌘C より先にクリップボードを読みうる。まとめるなら prompt-refiner 側に
   `--grab`（osascript で ⌘A ⌘C を打ってから読む）のような口を足す。あちらの CLAUDE.md の
-  作法（`make test`、モード追加は5か所）に従う。⌘S → `refine --from draft` も同じ賭け
+  作法（`make test`、モード追加は6か所）に従う。⌘S → `refine --from draft` も同じ賭け
 - prompt-refiner のホットキー ⌥⌘V / ⌥⌘1 を送る。Karabiner は自分の出力を再 manipulate しない
 - 整形ボタンを TextEdit 以外にも置く。5 モードぶんの枠がなく、他アプリでは R2 + A が
   ⌘A でないので、どのみちキーボードが要る。そちらは ⌥⌘1〜5 のまま

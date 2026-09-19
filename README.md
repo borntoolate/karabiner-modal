@@ -50,7 +50,7 @@ L / ハート 押しっぱなし           →  ⇧ / ⌘（本物の修飾キ�
 R / ハート 単押し                 →  Tab / ⌘Tab
 L2                                →  音声入力の開始 / 終了（Apple キーボードのマイクキーと同じイベント）
 R2 押しっぱなし                   →  レイヤー2（ここだけ前面アプリで出し分け）
-R2 + L2                           →  口述の下書きを開く（prompt-refiner の dictate。TextEdit では R2 + 十字 / Start が整形）
+R2 + L2                           →  口述の下書きを開く（外部コマンド。TextEdit では R2 + 十字 / Start が整形。下記）
 ```
 
 音声入力と組み合わせて、楽な姿勢でのエンジニア業務とブラウジングをキーボードとマウスなしで
@@ -69,6 +69,26 @@ make install-gamepad  # karabiner.json に書き込む（GUI 操作は不要）
 使い方と割り当ての一覧は **[gamepad/CHEATSHEET.md](gamepad/CHEATSHEET.md)**（マニュアル。
 ボタンの位置図つき）にあります。**[gamepad/CHEATSHEET.pdf](gamepad/CHEATSHEET.pdf)** は
 その表だけを抜いた印刷用です。設計判断は **[gamepad/DESIGN.md](gamepad/DESIGN.md)** にあります。
+
+### 口述の 6 ボタンは外部コマンドを呼びます
+
+R2 + L2 と、TextEdit が前面のときの R2 + 十字 ↑ ↓ ← → / Start の 6 つだけは、キーを送る
+代わりに `/bin/sh -c` でコマンドを実行します。
+
+| ボタン | 実行するもの | 期待している動作 |
+|---|---|---|
+| R2 + L2 | `$HOME/bin/dictate` | 新しい下書きファイルを作って TextEdit で開く |
+| R2 + 十字 ↑ ↓ ← → / Start（TextEdit） | `$HOME/bin/refine code` / `research` / `doc` / `ticket` / `message` | クリップボードの文を整形し、クリップボードへ書き戻す |
+
+この 2 コマンドは **prompt-refiner** のものです。喋った文を `claude -p` で用途別の
+構造化プロンプトに整形する作者の CLI で、**このリポジトリには入っておらず、非公開です。**
+ここが依存しているのは上の表の契約（パス・引数・クリップボード経由の入出力）だけで、
+`make gamepad` / `make check` には要りません。
+
+コマンドが無い環境では**この 6 ボタンだけが無音で失敗し**、他のボタンは影響を受けません
+（`No such file or directory` が `~/.local/share/karabiner/log/console_user_server.log` に
+残るだけです）。同じパスに自分のスクリプトを置けばそのまま使えます。呼び先を変えるなら
+`gamepad/gen.py` の `DICTATE` と `refine()` です。
 
 ---
 

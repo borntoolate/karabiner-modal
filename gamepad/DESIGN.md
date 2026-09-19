@@ -217,8 +217,10 @@ macOS の音声入力は押すたびに開始 / 終了するトグルなので�
 
 ### 口述は R2 + L2 で始め、整形は TextEdit の R2 層で
 
-口述した文は prompt-refiner（`~/works/prompt-refiner`）で構造化プロンプトにします。
-`dictate` が下書き `~/prompt-log/draft.md` を空にして TextEdit で開き、`refine <mode>` が
+口述した文は prompt-refiner で構造化プロンプトにします。喋った文を `claude -p` で用途別の
+構造化プロンプトに整形する作者の CLI で、**非公開です**（ローカルでは `~/works/prompt-refiner`。
+このリポジトリには入っていません）。`dictate` が新しい下書き `~/prompt-log/draft-<日時>.md` を
+作って TextEdit で開き、`refine <mode>` が
 クリップボードを読んで `claude -p` で整形し、クリップボードへ書き戻します。コントローラーでは
 **R2 + L2 が `dictate`、TextEdit が前面のときの R2 + 十字 ↑ ↓ ← → が
 `refine code` / `research` / `doc` / `ticket`、R2 + Start が `refine message`** です
@@ -275,8 +277,40 @@ stderr は残るので、`入力が空です` などのエラーはログで追�
 整形ボタンや R2 + L2 を押す、あるいはキーボードの ⌥⌘V / ⌥⌘1〜5 を押すと、先の整形は
 結果をクリップボードに書かずに消えます。通知「整形完了」を待ってから次を押してください。
 
-`LIMITATION:` **`dictate` は下書きを毎回空にします。** 前の口述に言い足す
-`dictate --keep` はボタンにありません。要るならキーボードから呼びます。
+`LIMITATION:` **`dictate` は毎回新しい下書きを作ります。** 前の口述に言い足す
+`dictate --keep`（いちばん新しい下書きをそのまま開く）はボタンにありません。
+要るならキーボードから呼びます。
+
+### 口述の 6 ボタンは prompt-refiner 側に移さない
+
+このリポジトリは公開（MIT）で、prompt-refiner は非公開です。ゲームパッドの README を
+prompt-refiner の語彙（`dictate` `refine` ⌥⌘1〜5）で書くと、読者は辿れない前提を押しつけられます。
+それを理由に 6 ボタンの配線を prompt-refiner のリポジトリへ移すことを検討し、やめました。
+
+- **6 / 163 です。** prompt-refiner を呼ぶ manipulator は 163 件中 6 件（`dictate` ×1、
+  `refine <mode>` ×5）。残りのスティック・矢印・修飾キーの合成・机のアプリの層は無関係で、
+  `shared/validate.py` `leakcheck.py` `make_cheatsheet_pdf.py` `Makefile` も vim / emacs と共有しています
+- **6 ボタンだけ切り出しても単独で成立しません。** `sn30_mod` 変数、`device_if`（§4）、
+  「TextEdit 層は汎用 R2 層より前」という評価順、`apply.py` の `[SN30]` 一括置換に依存しています。
+  別リポジトリの asset から同じデバイスへ書くと、評価順が Karabiner GUI で有効化した順に
+  左右され、`validate.py` の到達不能検出もリポジトリを跨げません
+- **依存の向きは今のままが正しい。** 入力デバイスがツールの CLI を呼ぶ形で、prompt-refiner 側も
+  ホットキー層を差し替え可能（Karabiner のキーボードルール / Raycast / ショートカット.app）と
+  設計しています。ゲームパッドはその一つです。移すと、ツールがデバイスのレイヤー変数を知る
+  逆向きの依存になります
+
+代わりに**境界を契約として書きました。** ここが当てにするのは `$HOME/bin/dictate` と
+`$HOME/bin/refine {code|research|doc|ticket|message}` というパスと引数、クリップボード経由の
+入出力だけです。生成と検査（`make gamepad` / `make check`）には要らず、無い環境では
+この 6 ボタンだけが無音で失敗します（`/bin/sh` のエラーが `console_user_server.log` に残る）。
+README にはこの契約だけを書き、prompt-refiner が何かは一文で済ませています。
+差し替え点は `gen.py` の `shell()` / `refine()` / `DICTATE` に集めてあります。
+
+`LIMITATION:` **モード名 5 つと並びは prompt-refiner の事実を写した固定値です。** あちらで
+モードを増やしても名前を変えても `gen.py` は追従しません。生成時に prompt-refiner を読む形は、
+`gen.py` が素の `python3` だけで動くことと公開 / 非公開の分離を壊すのでやりません。
+同期は手作業で、prompt-refiner 側のモード追加手順が `gen.py` の `DICTATION_APP` を指す
+逆向きの参照に頼ります。
 
 ---
 
@@ -388,6 +422,7 @@ Markdown で読んでください。
 | ボタンから prompt-refiner のホットキー ⌥⌘V / ⌥⌘1 を送る | Karabiner は自分が出したイベントを再 manipulate しない（§5）。`shell_command` で直接呼ぶ |
 | ⌘A → ⌘C → 整形 → ⌘V を1ボタンにまとめる | `shell_command` は即座に走り、キーイベントより先にクリップボードを読みうる（§5）。まとめるなら prompt-refiner 側に口を足す |
 | 整形ボタンを全アプリの R2 層に固定する | 5 モードぶんの枠がない。`dictate` が必ず TextEdit を開くので、TextEdit 層にあれば足りる（§5） |
+| 口述の 6 ボタンを prompt-refiner のリポジトリへ移す | 単独で成立しない（`sn30_mod`・`device_if`・評価順・`apply.py`）。依存は CLI の契約だけで、向きも今が正しい（§5） |
 | ⇧ / ⌘ を握った押込でモードを分ける（L + R2 + 押込 = research など） | 枠は要らないが3ボタンの同時押しで、5 モードは覚えられない |
 
 ---

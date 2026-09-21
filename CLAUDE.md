@@ -95,6 +95,7 @@ make venv           # .venv に playwright（Chromium で組版）を用意す�
 | ゲームパッドのハートはどのアプリでも ⌘Tab / ⌘。上書き不可（`DESK_LOCKED`） | `gamepad/DESIGN.md` §5 |
 | ゲームパッドで長押しリピートするのは矢印と削除だけ（`repeat: false` が既定） | `gamepad/DESIGN.md` §5 |
 | ゲームパッドの L / ハートは本物の修飾キー（全ルール `optional: ["any"]` は狙い） | `gamepad/DESIGN.md` §5 |
+| **ゲームパッドの左クリックは L 単押しと左スティック押込の 2 か所。** 押込は傾いて跳ねるので狙うクリックは L、ドラッグは押込。ナッジは expo 付き（浅い傾きほど細かい）で、低速モードは数式から変数が見えないので作れない | `gamepad/DESIGN.md` §5 / §6 |
 | **スティックの連続移動には 300 ms の空白がある。設定では消えない** | `gamepad/DESIGN.md` §6 |
 | ゲームパッドの `CHEATSHEET.md` は生成物 | `gamepad/DESIGN.md` §7 |
 | hjkl に転送するのは ⌥ と ⌘ だけ。⌃ は転送しない | `vim/ARCHITECTURE.md` §2b |

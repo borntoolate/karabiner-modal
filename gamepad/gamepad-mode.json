@@ -6913,7 +6913,7 @@
       "manipulators": [
         {
           "type": "basic",
-          "description": "L -> ⇧（押している間）",
+          "description": "L -> ⇧（押している間）/ 単押しで マウス左 (左クリック（スティックに触らずに。狙うクリックはこちら）)",
           "from": {
             "pointing_button": "button7",
             "modifiers": {
@@ -6926,6 +6926,11 @@
             {
               "key_code": "left_shift",
               "lazy": true
+            }
+          ],
+          "to_if_alone": [
+            {
+              "pointing_button": "button1"
             }
           ],
           "conditions": [
@@ -7377,7 +7382,7 @@
         },
         {
           "type": "basic",
-          "description": "左スティック押込 -> マウス左 (左クリック)",
+          "description": "左スティック押込 -> マウス左 (左クリック（押している間はドラッグ）。押し込みで傾いて跳ねるので、狙うクリックは L)",
           "from": {
             "pointing_button": "button14",
             "modifiers": {

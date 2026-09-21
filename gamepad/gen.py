@@ -44,8 +44,10 @@ DEVICE = {"vendor_id": 11720, "product_id": 24833, "is_game_pad": True}
 #
 # Karabiner はスティックを2通りの方法で動かす（16.3.0 の
 # game_pad_stick_converter.hpp で確認。DESIGN.md §6）。
-#   1. ナッジ   … 傾きが「増えた」ぶん × flick だけ、HID レポートが届くたびに動く。
-#                 待ちはない。戻す動きと、傾きを保ったままの回転では動かない
+#   1. ナッジ   … 傾きが「増えた」ぶん × flick × 傾き^expo だけ、HID レポートが届くたびに
+#                 動く。待ちはない。戻す動きと、傾きを保ったままの回転では動かない。
+#                 傾き^expo を掛けるので、浅い傾きほど 1 レポートあたりの移動が小さい
+#                 （中央付近で細かく、端で大きく。DESIGN.md §6）
 #   2. 連続移動 … 傾きが continued_movement_absolute_magnitude_threshold 以上に
 #                 なるとタイマーが回り、倒している間ずっと動き続ける
 #
@@ -66,7 +68,7 @@ _XY_FORMULA = """\
 var m:= 0;
 
 if (continued_movement == false) {{
-  m := delta_magnitude * {flick};
+  m := delta_magnitude * {flick} * pow(absolute_magnitude, {expo});
 }} else if (absolute_magnitude < 1.5) {{
   m := absolute_magnitude * {slow};
 }} else if (absolute_magnitude < 2) {{
@@ -92,19 +94,26 @@ if (abs(cos(radian)) {cmp} abs(sin(radian))) {{
 {trig}(radian) * m;
 """
 
-# カーソル速度。Karabiner 既定は 16 / 8 / 12 / 24。
-#   flick … ナッジの係数。いっぱいまで倒すと (threshold − deadzone) × flick ピクセル
+# カーソル速度。Karabiner 既定は 16 / 8 / 12 / 24（expo はこちらで足したもの。既定相当は 0）。
+#   flick … ナッジの係数。傾きの増分 × flick × 傾き^expo ピクセル
+#   expo  … ナッジの曲がり。0 で増分に比例（どこでも同じ粒度）、1 で傾きにも比例
+#           （デッドゾーンの縁では細かく、端では大きい）。小さい対象に合わせるための
+#           微調整は浅い傾きで、遠くへは深く倒すか連続移動で。
+#           いっぱいまで倒したときの合計は flick × (threshold^(expo+1) − deadzone^(expo+1)) / (expo+1)
+#           （150 / 0 のときの約 120 px に揃うよう、1 では 300 にしてある）
 #   slow  … 連続移動の係数。傾き × slow ピクセルが interval ごとに出る
 #   mid / fast … 傾きは 1.0 で頭打ちなので単独では発火しない。連続移動中に
 #                もう片方のスティックも倒すと、その傾きが足されて効く
-XY_SPEED = {"flick": 150, "slow": 13, "mid": 24, "fast": 40}
+XY_SPEED = {"flick": 300, "expo": 1, "slow": 13, "mid": 24, "fast": 40}
 
 # スクロール速度。Karabiner 既定は 1 / 0.1。
 WHEEL_SPEED = {"flick": 1.0, "hold": 0.15}
 
 DEVICE_SETTINGS = {
     # --- 左スティック（カーソル）: ナッジ + いっぱいに倒して保持で連続移動 ---
-    "game_pad_xy_stick_deadzone": 0.05,
+    # 0.12: 押し込み（クリック）で傾くぶんを飲み込む。expo があるので、この帯を捨てても
+    # 失うナッジは 2 px ほど。まだ跳ねるなら 0.2 まで上げる（DESIGN.md §6）
+    "game_pad_xy_stick_deadzone": 0.12,
     "game_pad_xy_stick_delta_magnitude_detection_threshold": 0.005,
     # ここ以上に倒して 300 ms 保持すると連続移動。下げるほど早く入るが、
     # 超えた瞬間からナッジが止まって 300 ms の空白ができる
@@ -206,8 +215,12 @@ MOD_VAR = "sn30_mod"
 # （L2 = ⌃ もこの仲間。上の VOICE_BUTTON）。
 SHIFT_BUTTON = "L"
 CMD_BUTTON = "HEART"
-# ハートを単押ししたとき（他のボタンを押さずに離したとき）
+# ハート / L を単押ししたとき（他のボタンを押さずに離したとき）。
+# L の単押しは左クリック。左スティックの押込はスティックが傾いてポインタが跳ねるので、
+# 狙って押すクリックはスティックに触らない人差し指で（DESIGN.md §5）。押込のクリックも
+# 残す（ドラッグは押しながら動かすしかない）。
 APP_SWITCH = ("cmd+tab", "直前のアプリへ。押したまま R で順送り")
+SHIFT_TAP = ("click:button1", "左クリック（スティックに触らずに。狙うクリックはこちら）")
 
 
 # 口述は prompt-refiner（~/works/prompt-refiner）の2コマンドで回す。
@@ -252,7 +265,7 @@ BASE = {
     "R":      ("tab", "Tab（次の要素へ）。L + R で ⇧Tab"),
     "SELECT": ("cmd+c", "コピー"),
     "START":  ("cmd+v", "貼り付け"),
-    "L3":     ("click:button1", "左クリック"),
+    "L3":     ("click:button1", "左クリック（押している間はドラッグ）。押し込みで傾いて跳ねるので、狙うクリックは L"),
     "R3":     ("click:button2", "右クリック"),
 }
 
@@ -868,9 +881,11 @@ def build_rules():
     base = [
         {
             "type": "basic",
-            "description": "%s -> ⇧（押している間）" % LABEL[SHIFT_BUTTON],
+            "description": "%s -> ⇧（押している間）/ 単押しで %s (%s)"
+                           % (LABEL[SHIFT_BUTTON], pretty(SHIFT_TAP[0]), SHIFT_TAP[1]),
             "from": from_event(SHIFT_BUTTON),
             "to": [{"key_code": "left_shift", "lazy": True}],
+            "to_if_alone": parse_to(SHIFT_TAP[0]),
             "conditions": [dev, mod_off],
         },
         {
@@ -924,7 +939,10 @@ def stick_note(stick):
         "game_pad_%s_stick_continued_movement_absolute_magnitude_threshold" % stick]
     if th <= dz:
         return "倒して 0.3 秒後から動き続ける"
-    return "倒した量だけ動き、%g 以上に倒して 0.3 秒保持すると動き続ける" % th
+    note = "倒した量だけ動き、%g 以上に倒して 0.3 秒保持すると動き続ける" % th
+    if stick == "xy" and XY_SPEED["expo"] > 0:
+        note += "。浅く倒すほど細かく動く（小さい対象には浅く）"
+    return note
 
 
 def table(L, header, rows):
@@ -942,6 +960,7 @@ def base_rows(over, merged=None):
     for b in ORDER:
         star = "★" if b in over else ""
         if b == SHIFT_BUTTON and b not in over:
+            rows.append([LABEL[b] + " 単押し", "`%s`" % pretty(SHIFT_TAP[0]), SHIFT_TAP[1], ""])
             rows.append([LABEL[b] + " 押しっぱなし", "`⇧`",
                          "本物の修飾キー。十字・クリック・Enter と組み合わせる", star])
         elif b == CMD_BUTTON:
@@ -1186,10 +1205,12 @@ def build_cheatsheet():
          "%d ms" % s["game_pad_xy_stick_continued_movement_interval_milliseconds"],
          "20 ms", "動き出してからの粒度。動き出すまでの待ちには効かない"],
         ["カーソル デッドゾーン", "%g" % s["game_pad_xy_stick_deadzone"],
-         "0.10", "下げると軽い。ドリフトが出たら 0.12〜0.2 に上げる"],
-        ["カーソル速度 flick / slow",
-         "%s / %s" % (XY_SPEED["flick"], XY_SPEED["slow"]), "16 / 8",
-         "flick = ナッジ（傾きの増分 × flick px）/ slow = 連続移動（傾き × slow px を更新ごと）"],
+         "0.10", "押し込み（クリック）で傾くぶんを飲み込む。まだ跳ねるなら 0.2 まで上げる。"
+                 "ドリフトが出ても上げる"],
+        ["カーソル速度 flick / expo / slow",
+         "%s / %s / %s" % (XY_SPEED["flick"], XY_SPEED["expo"], XY_SPEED["slow"]), "16 / 0 / 8",
+         "flick = ナッジ（傾きの増分 × flick × 傾き^expo px）/ expo = 浅い傾きほど細かく"
+         "（0 でどこでも同じ粒度）/ slow = 連続移動（傾き × slow px を更新ごと）"],
         ["スクロール 連続移動に入るしきい値",
          "%g" % s["game_pad_wheels_stick_continued_movement_absolute_magnitude_threshold"],
          "1.00", "デッドゾーンと同じ値なら、倒して 0.3 秒後から動き続ける"],
@@ -1236,8 +1257,8 @@ def build_cheatsheet():
              "整形結果の先頭が Karabiner のログに残らないよう、標準出力は捨てています"
              "（エラーは `~/.local/share/karabiner/log/console_user_server.log` に出ます）")
     L.append("- **実機で確認済みなのは固定ベース・Claude Desktop・ブラウザの層と、R2 + B の"
-             "メニューバー・R2 + 左スティック押込の ⌘S・L2 の ⌃です。** それ以外（机に向かう"
-             "アプリ、ターミナルの R2 層の ⌃C 以外、口述の手順）は"
+             "メニューバー・R2 + 左スティック押込の ⌘S・L2 の ⌃・L 単押しのクリック・ナッジの"
+             " expo です。** それ以外（机に向かうアプリ、ターミナルの R2 層の ⌃C 以外、口述の手順）は"
              "送るキーがこの表のとおりというだけなので、動きが違うときは `DESIGN.md` §9 と"
              "突き合わせてください")
     L.append("- **A ボタンは実マウスの左クリックと同じイベント**（`button1`）です。"

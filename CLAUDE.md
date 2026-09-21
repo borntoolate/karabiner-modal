@@ -85,7 +85,7 @@ make venv           # .venv に playwright（Chromium で組版）を用意す�
 | Figma などの除外アプリは設定しない | `COMPARISON.md` §5 |
 | **ゲームパッドの全 manipulator に `device_if` を付ける** | `gamepad/DESIGN.md` §4 |
 | ゲームパッド版は `karabiner.json` を直接書き換える（assets ではない） | `gamepad/DESIGN.md` §3 |
-| L2 = 音声入力の開始 / 終了（マイクキー `consumer_key_code: dictation`）、R2 = レイヤー修飾 | `gamepad/DESIGN.md` §5 |
+| L2 単押し = 音声入力の開始 / 終了（マイクキー `consumer_key_code: dictation`、`to_if_alone`）、**L2 押しっぱなし = ⌃**（本物の修飾キー。Mission Control / アプリケーション Exposé は L2 + 十字の合成で、個別のルールを作らない）、R2 = レイヤー修飾 | `gamepad/DESIGN.md` §5 |
 | **口述（prompt-refiner）は R2 + L2 の `dictate` が起点。整形ボタンは TextEdit 層にだけ置く。** どちらも `shell_command` で直接呼ぶ（⌥⌘V / ⌥⌘1 は送らない。Karabiner は自分の出力を再 manipulate しない）。⌘A ⌘C ⌘V は畳み込まない | `gamepad/DESIGN.md` §5 |
 | **口述の 6 ボタンはこのリポジトリに置く。prompt-refiner（非公開）側へ移さない。** 依存は `$HOME/bin/dictate` / `$HOME/bin/refine <mode>` という CLI の契約だけ。README にはその契約だけを書き、prompt-refiner の語彙で説明しない | `gamepad/DESIGN.md` §5 |
 | **ゲームパッドの単押しは固定ベース。エンジニア業務のアプリは R2 層の 10 枠だけ上書き**（`MOD_LOCKED` の 5 枠は不可）。机に向かうアプリ（`DESK_APPS`）だけ単押しも特化 | `gamepad/DESIGN.md` §5 |

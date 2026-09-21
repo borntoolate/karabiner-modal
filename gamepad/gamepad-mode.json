@@ -40,7 +40,7 @@
         },
         {
           "type": "basic",
-          "description": "L2 -> マイクキー（音声入力の開始 / 終了）",
+          "description": "L2 -> ⌃（押している間）/ 単押しでマイクキー（音声入力の開始 / 終了）",
           "from": {
             "pointing_button": "button9",
             "modifiers": {
@@ -50,6 +50,12 @@
             }
           },
           "to": [
+            {
+              "key_code": "left_control",
+              "lazy": true
+            }
+          ],
+          "to_if_alone": [
             {
               "consumer_key_code": "dictation",
               "repeat": false

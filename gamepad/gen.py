@@ -183,6 +183,8 @@ ORDER = ["A", "B", "X", "Y",
 #     "once:cmd+opt+left_arrow"   矢印でも長押しで繰り返さない（切り替えに使うとき）
 #     "shell:$HOME/bin/refine code"  シェルコマンドを実行する（/bin/sh -c）。
 #                                 空白を含むので、他のトークンと並べられない
+#     "ctrl+f2"                   F1〜F12 は fn の有無で 2 本の manipulator に展開される
+#                                 （manipulators()。素の F キーはメディアキーに化けるため）
 # ===========================================================================
 # L2 = 音声入力の開始 / 終了。
 # Apple のキーボードのマイクキー（F5）と同じ HID イベント（consumer usage
@@ -268,14 +270,18 @@ COMBOS = [
 
 # R2 を押しながら。アプリ別に上書きできるのはこの層だけ。
 #
-# ⌘N（新規）はアプリ別の 9 枠の外、右スティック押込に置いてある。TextEdit / VS Code の新規ファイル、
-# Claude Desktop の新規セッション、ブラウザの新規ウィンドウ、どのアプリでも ⌘N は「新しく
-# 作る」で意味が揃うので、アプリ別の枠を使わずグローバルにした。押し込みでポインタが跳ねても
-# ⌘N は困らない。アプリ別にすると TextEdit の R2 層（口述の整形で埋まっている）に置き場が
-# なく、アプリを足すたびに配線が要る（DESIGN.md §5）。
+# ⌘N（新規）と ⌘S（保存）はアプリ別の 8 枠の外、右 / 左スティック押込に置いてある。TextEdit /
+# VS Code の新規ファイルと保存、Claude Desktop の新規セッション、ブラウザの新規ウィンドウ、
+# どのアプリでも ⌘N は「新しく作る」、⌘S は「保存する」で意味が揃うので、アプリ別の枠を使わず
+# グローバルにした。押し込みでポインタが跳ねてもどちらも困らない。アプリ別にすると TextEdit の
+# R2 層（口述の整形で埋まっている）に置き場がなく、アプリを足すたびに配線が要る（DESIGN.md §5）。
+#
+# R2 + B はメニューバーへのフォーカス（macOS の ⌃F2）。コントローラーに枠のない操作は
+# 全部ここから届く（十字で移動、A で開く / 決定、B で抜ける）ので、どのアプリでも同じ位置に
+# 要る。上書き不可。閉じる（⌘W）はこの枠を譲り、メニューバー経由か × のクリックで代える。
 MOD_DEFAULT = {
     "A":      ("cmd+a", "すべて選択"),
-    "B":      ("cmd+w", "閉じる"),
+    "B":      ("ctrl+f2", "メニューバーにフォーカス（十字で移動、A で開く / 決定、B で抜ける）"),
     "X":      ("cmd+shift+z", "やり直す"),
     "Y":      ("cmd+z", "取り消す"),
     "UP":     ("page_up", "1画面ぶん上へ"),
@@ -287,14 +293,12 @@ MOD_DEFAULT = {
     "SELECT": ("cmd+x", "切り取り"),
     "START":  ("cmd+shift+v", "書式なしで貼り付け"),
     "HEART":  ("cmd+spacebar", "Spotlight / ランチャー"),
+    "L3":     ("cmd+s", "保存"),
     "R3":     ("cmd+n", "新規（新しい書類 / ウィンドウ / セッション）"),
 }
-# アプリ別に上書きできない枠。編集の芯はどのアプリでも同じ場所にある。
-MOD_LOCKED = {"X", "Y", "SELECT", "HEART"}
-# 既定を置かない枠。R2 を握ったままの左スティック押込は、どのアプリでも意味のある
-# 「クリックの変種」がない（⌥クリックは Chrome ではリンクのダウンロード）ので、
-# 必要なアプリだけが置く。既定では素の button14 が素通りし、macOS は何もしない。
-MOD_APP_ONLY = {"L3"}
+# アプリ別に上書きできない枠。編集の芯と、枠のない操作への逃げ道（メニューバー）は
+# どのアプリでも同じ場所にある。
+MOD_LOCKED = {"B", "X", "Y", "SELECT", "HEART"}
 
 # ===========================================================================
 # アプリ別（R2 を押しながらの上書きだけ）
@@ -329,7 +333,7 @@ DICTATION_APP = {
 # 「サーフェス」は Chat / Cowork / Code の切り替えで、macOS ではサイドバーの有無や
 # 分割ビューの有無に関わらず効く。分割ビューで「既存のセッションを開く」に相当する
 # キーは ⌥クリックしかない（Web 層の一覧に "alt+click" として載っている）ので、
-# 既定のない左スティック押込に置く。
+# 左スティック押込に置く。既定の ⌘S を潰すが、Desktop には保存するものがない。
 CLAUDE_DESKTOP_APP = {
     "name": "Claude Desktop",
     "apps": [r"^com\.anthropic\.claudefordesktop$"],
@@ -373,13 +377,14 @@ APPS = [
             r"^dev\.warp\.Warp-Stable$",
             r"^com\.github\.wez\.wezterm$",
         ],
+        # ⌃C は R2 + B に置いていた（B = Esc の「強い版」）が、R2 + B はメニューバーで
+        # 固定になったので Start へ。画面のクリア（⌘K）は見た目だけの操作なので外した。
         "mod": {
             "A":      ("opt+return_or_enter", "改行（送信しない）"),
-            "B":      ("ctrl+c", "強制中断"),
-            "START":  ("cmd+k", "画面をクリア"),
+            "START":  ("ctrl+c", "強制中断"),
         },
         "notes": [
-            "VS Code の新規ファイル（⌘N）は R2 + 右スティック押込（どのアプリでも同じ）",
+            "VS Code の新規ファイル（⌘N）と保存（⌘S）は R2 + 右 / 左スティック押込（どのアプリでも同じ）",
         ],
     },
 
@@ -709,7 +714,8 @@ def pretty(spec):
         parts = token.split("+")
         key = parts[-1]
         syms = "".join(MOD_SYMBOL.get(p.lower(), p) for p in parts[:-1])
-        out.append(syms + KEY_SYMBOL.get(key, key.upper() if len(key) == 1 else key))
+        default = key.upper() if len(key) == 1 or key in FKEYS else key
+        out.append(syms + KEY_SYMBOL.get(key, default))
     return " ".join(out)
 
 
@@ -723,12 +729,38 @@ def manipulator(button, spec, conditions, description):
     }
 
 
+# F1〜F12 を送る枠は 2 本に分ける。Karabiner は複雑な変更の**後**に Function Keys の段
+# （F1〜F12 ⇄ メディアキー）を掛けるので、素の f2 を送ると、macOS の「F1、F2 などのキーを
+# 標準のファンクションキーとして使用」が OFF の環境では画面の明るさに化ける。公式の作法
+# （"Details on changing to function keys"）どおり、その設定が OFF なら fn 付き、ON なら
+# fn なしを送る。設定は変数 system.use_fkeys_as_standard_function_keys（15.2.3 以降）で
+# 読める。R2 + B の ⌃F2（メニューバー）がこれに当たる。
+FKEYS = {"f%d" % i for i in range(1, 13)}
+FKEYS_STANDARD = "system.use_fkeys_as_standard_function_keys"
+
+
+def manipulators(button, spec, conditions, description):
+    """1 枠ぶんの manipulator のリスト。F1〜F12 を送る枠だけ fn の有無で 2 本になる。"""
+    plain = manipulator(button, spec, conditions, description)
+    if not any(ev.get("key_code") in FKEYS for ev in plain["to"]):
+        return [plain]
+    with_fn = dict(plain)
+    with_fn["to"] = [dict(ev, modifiers=["fn"] + ev.get("modifiers", []))
+                     if ev.get("key_code") in FKEYS else ev for ev in plain["to"]]
+    with_fn["description"] = description + "（fn 付き。F キーがメディアキーの設定のとき）"
+    with_fn["conditions"] = conditions + [
+        {"type": "variable_unless", "name": FKEYS_STANDARD, "value": True}]
+    plain["conditions"] = conditions + [
+        {"type": "variable_if", "name": FKEYS_STANDARD, "value": True}]
+    return [with_fn, plain]
+
+
 def mod_layer(app, locked=MOD_LOCKED):
     """そのアプリで効く R2 レイヤー（既定 + 上書き）。上書きした枠の集合も返す。"""
     over = app.get("mod", {})
     bad = set(over) & locked
     assert not bad, "%s: 上書きできない枠 %s" % (app["name"], sorted(bad))
-    unknown = set(over) - set(MOD_DEFAULT) - MOD_APP_ONLY
+    unknown = set(over) - set(MOD_DEFAULT)
     assert not unknown, "%s: R2 既定にない枠 %s" % (app["name"], sorted(unknown))
     merged = dict(MOD_DEFAULT)
     merged.update(over)
@@ -755,10 +787,10 @@ def build_rules():
     rules = [
         {
             "description": "%s 音声入力（L2 でマイクキー、R2 + L2 で下書きを開く）" % RULE_PREFIX,
-            "manipulators": [
-                manipulator(VOICE_BUTTON, DICTATE[0], [dev, mod_on],
-                            "R2 + %s -> %s (%s)" % (LABEL[VOICE_BUTTON], pretty(DICTATE[0]),
-                                                    DICTATE[1])),
+            "manipulators": manipulators(
+                VOICE_BUTTON, DICTATE[0], [dev, mod_on],
+                "R2 + %s -> %s (%s)" % (LABEL[VOICE_BUTTON], pretty(DICTATE[0]), DICTATE[1])
+            ) + [
                 {
                     "type": "basic",
                     "description": "L2 -> マイクキー（音声入力の開始 / 終了）",
@@ -789,15 +821,15 @@ def build_rules():
         desk_base_layer(app)
         appc = app_condition(app["apps"])
         manips = [
-            manipulator(b, app["mod"][b][0], [dev, mod_on, appc],
-                        "R2 + %s -> %s (%s)" % (LABEL[b], pretty(app["mod"][b][0]),
-                                                app["mod"][b][1]))
-            for b in ORDER if b in app.get("mod", {})]
+            m for b in ORDER if b in app.get("mod", {})
+            for m in manipulators(b, app["mod"][b][0], [dev, mod_on, appc],
+                                  "R2 + %s -> %s (%s)" % (LABEL[b], pretty(app["mod"][b][0]),
+                                                          app["mod"][b][1]))]
         manips += [
-            manipulator(b, app["base"][b][0], [dev, mod_off, appc],
-                        "%s -> %s (%s)" % (LABEL[b], pretty(app["base"][b][0]),
-                                           app["base"][b][1]))
-            for b in ORDER if b in app.get("base", {})]
+            m for b in ORDER if b in app.get("base", {})
+            for m in manipulators(b, app["base"][b][0], [dev, mod_off, appc],
+                                  "%s -> %s (%s)" % (LABEL[b], pretty(app["base"][b][0]),
+                                                     app["base"][b][1]))]
         rules.append({"description": "%s %s（左手デバイス特化）" % (RULE_PREFIX, app["name"]),
                       "manipulators": manips})
 
@@ -805,20 +837,20 @@ def build_rules():
         mod_layer(app)  # 上書きできない枠に触っていないか
         conds = [dev, mod_on, app_condition(app["apps"])]
         manips = [
-            manipulator(b, app["mod"][b][0], conds,
-                        "R2 + %s -> %s (%s)" % (LABEL[b], pretty(app["mod"][b][0]),
-                                                app["mod"][b][1]))
-            for b in ORDER if b in app["mod"]]
+            m for b in ORDER if b in app["mod"]
+            for m in manipulators(b, app["mod"][b][0], conds,
+                                  "R2 + %s -> %s (%s)" % (LABEL[b], pretty(app["mod"][b][0]),
+                                                          app["mod"][b][1]))]
         rules.append({"description": "%s %s（R2 を押しながら）" % (RULE_PREFIX, app["name"]),
                       "manipulators": manips})
 
     rules.append({
         "description": "%s R2 を押しながら（どのアプリでも）" % RULE_PREFIX,
         "manipulators": [
-            manipulator(b, MOD_DEFAULT[b][0], [dev, mod_on],
-                        "R2 + %s -> %s (%s)" % (LABEL[b], pretty(MOD_DEFAULT[b][0]),
-                                                MOD_DEFAULT[b][1]))
-            for b in ORDER if b in MOD_DEFAULT],
+            m for b in ORDER if b in MOD_DEFAULT
+            for m in manipulators(b, MOD_DEFAULT[b][0], [dev, mod_on],
+                                  "R2 + %s -> %s (%s)" % (LABEL[b], pretty(MOD_DEFAULT[b][0]),
+                                                          MOD_DEFAULT[b][1]))],
     })
 
     # 単押し。修飾キー2つは専用の形。
@@ -841,9 +873,9 @@ def build_rules():
         },
     ]
     base += [
-        manipulator(b, BASE[b][0], [dev, mod_off],
-                    "%s -> %s (%s)" % (LABEL[b], pretty(BASE[b][0]), BASE[b][1]))
-        for b in ORDER if b in BASE]
+        m for b in ORDER if b in BASE
+        for m in manipulators(b, BASE[b][0], [dev, mod_off],
+                              "%s -> %s (%s)" % (LABEL[b], pretty(BASE[b][0]), BASE[b][1]))]
     rules.append({"description": "%s 単押し（どのアプリでも）" % RULE_PREFIX,
                   "manipulators": base})
     return rules
@@ -1005,10 +1037,19 @@ def build_cheatsheet():
           [["R2 + " + LABEL[b], "`%s`" % pretty(MOD_DEFAULT[b][0]), MOD_DEFAULT[b][1],
             "不可" if b in MOD_LOCKED else "可"]
            for b in ORDER if b in MOD_DEFAULT])
-    L.append("- R2 + %s は既定では何も送りません（アプリ別にだけ置く枠。Claude Desktop の"
-             " ⌥クリック）。R2 + %s の ⌘N は「新規」の意味がアプリで揃うのでグローバルです"
-             "（TextEdit / VS Code は新しいファイル、Claude Desktop は新しいセッション、"
-             "ブラウザやターミナルは新しいウィンドウ）"
+    L.append("- **R2 + B のメニューバーは、コントローラーに枠のない操作への逃げ道です。**"
+             " フォーカスが移ったら十字 ← → でメニューを選び、↓ か A で開き、↑ ↓ で項目を選んで"
+             " A で実行、B で抜けます（macOS の ⌃F2。システム設定 → キーボード → キーボード"
+             "ショートカット → キーボード の「メニューバーにフォーカスを移動」が ON であること。"
+             "既定は ON）。「F1、F2 などのキーを標準のファンクションキーとして使用」が OFF の"
+             "環境では fn⌃F2 を送ります（Karabiner の作法。どちらでもメニューバーに届く）。"
+             "閉じる（⌘W）はこの枠を譲ったので、メニューバーの File → Close か × のクリックで")
+    L.append("- R2 + %s の ⌘S と R2 + %s の ⌘N は「保存」「新規」の意味がアプリで揃うので"
+             "グローバルです（TextEdit / VS Code はファイルの保存と新規、Claude Desktop は"
+             "新しいセッション、ブラウザやターミナルは新しいウィンドウ）。押し込みでポインタが"
+             "跳ねてもどちらも困りません。保存するものがないアプリでは ⌘S はダイアログを"
+             "出すか何もしないので、出たら B（Esc）で閉じます。Claude Desktop だけは左スティック"
+             "押込を ⌥クリックに上書きしています"
              % (LABEL["L3"], LABEL["R3"]))
     L.append("")
     L.append("---")
@@ -1168,8 +1209,8 @@ def build_cheatsheet():
     L.append("## 注意")
     L.append("")
     L.append("- **エンジニア業務とブラウジングでは単押しを変えません。** アプリ固有の操作は"
-             " `gen.py` の `APPS` に R2 の上書きとして足します（既定のある 10 枠と、既定のない"
-             "左スティック押込。取り消し / やり直し / 切り取り / Spotlight は上書き不可）。"
+             " `gen.py` の `APPS` に R2 の上書きとして足します（10 枠。メニューバー / 取り消し /"
+             " やり直し / 切り取り / Spotlight の 5 枠は上書き不可）。"
              "机に向かうアプリだけ `DESK_APPS` で単押しも上書きします。ハートはどこでも ⌘Tab です")
     L.append("- **長押しで繰り返すのは矢印・PgUp / PgDn・Backspace / Delete だけです。**"
              "他のボタンは押し続けても1回しか出ません。⇧Tab は L を先に押してから R です")
@@ -1177,9 +1218,11 @@ def build_cheatsheet():
              " Karabiner 全体で同時に1つだけで、次を押すと走っているほうが強制終了されます。"
              "整形結果の先頭が Karabiner のログに残らないよう、標準出力は捨てています"
              "（エラーは `~/.local/share/karabiner/log/console_user_server.log` に出ます）")
-    L.append("- **実機で確認済みなのは固定ベース・Claude Desktop・ブラウザの層です。** それ以外"
-             "（机に向かうアプリ、ターミナルの R2 層、口述の手順）は送るキーがこの表のとおりという"
-             "だけなので、動きが違うときは `DESIGN.md` §9 と突き合わせてください")
+    L.append("- **実機で確認済みなのは固定ベース・Claude Desktop・ブラウザの層と、R2 + B の"
+             "メニューバー・R2 + 左スティック押込の ⌘S です。** それ以外（机に向かうアプリ、"
+             "ターミナルの R2 層の ⌃C 以外、口述の手順）は"
+             "送るキーがこの表のとおりというだけなので、動きが違うときは `DESIGN.md` §9 と"
+             "突き合わせてください")
     L.append("- **A ボタンは実マウスの左クリックと同じイベント**（`button1`）です。"
              "すべてのルールに `device_if` が必要で、付け忘れるとトラックパッドのクリックが"
              "死にます。JSON を手で書かず、必ず `gen.py` から生成してください")

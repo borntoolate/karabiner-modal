@@ -5941,9 +5941,9 @@
         },
         {
           "type": "basic",
-          "description": "R2 + B -> ⌃C (強制中断)",
+          "description": "R2 + Start（＋） -> ⌃C (強制中断)",
           "from": {
-            "pointing_button": "button2",
+            "pointing_button": "button12",
             "modifiers": {
               "optional": [
                 "any"
@@ -5955,56 +5955,6 @@
               "key_code": "c",
               "modifiers": [
                 "left_control"
-              ],
-              "repeat": false
-            }
-          ],
-          "conditions": [
-            {
-              "type": "device_if",
-              "identifiers": [
-                {
-                  "vendor_id": 11720,
-                  "product_id": 24833,
-                  "is_game_pad": true
-                }
-              ]
-            },
-            {
-              "type": "variable_if",
-              "name": "sn30_mod",
-              "value": 1
-            },
-            {
-              "type": "frontmost_application_if",
-              "bundle_identifiers": [
-                "^com\\.apple\\.Terminal$",
-                "^com\\.lambdalisue\\.Arto$",
-                "^com\\.microsoft\\.VSCode$",
-                "^com\\.googlecode\\.iterm2$",
-                "^com\\.mitchellh\\.ghostty$",
-                "^dev\\.warp\\.Warp-Stable$",
-                "^com\\.github\\.wez\\.wezterm$"
-              ]
-            }
-          ]
-        },
-        {
-          "type": "basic",
-          "description": "R2 + Start（＋） -> ⌘K (画面をクリア)",
-          "from": {
-            "pointing_button": "button12",
-            "modifiers": {
-              "optional": [
-                "any"
-              ]
-            }
-          },
-          "to": [
-            {
-              "key_code": "k",
-              "modifiers": [
-                "left_command"
               ],
               "repeat": false
             }
@@ -6378,7 +6328,7 @@
         },
         {
           "type": "basic",
-          "description": "R2 + B -> ⌘W (閉じる)",
+          "description": "R2 + B -> ⌃F2 (メニューバーにフォーカス（十字で移動、A で開く / 決定、B で抜ける）)（fn 付き。F キーがメディアキーの設定のとき）",
           "from": {
             "pointing_button": "button2",
             "modifiers": {
@@ -6389,9 +6339,10 @@
           },
           "to": [
             {
-              "key_code": "w",
+              "key_code": "f2",
               "modifiers": [
-                "left_command"
+                "fn",
+                "left_control"
               ],
               "repeat": false
             }
@@ -6411,6 +6362,54 @@
               "type": "variable_if",
               "name": "sn30_mod",
               "value": 1
+            },
+            {
+              "type": "variable_unless",
+              "name": "system.use_fkeys_as_standard_function_keys",
+              "value": true
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + B -> ⌃F2 (メニューバーにフォーカス（十字で移動、A で開く / 決定、B で抜ける）)",
+          "from": {
+            "pointing_button": "button2",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "f2",
+              "modifiers": [
+                "left_control"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            },
+            {
+              "type": "variable_if",
+              "name": "system.use_fkeys_as_standard_function_keys",
+              "value": true
             }
           ]
         },
@@ -6801,6 +6800,44 @@
           "to": [
             {
               "key_code": "spacebar",
+              "modifiers": [
+                "left_command"
+              ],
+              "repeat": false
+            }
+          ],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [
+                {
+                  "vendor_id": 11720,
+                  "product_id": 24833,
+                  "is_game_pad": true
+                }
+              ]
+            },
+            {
+              "type": "variable_if",
+              "name": "sn30_mod",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "description": "R2 + 左スティック押込 -> ⌘S (保存)",
+          "from": {
+            "pointing_button": "button14",
+            "modifiers": {
+              "optional": [
+                "any"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "s",
               "modifiers": [
                 "left_command"
               ],
